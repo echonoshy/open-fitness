@@ -6,7 +6,7 @@
   </picture>
 </h1>
 
-[简体中文](README.md) · **English**
+[简体中文](README.md) · **English** · [Product website and demo](https://echonoshy.github.io/open-fitness/)
 
 **A camera-guided AI fitness coach for Apple Silicon Macs.** Use your camera to track movement and talk to the coach while you train. Start with a set of squats, or build your own workout from a library of 582 exercises.
 

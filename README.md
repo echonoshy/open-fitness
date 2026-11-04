@@ -6,7 +6,7 @@
   </picture>
 </h1>
 
-**简体中文** · [English](README.en.md)
+**简体中文** · [English](README.en.md) · [产品官网与实机演示](https://echonoshy.github.io/open-fitness/)
 
 **你的 AI 视觉私教。** 在配备 Apple 芯片的 Mac 上，用摄像头记录动作，用声音和教练交流。你可以从一组深蹲开始，也可以从 582 个动作中挑选、编排自己的训练计划。
 
