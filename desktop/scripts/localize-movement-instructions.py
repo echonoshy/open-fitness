@@ -14,10 +14,10 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[2]
 CACHE = ROOT / "output/movement-library-update-20261102/copy-cache"
 CACHE.mkdir(parents=True, exist_ok=True)
-SOURCE = ROOT / "data/movekit-library.json"
-TARGET = ROOT / "data/movekit-library.instructions.zh-CN.json"
+SOURCE = ROOT / "data/library.json"
+TARGET = ROOT / "data/library.instructions.zh-CN.json"
 CONFIG = json.loads((ROOT / "desktop/config/services.defaults.json").read_text())["llm"]
-NAMES = json.loads((ROOT / "data/movekit-library.zh-CN.json").read_text())["names"]
+NAMES = json.loads((ROOT / "data/library.zh-CN.json").read_text())["names"]
 PROMPT = """你是健身动作中文编辑。仅根据提供的每个动作资料，输出简体中文 JSON 对象，键是原 slug，值是 {\"description\":\"...\",\"instructions\":[\"...\",...] }。
 description 是 1-2 句简洁的动作介绍：训练部位与动作特点。剔除营销、应用开发、资产销售等语言，不夸大效果，不承诺康复或治疗。
 instructions 是 4-6 条具体且简洁的动作要领，按准备姿势、动作路径、控制与还原的顺序；忠实保留原资料中的特殊姿势、握法、单侧/交替、器械区别、训练方向。使用自然中文，不生硬逐词翻译，不用每个动作相同的通用建议填充。保持关节在舒适范围，不鼓励忍痛、憋气、猛拉颈部或过度伸展。动作本身就是爆发、跳跃、静态、活动度或伸展时必须正确区分。不得编造负荷、次数、训练计划或替换动作。
@@ -75,6 +75,6 @@ if __name__ == "__main__":
         for future in as_completed(futures):
             result.update(future.result())
             print(f"Chinese copy: {len(result)}/{len(rows)}", flush=True)
-    TARGET.write_text(json.dumps({"language": "zh-CN", "source": "movekit-library.json",
+    TARGET.write_text(json.dumps({"language": "zh-CN", "source": "library.json",
         "movements": {x["slug"]: result[x["slug"]] for x in rows}}, ensure_ascii=False, indent=2) + "\n")
     print(f"Saved {len(result)} descriptions and instruction lists.", flush=True)

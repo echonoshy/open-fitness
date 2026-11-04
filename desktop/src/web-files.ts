@@ -81,7 +81,7 @@ export function chooseBrowserFiles(
           ? ".json,.db"
           : ".json,application/json";
     input.multiple = kind === "legacy";
-    input.setAttribute("aria-label", "选择要导入的数据文件");
+    input.setAttribute("aria-label", document.documentElement.lang === "en" ? "Choose a data file to import" : "选择要导入的数据文件");
     input.style.display = "none";
     document.body.append(input);
     input.oncancel = () => {

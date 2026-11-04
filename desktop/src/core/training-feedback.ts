@@ -53,9 +53,6 @@ export function motionFeedback(state: Snapshot, cameraOn: boolean) {
   } else if (state.status === "resting") {
     title = "休息中 · 暂不计数";
     detail = "休息结束后继续本组";
-  } else if (state.auto && !state.detected) {
-    title = "正在识别动作类型";
-    detail = "锁定后，从下一次完整动作开始计数";
   } else if (state.squatCheck && !state.squatCheck.ready) {
     title = "侧身站位检查 · 暂不计数";
     detail = state.squatCheck.message;

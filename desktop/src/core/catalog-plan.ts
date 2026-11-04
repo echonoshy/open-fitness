@@ -44,6 +44,10 @@ export const catalogPlanSchema = z
     "每组次数最多 100 次",
   );
 export const catalogPlanControl = z.discriminatedUnion("type", [
+  blockSchema.pick({ target: true, load: true, rest: true }).extend({
+    type: z.literal("adjust_plan_set"),
+    setId: z.string().min(1),
+  }),
   z
     .object({
       type: z.literal("start_catalog_program"),
@@ -54,6 +58,7 @@ export const catalogPlanControl = z.discriminatedUnion("type", [
   z.object({ type: z.literal("skip_remaining_sets") }).strict(),
 ]);
 export type PlanCommand = z.infer<typeof catalogPlanControl>;
+export type PlanSetAdjustment = Extract<PlanCommand, { type: "adjust_plan_set" }>;
 export function blockForMovement(
   item: Movement,
   previous?: PlanBlock,
@@ -122,10 +127,12 @@ export type PlanPosition = {
   setIndex: number;
 };
 export type CatalogPlanView = {
+  setId: string;
   block: number;
   set: number;
   blocks: number;
   sets: number;
+  restSeconds: number;
   next: string;
   skipTo?: string;
   between: boolean;
@@ -142,6 +149,7 @@ export class CatalogPlan {
   private paused = false;
   private deadline = 0;
   private restLeft = 0;
+  private setRest = 0;
   constructor(
     private engine: SessionEngine,
     private timed: TimedTraining,
@@ -166,10 +174,12 @@ export class CatalogPlan {
     if (!this.active) return;
     const next = this.next();
     return {
+      setId: `${this.sessionId}/${this.block}/${this.set}`,
       block: this.block,
       set: this.set,
       blocks: this.items.length,
       sets: this.current.block.sets,
+      restSeconds: this.setRest,
       between: this.between,
       next: next
         ? blockName(this.items[next.block].block) + " · 第 " + next.set + " 组"
@@ -209,6 +219,7 @@ export class CatalogPlan {
   }
   private beginSet() {
     const { movement, block } = this.current;
+    this.setRest = block.rest;
     const position = {
       sessionId: this.sessionId,
       blockIndex: this.block,
@@ -218,30 +229,25 @@ export class CatalogPlan {
     this.paused = false;
     this.restLeft = 0;
     this.timed.select(movement);
-    if (movement) {
-      this.timed.planPosition = position;
-      this.timed.dispatch({ type: "set_load", kg: block.load });
-      this.timed.dispatch(
-        blockUnit(block) === "reps"
-          ? { type: "set_rep_goal", reps: block.target }
-          : { type: "set_hold_goal", seconds: block.target },
-      );
-      this.timed.dispatch({ type: "session", action: "start" });
-    } else if ("exercise" in block) {
+    if ("exercise" in block) {
       this.engine.dispatch({
         type: "set_exercise",
         exercise: block.exercise,
         restart: true,
       });
-      this.engine.dispatch({ type: "set_load", kg: block.load });
-      this.engine.dispatch(
-        blockUnit(block) === "reps"
-          ? { type: "set_rep_goal", reps: block.target }
-          : { type: "set_hold_goal", seconds: block.target },
-      );
-      this.engine.dispatch({ type: "session", action: "start" });
-      this.engine.planPosition = position;
     }
+    this.applySetValues(block.target, block.load);
+    this.raw({ type: "session", action: "start" });
+    if (movement) this.timed.planPosition = position;
+    else this.engine.planPosition = position;
+  }
+  private applySetValues(target: number, load: number): Result {
+    const reps = blockUnit(this.current.block) === "reps";
+    if (reps && target > 100) return fail("本组目标最多 100 次。");
+    const goal = this.raw(reps
+      ? { type: "set_rep_goal", reps: target }
+      : { type: "set_hold_goal", seconds: target });
+    return goal.ok ? this.raw({ type: "set_load", kg: load }) : goal;
   }
   private archive() {
     if (this.timed.active) this.timed.finish();
@@ -254,6 +260,7 @@ export class CatalogPlan {
     }
     this.timed.planPosition = undefined;
     this.engine.planPosition = undefined;
+    this.applySetValues(this.current.block.target, this.current.block.load);
   }
   private raw(command: Command): Result {
     return this.current.movement
@@ -273,7 +280,7 @@ export class CatalogPlan {
       return success("计划已完成。");
     }
     this.between = true;
-    this.deadline = this.engine.now() + (restSeconds ?? this.current.block.rest);
+    this.deadline = this.engine.now() + (restSeconds ?? this.setRest);
     return success("本组完成，准备下一组。");
   }
   skipRemainingSets(): Result {
@@ -315,7 +322,11 @@ export class CatalogPlan {
         this.engine.exercise === "plank"
           ? this.engine.plank.total
           : this.engine.rows.length;
-    if (value >= this.current.block.target) return this.complete();
+    const reps = blockUnit(this.current.block) === "reps";
+    const target = timed
+      ? (reps ? timed.goalReps : timed.goalSeconds)
+      : (reps ? this.engine.goal : this.engine.holdGoal);
+    if (value >= target) return this.complete();
   }
   pause(): Result {
     if (!this.active) return fail("当前没有训练计划。");
@@ -333,7 +344,15 @@ export class CatalogPlan {
     this.items = [];
     return success("计划已结束。");
   }
-  command(command: Command): Result {
+  command(command: Command | PlanSetAdjustment): Result {
+    if (command.type === "adjust_plan_set") {
+      if (!this.active || this.between || this.view()?.setId !== command.setId)
+        return fail("本组已结束，请在当前组重新调整。");
+      const result = this.applySetValues(command.target, command.load);
+      if (!result.ok) return result;
+      this.setRest = command.rest;
+      return this.tick() ?? success("本组设置已生效。");
+    }
     if (command.type === "stop_program") return this.stop();
     if (command.type === "session") {
       if (command.action === "end") return this.stop();
@@ -361,10 +380,11 @@ export class CatalogPlan {
     if (command.type === "rest_timer") return this.complete(command.seconds);
     if (
       !this.between &&
-      (command.type === "cues" ||
+      (command.type === "cues" || command.type === "set_rep_goal" ||
+        command.type === "set_hold_goal" || command.type === "set_load" ||
         command.type === "set_tempo")
     )
       return this.raw(command);
-    return fail("计划中使用已设定的动作和目标，可完成本组或结束计划。");
+    return fail(this.between ? "组间休息中，请在下一组开始后调整。" : "计划进行中，请先结束计划再切换训练。");
   }
 }

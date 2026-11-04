@@ -8,7 +8,7 @@ import {
 } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { build } from "esbuild";
-import { buildMovementLibrary } from "./movekit-assets.mjs";
+import { buildMovementLibrary } from "./library-assets.mjs";
 // Ship the same notices in desktop and Web builds, including offline copies.
 await mkdir("public/licenses", { recursive: true });
 for (const [source, filename] of [

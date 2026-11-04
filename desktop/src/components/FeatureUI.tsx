@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { type CSSProperties, type ReactNode } from "react";
 import { type LucideIcon } from "lucide-react";
 import { SegmentedControl, type NavigationProps } from "./SegmentedControl";
@@ -8,14 +9,15 @@ export function PageHeading({
   extra,
 }: {
   title: string;
-  sub: string;
+  sub?: string;
   extra?: ReactNode;
 }) {
+  const { uiText } = useUiLocale();
   return (
     <div className="page-title">
       <div>
-        <h1>{title}</h1>
-        <p className="muted">{sub}</p>
+        <h1>{uiText(title)}</h1>
+        {sub && <p className="muted">{uiText(sub)}</p>}
       </div>
       {extra}
     </div>
@@ -31,13 +33,14 @@ export function EmptyState({
   title: string;
   text?: string;
 }) {
+  const { uiText } = useUiLocale();
   return (
     <div className="quiet-empty">
       <span className="empty-icon">
         <Icon size={23} strokeWidth={1.5} />
       </span>
-      <strong>{title}</strong>
-      {text && <p>{text}</p>}
+      <strong>{uiText(title)}</strong>
+      {text && <p>{uiText(text)}</p>}
     </div>
   );
 }
@@ -51,11 +54,12 @@ export function SectionHeading({
   detail?: string;
   icon?: LucideIcon;
 }) {
+  const { uiText } = useUiLocale();
   return (
     <div className="section-heading">
       <h2>
         {Icon && <Icon size={18} strokeWidth={1.6} />}
-        {title}
+        {uiText(title)}
       </h2>
       {detail && <span>{detail}</span>}
     </div>
@@ -73,15 +77,16 @@ export function Metric({
   unit?: string;
   color?: string;
 }) {
+  const { uiText } = useUiLocale();
   return (
     <div
       className="stat-block"
       style={{ "--stat-color": color } as CSSProperties}
     >
-      <span className="stat-label">{label}</span>
+      <span className="stat-label">{uiText(label)}</span>
       <div>
-        <strong>{value}</strong>
-        {unit && <span className="stat-unit">{unit}</span>}
+        <strong>{uiText(value)}</strong>
+        {unit && <span className="stat-unit">{uiText(unit)}</span>}
       </div>
     </div>
   );
@@ -96,8 +101,9 @@ export function TabNavigation(props: NavigationProps & { primary?: boolean }) {
 }
 
 function PrimaryNavigation({ value, onChange, items, label }: NavigationProps) {
+  const { uiText } = useUiLocale();
   return (
-    <div className="tab-navigation" role="group" aria-label={label}>
+    <div className="tab-navigation" role="group" aria-label={uiText(label)}>
       {items.map(([id, text]) => (
         <button
           key={id}
@@ -106,7 +112,7 @@ function PrimaryNavigation({ value, onChange, items, label }: NavigationProps) {
           aria-current={value === id ? "page" : undefined}
           onClick={() => onChange(id)}
         >
-          {text}
+          {uiText(text)}
         </button>
       ))}
     </div>
@@ -142,6 +148,7 @@ export function Distribution({
 }: {
   groups: { muscle: string; sets: number; last: string }[];
 }) {
+  const { language, uiText } = useUiLocale();
   const total = groups.reduce((sum, g) => sum + g.sets, 0);
   let offset = 0;
   return (
@@ -151,9 +158,9 @@ export function Distribution({
           viewBox="0 0 220 220"
           role="img"
           aria-label={
-            total
+            uiText(total
               ? `近七天肌群关联训练共 ${total} 组，具体分布见图例`
-              : "暂无近七天肌群训练数据"
+              : "暂无近七天肌群训练数据")
           }
         >
           <circle
@@ -190,7 +197,7 @@ export function Distribution({
         </svg>
         <div className="ring-caption">
           <strong>{total}</strong>
-          <span>关联组数</span>
+          <span>{uiText("关联组数")}</span>
         </div>
       </div>
       <div className="distribution-legend">
@@ -198,23 +205,23 @@ export function Distribution({
           groups.map((g) => (
             <div
               key={g.muscle}
-              title={`最近训练：${new Date(g.last).toLocaleDateString("zh-CN")}`}
+              title={uiText(`最近训练：${new Date(g.last).toLocaleDateString(language)}`)}
             >
               <i
                 style={{ background: muscleColors[g.muscle] ?? chartColors[0] }}
               />
-              <span>{g.muscle}</span>
+              <span>{uiText(g.muscle)}</span>
               <b>
                 {g.sets}
-                <small> 组</small>
+                <small>{uiText(" 组")}</small>
               </b>
             </div>
           ))
         ) : (
           <p className="muted">
-            完成训练后，
+            {uiText("完成训练后，")}
             <br />
-            在这里看见肌群分布。
+            {uiText("在这里看见肌群分布。")}
           </p>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Check, Plus, Search, X } from "lucide-react";
 import {
@@ -23,6 +24,7 @@ export function MovementPicker(
   props: LibrarySource &
     PickerMode & { favorites: string[]; onClose: () => void },
 ) {
+  const { uiText } = useUiLocale();
   const { items, favorites, failed, reload, onClose } = props;
   const managing = props.mode === "home";
   const dialog = useRef<HTMLDialogElement>(null);
@@ -107,21 +109,22 @@ export function MovementPicker(
         <header>
           <div>
             <h2 id={titleId}>
-              {managing ? "管理首页快捷动作" : "选择计划动作"}
+              {uiText(managing ? "管理首页快捷动作" : "选择计划动作")}
             </h2>
             <p>
-              {managing
+              {uiText(managing
                 ? "勾选常用动作，在「首页已选」里调整顺序。"
-                : "按难度、肌群和器械浏览，点选动作即可加入计划。"}
+                : "按难度、肌群和器械浏览，点选动作即可加入计划。")}
             </p>
           </div>
-          <button aria-label="关闭动作选择" disabled={saving} onClick={onClose}>
+          <button aria-label={uiText("关闭动作选择")} disabled={saving} onClick={onClose}>
             <X size={18} />
           </button>
         </header>
         <div className="picker-layout">
-          <aside className="picker-filters" aria-label="动作分类">
+          <aside className="picker-filters" aria-label={uiText("动作分类")}>
             <MovementFilters
+              showAll
               items={items}
               value={facets}
               onChange={(v) => {
@@ -130,12 +133,12 @@ export function MovementPicker(
               }}
             />
           </aside>
-          <section className="picker-catalog" aria-label="可选动作">
+          <section className="picker-catalog" aria-label={uiText("可选动作")}>
             <label className="library-search">
               <Search size={18} />
               <input
-                aria-label="搜索全部动作"
-                placeholder="也可搜索动作名称"
+                aria-label={uiText("搜索全部动作")}
+                placeholder={uiText("搜索动作名称")}
                 value={query}
                 onChange={(e) => {
                   setQuery(e.target.value);
@@ -144,7 +147,7 @@ export function MovementPicker(
               />
             </label>
             {managing && (
-              <div className="picker-tabs" aria-label="快捷动作范围">
+              <div className="picker-tabs" aria-label={uiText("快捷动作范围")}>
                 {[false, true].map((only) => (
                   <button
                     key={String(only)}
@@ -154,13 +157,13 @@ export function MovementPicker(
                       resetFilters();
                     }}
                   >
-                    {only ? `首页已选 · ${draft.length}` : "全部动作"}
+                    {uiText(only ? `首页已选 · ${draft.length}` : "全部动作")}
                   </button>
                 ))}
               </div>
             )}
             <p className="picker-count" role="status">
-              {results.length} 个动作{!selectedOnly && " · 常练优先"}
+              {results.length}{uiText(" 个动作")}{!selectedOnly && " · 常练优先"}
             </p>
             <div
               className="plan-picker-scroll"
@@ -173,18 +176,18 @@ export function MovementPicker(
               ].join("|")}
             >
               {failed ? (
-                <button onClick={reload}>动作库读取失败，重新加载</button>
+                <button onClick={reload}>{uiText("动作库读取失败，重新加载")}</button>
               ) : !items.length ? (
-                <p>正在读取动作…</p>
+                <p>{uiText("正在读取动作…")}</p>
               ) : !results.length ? (
                 <div className="picker-empty">
                   <p>
-                    {selectedOnly && !draft.length
+                    {uiText(selectedOnly && !draft.length
                       ? "还没有首页快捷动作，请到「全部动作」选择。"
-                      : "没有符合条件的动作。"}
+                      : "没有符合条件的动作。")}
                   </p>
                   {(query || Object.values(facets).some(Boolean)) && (
-                    <button onClick={resetFilters}>清除筛选</button>
+                    <button onClick={resetFilters}>{uiText("清除筛选")}</button>
                   )}
                 </div>
               ) : (
@@ -201,15 +204,15 @@ export function MovementPicker(
                       >
                         <img src={m.poster} alt="" loading="lazy" />
                         <span>
-                          <strong>{m.name}</strong>
+                          <strong>{uiText(m.name)}</strong>
                           <small>
-                            {movementLevels[m.level] ?? m.level} ·{" "}
-                            {m.primaryMuscles
+                            {uiText(movementLevels[m.level] ?? m.level)} ·{" "}
+                            {uiText(m.primaryMuscles
                               .map((s) => movementMuscles[s] ?? s)
-                              .join(" / ")}
+                              .join(" / "))}
                           </small>
                           <small>
-                            {movementCapability(m)}
+                            {uiText(movementCapability(m))}
                             {favorites.includes(m.slug) && " · 常练"}
                           </small>
                         </span>
@@ -219,14 +222,14 @@ export function MovementPicker(
                       {selectedOnly && (
                         <div className="shortcut-order">
                           <button
-                            aria-label={`上移${m.name}`}
+                            aria-label={uiText(`上移${m.name}`)}
                             disabled={saving || m.slug === draft[0]}
                             onClick={() => move(m.slug, -1)}
                           >
                             <ArrowUp size={14} />
                           </button>
                           <button
-                            aria-label={`下移${m.name}`}
+                            aria-label={uiText(`下移${m.name}`)}
                             disabled={saving || m.slug === draft.at(-1)}
                             onClick={() => move(m.slug, 1)}
                           >
@@ -243,7 +246,7 @@ export function MovementPicker(
                   className="load-more"
                   onClick={() => setLimit(limit + 32)}
                 >
-                  查看更多动作
+                  {uiText("查看更多动作")}
                 </button>
               )}
             </div>
@@ -259,15 +262,15 @@ export function MovementPicker(
                 resetFilters();
               }}
             >
-              恢复默认九项
+              {uiText("恢复默认")}
             </button>
-            {error && <span role="alert">{error}</span>}
+            {error && <span role="alert">{uiText(error)}</span>}
             <button
               className="save-shortcuts"
               disabled={saving || failed || !items.length}
               onClick={() => void save()}
             >
-              {saving ? "保存中…" : `保存快捷动作（${draft.length}）`}
+              {uiText(saving ? "保存中…" : "保存")}
             </button>
           </footer>
         )}

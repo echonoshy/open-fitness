@@ -11,8 +11,8 @@ const reference = (
   exercise: Exercise,
   points: ExerciseReference["points"],
 ): ExerciseReference => ({
-  video: `./movekit-library/hd/${primaryMovementSlugs[exercise]}.mp4`,
-  poster: `./movekit-library/hd/${primaryMovementSlugs[exercise]}.webp`,
+  video: `./library/hd/${primaryMovementSlugs[exercise]}.mp4`,
+  poster: `./library/hd/${primaryMovementSlugs[exercise]}.webp`,
   points,
 });
 

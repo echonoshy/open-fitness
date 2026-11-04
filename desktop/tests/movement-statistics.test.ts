@@ -1,7 +1,7 @@
 import { catalogCameraGuide } from "../src/components/catalog-camera-guides";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { catalog } from "./fixtures/movement-catalog";
 import {
   MovementStatistics,
   movementProfile,
@@ -13,19 +13,9 @@ import {
   recoverTimedCheckpoint,
 } from "../src/core/timed-training";
 import { dataSchema } from "../src/core/data";
-import {
-  movementCapability,
-  type Movement,
-} from "../src/core/movement-library";
 import type { Point } from "../src/core/engine";
 import { appControls } from "./helpers/app-controls";
 
-const catalog: Movement[] = JSON.parse(
-  readFileSync(
-    new URL("../public/movekit-library/catalog.json", import.meta.url),
-    "utf8",
-  ),
-).movements;
 const item = (slug: string) => catalog.find((m) => m.slug === slug)!;
 function pose(deg = 170): Point[] {
   const p = Array.from({ length: 33 }, () => ({
@@ -144,10 +134,6 @@ test("specific families take precedence over ambiguous name fragments", () => {
 });
 
 test("all camera-tracked movements have a placement diagram, timer-only movements need none", () => {
-  assert.equal(catalog.length, 582);
-  assert.ok(
-    catalog.filter((m) => movementCapability(m) === "估算计数").length > 300,
-  );
   for (const m of catalog) {
     assert.ok(effectiveMovementProfile(m).hint, m.slug);
     if (!m.trainingExercise)

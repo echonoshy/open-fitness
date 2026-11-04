@@ -18,9 +18,9 @@
   padding: 16px;
   border: 1px solid #ffffff26;
   border-radius: 18px;
-  background: #292929;
+  background: var(--surface);
   box-shadow: 0 12px 32px #0006;
-  color: #f5f5f3;
+  color: var(--text-primary);
   z-index: 30;
   text-align: left;
 }
@@ -60,7 +60,7 @@
 }
 .camera-view-panel .camera-view-presets button[aria-pressed="true"] {
   background: var(--accent);
-  color: #22251b;
+  color: var(--primary-ink);
 }
 .camera-view-panel .camera-view-presets button[role="switch"] {
   justify-content: space-between;
@@ -68,7 +68,7 @@
 }
 .camera-view-panel [role="switch"] span {
   font-size: 12px;
-  color: #b7bcb0;
+  color: var(--muted);
 }
 .camera-view-panel [role="switch"][aria-checked="true"] span {
   color: var(--accent);
@@ -77,7 +77,7 @@
   margin: 12px 0 0;
   font-size: 13px;
   line-height: 1.6;
-  color: #c7c7c7;
+  color: var(--text-secondary);
 }
 .camera-view-control button:disabled {
   opacity: 0.4;

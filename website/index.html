@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="用 open-fitness 从 582 个动作中编排自己的训练计划，看看真实的计划编辑器、动作库和摄像头训练演示。">
+  <link rel="icon" href="./assets/app-icon.png" type="image/png">
+  <link rel="stylesheet" href="./style.css">
+  <title>open-fitness · 摄像头与语音健身教练</title>
+</head>
+<body>
+  <svg class="symbol-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="overview-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></symbol>
+    <symbol id="film-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></symbol>
+    <symbol id="download-icon" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+    <symbol id="layers-icon" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5zm-9 9 9 5 9-5m-18 4 9 5 9-5"/></symbol>
+    <symbol id="mac-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="m2 19 3-3h14l3 3z"/></symbol>
+    <symbol id="list-icon" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  </svg>
+  <a class="skip" href="#content">跳到正文</a>
+  <aside class="rail">
+    <a class="brand" href="#overview" aria-label="open-fitness，返回产品概览">
+      <img class="brand-icon" src="./assets/app-icon.png" alt="" width="32" height="32">
+      <img class="brand-wordmark" src="./assets/navigation-wordmark.svg" alt="" width="116" height="18">
+    </a>
+    <nav aria-label="页面导航">
+      <a href="#overview" aria-current="location"><svg><use href="#overview-icon"/></svg>概览</a>
+      <a href="#demo"><svg><use href="#film-icon"/></svg>实机演示</a>
+      <a href="#features"><svg><use href="#layers-icon"/></svg>计划与动作库</a>
+      <a href="#coaching"><svg><use href="#list-icon"/></svg>训练与反馈</a>
+      <a href="#download"><svg><use href="#download-icon"/></svg>下载</a>
+    </nav>
+    <div class="rail-bottom"><svg><use href="#mac-icon"/></svg><span>当前桌面版 <small>macOS · Apple Silicon</small></span></div>
+  </aside>
+  <main id="content">
+    <div class="page">
+      <section id="overview" class="intro" aria-labelledby="page-title">
+        <div class="path"><span>open-fitness</span><i>/</i> 产品概览</div>
+        <div class="product-head">
+          <img src="./assets/app-icon.png" alt="open-fitness 应用图标" width="72" height="72">
+          <div><h1 id="page-title">你的 AI 视觉私教</h1>
+          <p>从 582 个动作里选一套计划，让摄像头帮你计次，训练中随时开口问教练。</p>
+          <ul class="product-values" aria-label="使用与源码">
+            <li><span class="badge badge-free"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="m9 12 2 2 4-4"/></svg>个人免费使用</span></li>
+            <li><span class="badge badge-ad-free"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M9 9l-6 2v3l14 3M21 15V6l-7 2M6 15l1 4h4l-1-3"/></svg>无广告</span></li>
+            <li><span class="badge badge-source"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 8-4 4 4 4m10-8 4 4-4 4m-4-12-3 16"/></svg>代码开源</span></li>
+          </ul></div>
+        </div>
+      </section>
+      <section id="demo" aria-labelledby="film-title">
+        <div class="section-heading"><h2 id="film-title">实机演示</h2><span class="meta">50 秒<span class="dot">·</span>含教练语音</span></div>
+        <div class="screen">
+          <video id="demo-video" controls playsinline preload="metadata" poster="./preview-media/open-fitness-tour.jpg" aria-label="open-fitness 软件功能实机演示" aria-describedby="film-note">
+            <source src="./preview-media/open-fitness-tour.mp4?v=female2-solo" type="video/mp4">
+            <track kind="captions" srclang="zh-CN" label="中文" src="./assets/tour-voice.zh.vtt?v=female2-solo">
+            你的浏览器无法播放此视频。<a href="./preview-media/open-fitness-tour.mp4?v=female2-solo">打开原片</a>
+          </video>
+          <button class="cover" type="button" hidden aria-label="播放 50 秒实机演示">
+            <span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5 13 8l-9 5.5z"/></svg>播放演示</span>
+          </button>
+        </div>
+        <div class="chapters" aria-label="演示章节">
+          <button type="button" data-start="0" aria-pressed="true"><time>00:00</time><span>姿态识别</span></button>
+          <button type="button" data-start="3" aria-pressed="false"><time>00:03</time><span>挑选动作</span></button>
+          <button type="button" data-start="6" aria-pressed="false"><time>00:06</time><span>选定计划</span></button>
+          <button type="button" data-start="12" aria-pressed="false"><time>00:12</time><span>自动计次</span></button>
+          <button type="button" data-start="18" aria-pressed="false"><time>00:18</time><span>背景虚化</span></button>
+          <button type="button" data-start="22" aria-pressed="false"><time>00:22</time><span>AI 语音指导</span></button>
+          <button type="button" data-start="40" aria-pressed="false"><time>00:40</time><span>动作讲解</span></button>
+          <button type="button" data-start="45" aria-pressed="false"><time>00:45</time><span>保存记录</span></button>
+        </div>
+        <p class="note" id="film-note">演示结合 0.3.24 和 0.3.48 版实际运行画面。摄像头画面使用预录动作样本。语音段保留实机问答内容，提问以文字呈现，教练回答使用应用内的女声 2。</p>
+        <p class="note" id="play-error" role="status" hidden>视频暂时无法播放。<a href="./preview-media/open-fitness-tour.mp4?v=female2-solo">打开原片</a></p>
+      </section>
+      <section id="features" class="showcase" aria-label="训练计划和动作库">
+        <article id="plans">
+          <h2>设置训练计划</h2>
+          <p>为每个动作设置组数、目标次数或时长、组间休息和负重。保存后，下次可以直接开始同一套计划。</p>
+          <a class="shot" href="./preview-media/plan-screen.jpg" data-title="设置训练计划" aria-label="放大训练计划实机截图">
+            <img src="./preview-media/plan-screen.jpg" width="1360" height="860" alt="全身基础训练计划。深蹲 3 组，每组 12 次；俯卧撑 3 组，每组 10 次；平板支撑 2 组，每组 30 秒。">
+            <span aria-hidden="true">⤢</span>
+          </a>
+          <small>全身基础训练<span>·</span>3 个动作，8 组</small>
+        </article>
+        <article id="library">
+          <h2>浏览 582 个动作</h2>
+          <p>按难度、肌群或器械筛选，点开演示视频看动作怎么做。喜欢的动作可以加入「常练动作」。</p>
+          <a class="shot" href="./preview-media/library-screen.jpg" data-title="动作库 · 全部 582 个动作" aria-label="放大动作库实机截图">
+            <img src="./preview-media/library-screen.jpg" width="1360" height="860" alt="动作库的全部动作页，展示难度、训练肌群、器械筛选，以及自重深蹲、俯卧撑、杠铃卧推和硬拉等动作视频。">
+            <span aria-hidden="true">⤢</span>
+          </a>
+          <small>全部动作<span>·</span>按难度、肌群和器械浏览</small>
+        </article>
+      </section>
+      <section id="coaching" aria-labelledby="coaching-title">
+        <h2 id="coaching-title">训练中的反馈</h2>
+        <dl class="feature-lines">
+          <div><dt>AI 语音交互</dt><dd>训练中可以问「深蹲时怎么呼吸」，也可以说「把目标改成 12 次」「休息一分钟」。教练播报时，你可以直接开口打断。</dd></div>
+          <div><dt>摄像头计次与计时</dt><dd>深蹲、俯卧撑等动作可自动计次，平板支撑按保持时间记录。动作库也标明哪些动作适合估算、计时或手动记录。</dd></div>
+          <div><dt>背景虚化与隐私</dt><dd>可以在取景时虚化身后的房间。摄像头画面和姿态分析留在本机；使用在线教练时，语音片段、对话和必要的训练上下文会发往所配置的 AI 服务。</dd></div>
+          <div><dt>记录与导出</dt><dd>练完一组，可以回看次数、时长和历史表现。完整资料可备份为 JSON，部分训练记录也可导出为 Strong 或 Hevy 格式的 CSV。</dd></div>
+        </dl>
+      </section>
+      <section id="download" class="info-section" aria-labelledby="download-title">
+        <h2 id="download-title">平台与下载</h2>
+        <div class="download-row"><div class="platform"><img class="download-icon" src="./assets/app-icon.png" width="40" height="40" alt=""><div><strong>macOS 版</strong><p>适用于配备 Apple Silicon 芯片的 Mac</p></div></div><span class="status">公开版尚未发布</span></div>
+        <p class="platform-roadmap"><strong>更多平台</strong><span>后续计划适配其他系统，具体平台与时间待定。</span></p>
+        <p class="note"><strong>基础功能无需 API Key。</strong>你可以浏览动作库、编排计划、保存训练记录，也可以用摄像头为深蹲、俯卧撑等动作计次。使用在线 AI 语音教练时，需要自备 Agent Plan Key，费用按服务商套餐计算。</p>
+      </section>
+      <footer><span>open-fitness</span><a href="#overview">回到顶部 ↑</a></footer>
+    </div>
+  </main>
+  <dialog class="shot-dialog" aria-labelledby="shot-title">
+    <div class="dialog-tools"><h2 id="shot-title"></h2><button type="button" autofocus>关闭</button></div>
+    <a class="original-shot" target="_blank" rel="noopener" aria-label="查看原始大小的截图（新标签页）"><img alt=""></a>
+    <p>点击图片查看原始大小。</p>
+  </dialog>
+  <script src="./demo.js" defer></script>
+</body>
+</html>

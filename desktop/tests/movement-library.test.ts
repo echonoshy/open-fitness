@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import {
   filterMovements,
   primaryMovementSlugs,
@@ -27,8 +27,8 @@ const entry = (
   level: "beginner",
   description: "动作介绍。",
   instructions: ["准备姿势", "执行动作", "控制节奏", "还原姿势"],
-  video: `./movekit-library/hd/${slug}.mp4`,
-  poster: `./movekit-library/hd/${slug}.webp`,
+  video: `./library/hd/${slug}.mp4`,
+  poster: `./library/hd/${slug}.webp`,
   durationSeconds: 7,
   ...extra,
 });
@@ -132,30 +132,25 @@ test("typed searches tolerate a single typo within a longer name and keep all ot
   assert.deepEqual(filterMovements(sample, { query: "杠铃卧推" }), [sample[1]]);
 });
 
-test("every MoveKit entry has a unique slug, Chinese title, and known filter labels", async () => {
+test("every library entry has a unique slug, Chinese title, and known filter labels", async () => {
   const source = JSON.parse(
     await readFile(
-      new URL("../../data/movekit-library.json", import.meta.url),
+      new URL("../../data/library.json", import.meta.url),
       "utf8",
     ),
   );
   const translation = JSON.parse(
     await readFile(
-      new URL("../../data/movekit-library.zh-CN.json", import.meta.url),
+      new URL("../../data/library.zh-CN.json", import.meta.url),
       "utf8",
     ),
   );
   const slugs = source.exercises.map((x: { slug: string }) => x.slug);
+  assert.equal(slugs.length, 582);
   assert.equal(new Set(slugs).size, slugs.length);
   assert.equal(slugs.length, Object.keys(translation.names).length);
   for (const item of source.exercises) {
     assert.match(translation.names[item.slug], /[\u4e00-\u9fff]/);
-    assert.ok(
-      item.videoWatermarkedUrl.includes("video-watermarked"),
-      item.slug,
-    );
-    assert.ok(item.posterImageUrl.startsWith("https://"), item.slug);
-    assert.ok(item.videoPreviewUrl.startsWith("https://"), item.slug);
     assert.ok(movementLevels[item.difficulty], item.slug);
     item.equipment.forEach((value: string) =>
       assert.ok(movementEquipment[value], value),
@@ -188,17 +183,41 @@ test("every MoveKit entry has a unique slug, Chinese title, and known filter lab
   }
 });
 
+test("the built catalogue lists exactly the installed media and maps the bundled exercises", async () => {
+  const dir = new URL("../public/library/", import.meta.url);
+  const { movements }: { movements: Movement[] } = JSON.parse(
+    await readFile(new URL("catalog.json", dir), "utf8"),
+  );
+  const files = await readdir(new URL("hd/", dir));
+  const paths = movements.flatMap(({ slug, video, poster }) => {
+    assert.equal(video, `./library/hd/${slug}.mp4`);
+    assert.equal(poster, `./library/hd/${slug}.webp`);
+    return [`${slug}.mp4`, `${slug}.webp`];
+  });
+  assert.deepEqual(
+    paths.sort(),
+    files.filter((f) => /\.(mp4|webp)$/i.test(f)).sort(),
+  );
+  assert.deepEqual(
+    movements
+      .filter((m) => m.trainingExercise)
+      .map((m) => [m.trainingExercise, m.slug])
+      .sort(),
+    Object.entries(primaryMovementSlugs).sort(),
+  );
+});
+
 test("every catalogue movement has its own Chinese introduction and ordered technique instructions", async () => {
   const source = JSON.parse(
     await readFile(
-      new URL("../../data/movekit-library.json", import.meta.url),
+      new URL("../../data/library.json", import.meta.url),
       "utf8",
     ),
   );
   const { movements } = JSON.parse(
     await readFile(
       new URL(
-        "../../data/movekit-library.instructions.zh-CN.json",
+        "../../data/library.instructions.zh-CN.json",
         import.meta.url,
       ),
       "utf8",
@@ -228,7 +247,7 @@ test("every catalogue movement has its own Chinese introduction and ordered tech
     );
     for (const text of item.instructions) {
       assert.match(text, /[\u4e00-\u9fff]/, slug);
-      assert.doesNotMatch(text, /https?:|MoveKit|TODO|待补充|敬请期待/i, slug);
+      assert.doesNotMatch(text, /https?:|TODO|待补充|敬请期待/i, slug);
       assert.doesNotMatch(text.replace(/TRX/g, ""), /[A-Za-z]{3,}/, slug);
     }
   }

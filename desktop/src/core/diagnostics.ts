@@ -125,7 +125,6 @@ function supportedObservation(clause: string, g?: ReplyGrounding) {
         (!want || !s.backgroundBlur.notice)
       );
     if (/摄像头/.test(clause)) return s.cameraView?.cameraOn === want;
-    if (/自动识别/.test(clause)) return s.auto === want;
     if (/纠错/.test(clause)) return s.cues === want;
     if (/语音播报|教练声音/.test(clause)) return s.voice?.enabled === want;
     if (/休息|倒计时/.test(clause)) {

@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import type { CSSProperties } from "react";
 
 export interface NavigationProps {
@@ -13,11 +14,12 @@ export function SegmentedControl({
   items,
   label,
 }: NavigationProps) {
+  const { uiText } = useUiLocale();
   return (
     <div
       className="segmented-control"
       role="group"
-      aria-label={label}
+      aria-label={uiText(label)}
       style={
         {
           "--segment-count": items.length,
@@ -31,7 +33,7 @@ export function SegmentedControl({
           aria-pressed={value === id}
           onClick={() => onChange(id)}
         >
-          {text}
+          {uiText(text)}
         </button>
       ))}
     </div>

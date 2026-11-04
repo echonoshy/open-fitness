@@ -8,6 +8,8 @@ export interface Movement {
   slug: string;
   name: string;
   originalName: string;
+  originalDescription?: string;
+  originalInstructions?: string[];
   equipment: string[];
   primaryMuscles: string[];
   secondaryMuscles: string[];
@@ -92,7 +94,7 @@ export const primaryMovementSlugs: Record<Exercise, string> = {
 
 let cached: Promise<Movement[]> | undefined;
 export function loadMovementLibrary(): Promise<Movement[]> {
-  return (cached ??= fetch("./movekit-library/catalog.json")
+  return (cached ??= fetch("./library/catalog.json")
     .then(async (response) => {
       if (
         !response.ok ||

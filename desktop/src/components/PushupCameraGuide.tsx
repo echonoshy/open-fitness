@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import {
   PUSHUP_VIEW_LABELS,
   type PushupCheck,
@@ -11,10 +12,11 @@ export function PushupCameraGuide({
   check?: PushupCheck;
   cameraOn: boolean;
 }) {
+  const { uiText } = useUiLocale();
   const current = cameraOn ? (check?.view ?? "unknown") : "unknown";
   return (
-    <div className="pushup-camera-guide" aria-label="俯卧撑拍摄角度">
-      <div className="camera-view-options" aria-label="支持的机位，俯视示意">
+    <div className="pushup-camera-guide" aria-label={uiText("俯卧撑拍摄角度")}>
+      <div className="camera-view-options" aria-label={uiText("支持的机位，俯视示意")}>
         {(["front", "oblique", "side"] as PushupView[]).map((view) => (
           <div
             key={view}
@@ -23,7 +25,7 @@ export function PushupCameraGuide({
             <svg
               viewBox="0 0 56 44"
               role="img"
-              aria-label={`${PUSHUP_VIEW_LABELS[view]}机位俯视示意`}
+              aria-label={uiText(`${PUSHUP_VIEW_LABELS[view]}机位俯视示意`)}
             >
               <g className="camera-view-body">
                 <circle cx="32" cy="26" r="3" />
@@ -42,25 +44,25 @@ export function PushupCameraGuide({
                 <path d="M3-1L6-3V3L3 1M9 0H15M12-3L15 0L12 3" />
               </g>
             </svg>
-            <span>{PUSHUP_VIEW_LABELS[view]}</span>
+            <span>{uiText(PUSHUP_VIEW_LABELS[view])}</span>
           </div>
         ))}
       </div>
       <small className="camera-view-legend">
-        俯视机位 · 侧面更适合观察腰背
+        {uiText("俯视机位 · 侧面更适合观察腰背")}
       </small>
       <div className="camera-view-status" role="status">
         <strong>
-          {!cameraOn
+          {uiText(!cameraOn
             ? "开启摄像头后识别角度"
             : current === "unknown"
               ? "正在确认拍摄角度"
-              : `当前：${PUSHUP_VIEW_LABELS[current]} · ${check?.ready ? "可计数" : "准备中"}`}
+              : `当前：${PUSHUP_VIEW_LABELS[current]} · ${check?.ready ? "可计数" : "准备中"}`)}
         </strong>
         <small>
-          {cameraOn && check
+          {uiText(cameraOn && check
             ? check.assessment
-            : "镜头放低，肩、肘、手腕和髋部入镜"}
+            : "镜头放低，肩、肘、手腕和髋部入镜")}
         </small>
       </div>
     </div>

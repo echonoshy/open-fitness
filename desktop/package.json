@@ -15,7 +15,6 @@
     "test": "tsx --test tests/*.test.ts",
     "verify:services": "tsx scripts/verify-services.ts",
     "verify:vad": "tsx scripts/verify-barge-in.ts",
-    "voices:register": "tsx scripts/register-approved-voices.ts",
     "icon": "node scripts/icon.mjs",
     "package": "node scripts/package-macos.mjs personal",
     "package:private": "npm run package",

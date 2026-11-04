@@ -113,8 +113,8 @@
   background: #242424;
 }
 .reference-choice.selected {
-  border-color: #d2ed9e88;
-  background: #d2ed9e09;
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
 }
 .reference-choice:focus-within {
   outline: 2px solid var(--focus);

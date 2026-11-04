@@ -17,27 +17,10 @@
   position: absolute;
   inset: 0 0 auto;
   padding: 0 40px;
-  background: #1e1e1ee6;
+  background: var(--header-surface);
   transition:
     opacity 0.2s,
     transform 0.2s;
-}
-.app-header .brand {
-  font-size: 26px;
-  font-weight: 750;
-  letter-spacing: -1.2px;
-  white-space: nowrap;
-  line-height: 1.2;
-}
-.app-header .brand span {
-  font-size: 20px;
-  color: #bcbcbc;
-  font-weight: 400;
-}
-.brand b {
-  color: var(--accent);
-  font-weight: 500;
-  padding: 0 2px;
 }
 .app-header nav {
   position: absolute;
@@ -59,7 +42,7 @@
   border-radius: 8px;
   font-size: 14px;
   line-height: 1;
-  color: #bdbdbd;
+  color: var(--muted);
   white-space: nowrap;
 }
 .app-header nav button.selected {
@@ -69,13 +52,13 @@
   font-weight: 650;
 }
 .app-header nav button:hover:not(.selected) {
-  background: #ffffff0a;
+  background: var(--hover-overlay);
 }
 .app-header .device-pill {
   max-width: 200px;
   font-size: 12px;
   line-height: 1;
-  background: #262626d9;
+  background: var(--surface-floating);
   backdrop-filter: blur(20px);
   height: 36px;
   min-height: 36px;
@@ -135,6 +118,11 @@
 }
 .camera-live .stage-video video {
   opacity: 1;
+}
+.camera-idle {
+  background: radial-gradient(ellipse at 49% 41%,
+    color-mix(in srgb, var(--accent) 12%, var(--surface)) 0%,
+    var(--surface) 33%, var(--background) 76%);
 }
 .stage-shade {
   background: transparent;
@@ -234,7 +222,7 @@
   padding-right: 5px;
 }
 .rep-ring span {
-  color: #ccc;
+  color: var(--text-secondary);
   font-size: 16px;
   margin-top: 6px;
 }
@@ -269,14 +257,14 @@
   backdrop-filter: blur(16px);
   border: 1px solid #ffffff10;
   font-size: 13px;
-  color: #c7c7c7;
+  color: var(--text-secondary);
 }
 .session-chip svg {
-  color: #c4c5e7;
+  color: var(--muted);
 }
 .session-chip strong {
   font-size: 16px;
-  color: #f5f5f3;
+  color: var(--text-primary);
   font-variant-numeric: tabular-nums;
 }
 .tracking-chip {
@@ -308,7 +296,7 @@
   position: absolute;
   width: 26px;
   height: 26px;
-  border: solid #646464;
+  border: solid var(--accent-line);
   border-width: 0;
 }
 .viewfinder-corners i:nth-child(1) {
@@ -343,11 +331,12 @@
   width: 64px;
   height: 64px;
   border-radius: var(--radius-panel);
-  background: transparent;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  box-shadow: inset 0 0 0 1px var(--accent-soft);
   border: 0;
   display: grid;
   place-items: center;
-  color: #c5c5c5;
+  color: color-mix(in srgb, var(--accent) 45%, var(--text-primary));
   margin-bottom: 16px;
 }
 .camera-symbol svg {
@@ -395,7 +384,7 @@
 }
 .session-overlay p {
   font-size: 14px;
-  color: #ccc;
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 .session-overlay button {
@@ -486,14 +475,14 @@
   border-color: #ffffff2a;
 }
 .call-dock .dock-round.mic-active {
-  background: #3c4630;
+  background: var(--accent-soft);
   color: var(--accent);
 }
 .call-dock .finish-action {
   color: #e2e2e2;
 }
 .call-dock .finish-action:hover:not(:disabled) {
-  color: #f5f5f3;
+  color: var(--text-primary);
   background: #3b3b3b;
   border-color: #ffffff30;
 }
@@ -578,7 +567,7 @@
   overflow-y: auto;
   border: 1px solid var(--line);
   border-radius: var(--radius-dialog);
-  color: #f5f5f3;
+  color: var(--text-primary);
   background: var(--surface);
   box-shadow: 0 30px 100px #0008;
 }
@@ -620,6 +609,16 @@
 }
 .goal-setting label small {
   margin-left: 7px;
+}
+.plan-settings-summary {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-block: 12px;
+  border-block: 1px solid var(--line);
+}
+.plan-settings-summary small {
+  color: var(--muted);
 }
 .training-dialog .stepper {
   border-radius: 25px;
@@ -664,7 +663,7 @@
   padding-top: 16px;
   font-size: 12px;
   line-height: 1.7;
-  color: #c9d7b4;
+  color: var(--accent);
 }
 .training-summary svg {
   flex-shrink: 0;
@@ -680,13 +679,6 @@
 .content-app .primary {
   border-radius: var(--radius-control);
 }
-.content-app .voice-option {
-  border-radius: 18px;
-}
-.content-app .voice-option.selected {
-  background: #30352a;
-}
-
 @media (min-width: 1500px) {
   .camera-welcome {
     inset: 21% 25% 22%;
@@ -760,12 +752,6 @@
   .immersive .app-header {
     padding: 0 26px;
   }
-  .app-header .brand {
-    font-size: 26px;
-  }
-  .app-header .brand span {
-    font-size: 20px;
-  }
   .app-header nav button {
     padding: 0 12px !important;
     min-width: 54px;
@@ -837,11 +823,8 @@
   .immersive .app-header {
     padding: 16px 20px 0;
   }
-  .app-header .brand {
-    font-size: 26px;
-  }
-  .app-header .brand span {
-    font-size: 20px;
+  .app-header .product-logo img:last-child {
+    width: 86px;
   }
   .app-header .device-pill {
     height: 36px;
@@ -1099,7 +1082,7 @@
 .coach-subtitle .heard-transcript {
   margin: 0 0 8px;
   font-size: 12px;
-  color: #c7c7c7;
+  color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1110,7 +1093,7 @@
 
 .training-capability {
   display: block;
-  color: #d2ed9e;
+  color: var(--accent);
   font-size: 12px;
   margin: 7px 0 0;
   letter-spacing: 0.04em;
@@ -1150,16 +1133,18 @@
     margin-top: 4px;
   }
 }
-.all-movements-entry {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
+.exercise-list-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+  gap: 10px;
   margin-top: 16px;
-  padding: 12px;
-  background: #d2ed9e15;
-  border: 1px solid #d2ed9e50;
-  border-radius: 10px;
-  color: #d2ed9e;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.exercise-list-actions button {
+  min-height: 44px;
+  padding: 8px 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
 }

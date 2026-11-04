@@ -35,7 +35,7 @@
 }
 .exercise-guide small {
   display: block;
-  color: #bdbdbd;
+  color: var(--text-secondary);
   font-size: 12px;
 }
 .position-checks {
@@ -47,10 +47,10 @@
   flex-wrap: wrap;
   gap: 2px 8px;
   font-size: 10px;
-  color: #bdbdbd;
+  color: var(--text-secondary);
 }
 .position-checks li.passed {
-  color: var(--accent);
+  color: var(--success);
 }
 .pushup-camera-guide {
   margin-top: 10px;
@@ -66,13 +66,13 @@
   padding: 4px;
   border: 1px solid #ffffff18;
   border-radius: 9px;
-  color: #bdbdbd;
+  color: var(--text-secondary);
   font-size: 10px;
 }
 .camera-view.active {
   color: var(--accent);
-  border-color: #d0ff7160;
-  background: #d0ff710c;
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
 }
 .camera-view svg {
   display: block;
@@ -106,16 +106,17 @@
   display: block;
   margin-top: 3px;
   font-size: 10px;
-  color: #bdbdbd;
+  color: var(--text-secondary);
 }
 .exercise-hud {
   top: 104px;
   left: 28px;
   width: 266px;
   padding: 20px;
-  border: 1px solid transparent;
+  border: 1px solid var(--line);
   border-radius: var(--radius-panel);
-  background: #262626ed;
+  box-shadow: var(--panel-shadow);
+  background: var(--surface-floating);
   backdrop-filter: blur(18px);
   text-shadow: none;
   max-height: calc(100dvh - 144px);
@@ -123,11 +124,11 @@
   scrollbar-width: thin;
 }
 .exercise-hud:is(:hover, :focus-within) {
-  border-color: #ffffff16;
+  border-color: var(--line-strong);
 }
 .exercise-label {
   display: block;
-  color: #bdbdbd;
+  color: var(--text-secondary);
   font-size: 12px;
   margin-bottom: 5px;
 }
@@ -152,7 +153,7 @@
 }
 .exercise-trigger svg {
   flex-shrink: 0;
-  color: #bdbdbd;
+  color: var(--text-secondary);
 }
 .exercise-hud .rep-ring {
   width: 152px;
@@ -181,7 +182,7 @@
   gap: 8px;
   min-height: 44px;
   padding: 8px 0 0;
-  color: #c7c7c7;
+  color: var(--text-secondary);
   cursor: pointer;
   list-style: none;
 }
@@ -210,7 +211,7 @@
   padding-top: 10px;
 }
 .tracking-side {
-  color: #bdbdbd;
+  color: var(--text-secondary);
   font-size: 12px;
 }
 .angle-chart {
@@ -250,7 +251,7 @@
   border-radius: 5px;
 }
 .motion-stages .current {
-  background: #d0ff7120;
+  background: var(--accent-soft);
   color: var(--accent);
 }
 .counting-status {
@@ -274,7 +275,7 @@
 .last-rep {
   display: block;
   margin-top: 8px;
-  color: #b8d495;
+  color: var(--success);
   font-size: 11px;
 }
 .program-caption {
@@ -291,7 +292,7 @@
   height: 54px;
   flex-shrink: 0;
   align-items: center;
-  background: #262626e8;
+  background: var(--surface-floating);
   border: 1px solid #ffffff12;
   border-radius: var(--radius-panel);
 }
@@ -317,7 +318,7 @@
   background: transparent;
   border: 0;
   border-radius: var(--radius-control);
-  color: #ccc;
+  color: var(--text-secondary);
 }
 .stage-tools button:hover {
   background: #ffffff12;
@@ -341,8 +342,8 @@
   padding: 10px;
   gap: 8px;
   border-radius: var(--radius-panel);
-  background: #262626ed;
-  box-shadow: 0 8px 28px #0002;
+  background: var(--surface-floating);
+  box-shadow: var(--panel-shadow);
 }
 .call-dock .dock-device {
   width: 48px;
@@ -355,17 +356,17 @@
   border-radius: var(--radius-control);
   background: var(--surface-raised);
   border: 1px solid #ffffff12;
-  color: #c7c7c7;
+  color: var(--text-secondary);
   font-size: 12px;
 }
 .call-dock .dock-device.is-on {
   color: #eee;
 }
 .call-dock .dock-device.is-on svg {
-  color: var(--accent);
+  color: var(--success);
 }
 .call-dock .dock-device:hover {
-  background: #424242;
+  background: var(--surface-hover);
 }
 .call-dock .training-action {
   min-height: 48px;
@@ -440,7 +441,7 @@
   max-width: 100%;
   padding: 12px 16px;
   border-radius: var(--radius-panel);
-  background: #262626ed;
+  background: var(--surface-floating);
   font-size: 14px;
   margin: 0;
 }
@@ -464,18 +465,20 @@
   padding: 4px 7px;
   border: 0;
   background: transparent;
-  color: #bdbdbd;
+  color: var(--text-secondary);
   font-size: 12px;
   gap: 4px;
 }
 .coach-markdown {
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+.coach-subtitle .coach-markdown {
   min-height: 0;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-  overflow-wrap: anywhere;
-  line-height: 1.7;
 }
 .coach-subtitle.expanded .coach-markdown {
   display: block;
@@ -528,7 +531,7 @@
   border-left: 2px solid var(--accent);
   margin: 8px 0;
   padding-left: 12px;
-  color: #ccc;
+  color: var(--text-secondary);
 }
 .coach-markdown code {
   font-size: 0.9em;
@@ -556,7 +559,7 @@
 }
 .exercise-help,
 .camera-diagnostic {
-  color: #bdbdbd;
+  color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.7;
   margin: 12px 0 18px;
@@ -574,7 +577,7 @@
   border-radius: 16px;
   min-height: 78px;
   padding: 14px;
-  background: #303030;
+  background: var(--surface-raised);
   border: 1px solid #ffffff14;
   text-align: left;
 }
@@ -591,12 +594,12 @@
   color: #b6b6b6;
 }
 .exercise-options button.selected {
-  border-color: #d0ff7170;
-  background: #d0ff7110;
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
   color: var(--accent);
 }
 .exercise-options button:hover:not(:disabled) {
-  background: #3d3d3d;
+  background: var(--surface-hover);
 }
 @media (max-height: 760px) and (min-width: 901px) {
   .exercise-hud {
@@ -943,5 +946,57 @@
   }
   .exercise-hud {
     top: 208px;
+  }
+}
+
+/* Keep the idle guide within the space between the workout controls. */
+@media (min-width: 901px) {
+  .camera-idle .camera-welcome {
+    inset: 50% max(408px, 18%) auto max(314px, 17%);
+    transform: translateY(-50%);
+    max-width: 520px;
+    margin-inline: auto;
+    padding: clamp(18px, 4vh, 48px) 16px;
+  }
+}
+@media (min-width: 901px) and (max-width: 1050px) {
+  .camera-idle .camera-welcome {
+    left: 260px;
+    right: 376px;
+  }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  .camera-idle {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: max-content minmax(max-content, 1fr);
+    align-items: start;
+    align-content: start;
+    overflow-y: auto;
+    gap: 16px;
+    padding: 146px 20px 20px;
+  }
+  .camera-idle :is(.exercise-hud, .session-hud, .camera-welcome, .stage-bottom) {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+  }
+  .camera-idle .camera-welcome {
+    padding: 24px 12px;
+    align-self: center;
+  }
+}
+
+@media (min-width: 901px) {
+  .camera-idle .camera-welcome {
+    height: clamp(220px, 48dvh, 620px);
+    padding-block: 12px;
+  }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  .camera-idle .camera-welcome {
+    min-height: clamp(175px, 30dvh, 360px);
   }
 }

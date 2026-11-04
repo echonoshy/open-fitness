@@ -722,10 +722,6 @@ function FreePractice({
           >
             <div className="practice-visuals">
               <div className="video-stage">
-                <div className="video-label">
-                  <Repeat2 size={15} />
-                  MoveKit 示范 · 内部参考
-                </div>
                 {mediaFailed ? (
                   <>
                     <Poster item={current} />
@@ -1034,7 +1030,6 @@ function FreePractice({
               <span className="eyebrow">
                 {labels(detail.primaryMuscles, movementMuscles)}
               </span>
-              <p>MoveKit 示范与封面 · 仅供内部参考</p>
               <p>{detail.description}</p>
               <h3>动作要领</h3>
               <ol>

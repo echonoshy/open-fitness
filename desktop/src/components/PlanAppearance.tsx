@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useId, useLayoutEffect, useRef, useState } from "react";
 import {
   Activity, BicepsFlexed, Bike, CalendarDays, Check, Dumbbell, Flag, Flame,
@@ -35,10 +36,11 @@ export type PlanAppearance = { name: string; icon: PlanIcon; color: PlanColor };
 export function PlanBadge({
   icon = defaultPlanIcon, color = defaultPlanColor,
 }: { icon?: PlanIcon; color?: PlanColor }) {
+  const { uiText } = useUiLocale();
   const [label, Icon] = symbols[icon];
   return (
     <span className="plan-badge" style={{ color: palette[color][1] }}>
-      <Icon role="img" aria-label={label} />
+      <Icon role="img" aria-label={uiText(label)} />
     </span>
   );
 }
@@ -50,6 +52,7 @@ export function PlanAppearanceDialog({
   onApply: (value: PlanAppearance) => void;
   onCancel: () => void;
 }) {
+  const { uiText } = useUiLocale();
   const [draft, setDraft] = useState(initial);
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -69,20 +72,20 @@ export function PlanAppearanceDialog({
         if (name) onApply({ ...draft, name });
       }}>
         <div className="appearance-body">
-          <h2 id={titleId}>计划名称与图标</h2>
+          <h2 id={titleId}>{uiText("计划名称与图标")}</h2>
           <div className="appearance-preview">
             <PlanBadge icon={draft.icon} color={draft.color} />
-            <input aria-label="计划名称" placeholder="输入计划名称" value={draft.name}
+            <input aria-label={uiText("计划名称")} placeholder={uiText("输入计划名称")} value={draft.name}
               maxLength={80} autoFocus onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
           </div>
           <fieldset className="appearance-choices">
-            <legend>颜色</legend>
+            <legend>{uiText("颜色")}</legend>
             <div className="appearance-swatches">
               {planColors.map((id) => {
                 const [label, tint] = palette[id];
                 return (
-                  <label key={id} title={label} className="appearance-choice">
-                    <input type="radio" name="plan-color" aria-label={label} checked={draft.color === id}
+                  <label key={id} title={uiText(label)} className="appearance-choice">
+                    <input type="radio" name="plan-color" aria-label={uiText(label)} checked={draft.color === id}
                       onChange={() => setDraft({ ...draft, color: id })} />
                     <span style={{ backgroundColor: tint }}>
                       {draft.color === id && <Check size={15} strokeWidth={3} />}
@@ -93,13 +96,13 @@ export function PlanAppearanceDialog({
             </div>
           </fieldset>
           <fieldset className="appearance-choices">
-            <legend>图标</legend>
+            <legend>{uiText("图标")}</legend>
             <div className="appearance-symbols" style={{ color: palette[draft.color][1] }}>
               {planIcons.map((id) => {
                 const [label, Icon] = symbols[id];
                 return (
-                  <label key={id} title={label} className="appearance-choice">
-                    <input type="radio" name="plan-icon" aria-label={label} checked={draft.icon === id}
+                  <label key={id} title={uiText(label)} className="appearance-choice">
+                    <input type="radio" name="plan-icon" aria-label={uiText(label)} checked={draft.icon === id}
                       onChange={() => setDraft({ ...draft, icon: id })} />
                     <span><Icon size={19} aria-hidden="true" /></span>
                   </label>
@@ -109,8 +112,8 @@ export function PlanAppearanceDialog({
           </fieldset>
         </div>
         <footer>
-          <button type="button" onClick={onCancel}>取消</button>
-          <button className="primary" disabled={!draft.name.trim()}>完成</button>
+          <button type="button" onClick={onCancel}>{uiText("取消")}</button>
+          <button className="primary" disabled={!draft.name.trim()}>{uiText("完成")}</button>
         </footer>
       </form>
     </dialog>

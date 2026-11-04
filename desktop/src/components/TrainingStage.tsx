@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import {
   useEffect,
   useMemo,
@@ -16,6 +17,7 @@ import {
   Clock3,
   Eye,
   EyeOff,
+  ListChecks,
   Mic,
   MicOff,
   Minus,
@@ -107,7 +109,43 @@ interface Props {
   showVoiceGuide: () => void;
 }
 
+function PlanSetFields({ goal, load, rest, isHold, last, onApply }: {
+  goal: number;
+  load: number;
+  rest: number;
+  isHold: boolean;
+  last: boolean;
+  onApply: (target: number, load: number, rest: number) => void;
+}) {
+  const { uiText } = useUiLocale();
+  const [targetText, setTargetText] = useState(String(goal));
+  const [loadText, setLoadText] = useState(String(load));
+  const [restText, setRestText] = useState(String(rest));
+  const changed = Number(targetText) !== goal || Number(loadText) !== load || Number(restText) !== rest;
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      onApply(Number(targetText), Number(loadText), Number(restText));
+    }}>
+      <label className="compact-field">{uiText("本组目标 / ")}{uiText(isHold ? "秒" : "次")}
+        <input type="number" required min={1} max={isHold ? 600 : 100}
+          value={targetText} onChange={(e) => setTargetText(e.target.value)} />
+      </label>
+      <label className="compact-field">{uiText("本组负重 / kg")}
+        <input type="number" required min={0} max={500} step="any"
+          value={loadText} onChange={(e) => setLoadText(e.target.value)} />
+      </label>
+      {!last && <label className="compact-field">{uiText("本组结束后休息 / 秒")}
+        <input type="number" required min={0} max={900}
+          value={restText} onChange={(e) => setRestText(e.target.value)} />
+      </label>}
+      <button type="submit" disabled={!changed}>{uiText("应用到本组")}</button>
+    </form>
+  );
+}
+
 export function TrainingStage(p: Props) {
+  const { uiText, message } = useUiLocale();
   const { state, control } = p;
   const [settingsOpen, setSettingsOpen] = useState(false);
   const view = state.cameraView ?? {
@@ -130,10 +168,14 @@ export function TrainingStage(p: Props) {
   const referenceButton = useRef<HTMLButtonElement>(null);
   const inPlan = !!(state.catalogPlan || state.program);
   const program = state.program;
+  const planBlock = program?.blocks[program.block];
+  const lastPlanSet = state.catalogPlan
+    ? !state.catalogPlan.next
+    : program && program.block === program.blocks.length - 1 && program.set === planBlock?.sets;
+  const planRest = state.catalogPlan?.restSeconds ?? program?.restSeconds ?? 0;
+  const planSetId = state.catalogPlan?.setId ?? program?.setId;
   // Traditional plans already point at the scheduled set during a rest.
-  const scheduled = state.status === "resting" && program
-    ? program.blocks[program.block]
-    : undefined;
+  const scheduled = program?.between ? planBlock : undefined;
   const afterRest = state.catalogPlan?.between ? state.catalogPlan.next
     : scheduled && program ? `${EXERCISES[scheduled.exercise].label} · 第 ${program.set} 组` : "";
   const following = scheduled && program && program.set > 1 ? program.blocks[program.block + 1] : undefined;
@@ -191,7 +233,7 @@ export function TrainingStage(p: Props) {
     <main
       className={`training-stage ${cameraLive ? "camera-live" : "camera-idle"} ${p.hudHidden ? "hud-hidden" : ""} ${p.exerciseReference ? "with-reference" : ""}`}
       hidden={!p.visible}
-      aria-label="训练画面"
+      aria-label={uiText("训练画面")}
     >
       <div className="stage-video">
         <div
@@ -209,7 +251,7 @@ export function TrainingStage(p: Props) {
               ref={p.video}
               muted
               playsInline
-              aria-label="实时摄像头画面"
+              aria-label={uiText("实时摄像头画面")}
             />
             <canvas
               className="camera-background-effect"
@@ -233,31 +275,31 @@ export function TrainingStage(p: Props) {
 
       <section
         className={`exercise-hud stage-hud${!timed && state.exercise === "pushup" ? " pushup-hud" : ""}`}
-        aria-label="本组训练"
+        aria-label={uiText("本组训练")}
         inert={p.hudHidden}
       >
-        <span className="exercise-label">当前动作</span>
+        <span className="exercise-label">{uiText("当前动作")}</span>
         <button
           ref={exerciseButton}
           className="exercise-trigger"
-          aria-label={`切换动作，当前${name}`}
+          aria-label={uiText(`切换动作，当前${name}`)}
           aria-haspopup="dialog"
           onClick={() => setExerciseOpen(true)}
         >
-          {name}
+          {uiText(name)}
           <ChevronDown size={20} />
         </button>
         <span className="training-capability">
-          {timed
+          {uiText(timed
             ? statisticLabel(timed.statistics.mode)
             : state.exercise === "plank"
               ? "姿态计时"
-              : "自动计数"}
+              : "自动计数")}
         </span>
         <div
           className="rep-ring"
           role="meter"
-          aria-label="本组完成进度"
+          aria-label={uiText("本组完成进度")}
           aria-valuemin={0}
           aria-valuemax={goal}
           aria-valuenow={Math.min(count, goal)}
@@ -277,36 +319,36 @@ export function TrainingStage(p: Props) {
           <div>
             <strong>{String(count).padStart(2, "0")}</strong>
             <span>
-              / {goal} {isHold ? "秒" : "次"}
+              / {goal} {uiText(isHold ? "秒" : "次")}
             </span>
           </div>
         </div>
         {timed ? (
           <div className="timed-training-note">
             <p>
-              第 {timed.setIndex} 组 ·{" "}
-              {timed.cameraStatistics
+              {message("第 {0} 组", timed.setIndex)} ·{" "}
+              {uiText(timed.cameraStatistics
                 ? "摄像头估算，不作动作评分"
-                : "记录训练时长"}
+                : "记录训练时长")}
             </p>
             <p role="status">
-              {timed.cameraStatistics
+              {uiText(timed.cameraStatistics
                 ? timed.statistics.notice
-                : "可自行填写次数，无需开启摄像头"}
+                : "可自行填写次数，无需开启摄像头")}
             </p>
             {active && !inPlan && count >= goal && (
-              <p role="status">目标已达，可结束保存或继续训练</p>
+              <p role="status">{uiText("目标已达，可结束保存或继续训练")}</p>
             )}
-            {!active && p.summary && <p role="status">{p.summary}</p>}
+            {!active && p.summary && <p role="status">{uiText(p.summary)}</p>}
             <label>
-              {timed.statistics.mode === "reps" ? "修正次数" : "自填次数"}
+              {uiText(timed.statistics.mode === "reps" ? "修正次数" : "自填次数")}
               <input
-                aria-label="本组自填次数"
+                aria-label={uiText("本组自填次数")}
                 type="number"
                 min={0}
                 max={1000}
                 step={1}
-                placeholder="未填写"
+                placeholder={uiText("未填写")}
                 disabled={!active || !!state.catalogPlan?.between}
                 value={timed.manualReps ?? ""}
                 onChange={(e) =>
@@ -323,7 +365,7 @@ export function TrainingStage(p: Props) {
             {timed.manualReps !== undefined &&
               timed.statistics.mode === "reps" && (
                 <small>
-                  已采用修正值 · 自动估算 {timed.statistics.reps} 次
+                  {uiText("已采用修正值 · 自动估算 ")}{timed.statistics.reps}{uiText(" 次")}
                 </small>
               )}
             {placement && (
@@ -335,12 +377,12 @@ export function TrainingStage(p: Props) {
         ) : (
           <AngleFeedback state={state} cameraOn={p.cameraStatus === "on"} />
         )}
-        {state.catalogPlan && <p className="program-caption">计划 · 动作 {state.catalogPlan.block+1}/{state.catalogPlan.blocks} · 第 {state.catalogPlan.set}/{state.catalogPlan.sets} 组
-          {state.catalogPlan.next && <small>下一组 · {state.catalogPlan.next}</small>}</p>}
+        {state.catalogPlan && <p className="program-caption">{uiText("计划 · 动作 ")}{state.catalogPlan.block+1}/{state.catalogPlan.blocks}{" · "}{message("第 {0}/{1} 组", state.catalogPlan.set, state.catalogPlan.sets)}
+          {state.catalogPlan.next && <small>{uiText("下一组 · ")}{uiText(state.catalogPlan.next)}</small>}</p>}
         {state.program && (
           <p className="program-caption">
-            {scheduled ? "接下来 · " : "计划 · "}动作 {state.program.block + 1}/{state.program.blocks.length}
-            {" · "}第 {state.program.set}/{state.program.blocks[state.program.block].sets} 组
+            {uiText(scheduled ? "接下来 · " : "计划 · ")}{uiText("动作 ")}{state.program.block + 1}/{state.program.blocks.length}
+            {" · "}{message("第 {0}/{1} 组", state.program.set, state.program.blocks[state.program.block].sets)}
           </p>
         )}
       </section>
@@ -349,42 +391,42 @@ export function TrainingStage(p: Props) {
         <div className="session-chip">
           <Clock3 size={17} />
           <span>
-            {state.status === "training" && state.preparing
+            {uiText(state.status === "training" && state.preparing
               ? "准备检查中"
-              : labels[state.status]}
+              : labels[state.status])}
           </span>
-          <strong>{time(state.elapsed)}</strong>
+          <strong>{uiText(time(state.elapsed))}</strong>
         </div>
         {p.cameraStatus === "on" && (
           <div className="tracking-chip">
             <span className={`dot ${state.tracking ? "live" : ""}`} />
-            {view.automatic ? "自动取景 · 全身优先" : "画面已固定"}
+            {uiText(view.automatic ? "自动取景 · 全身优先" : "画面已固定")}
           </div>
         )}
-        <div className="stage-tools" aria-label="画面工具">
+        <div className="stage-tools" aria-label={uiText("画面工具")}>
           <button
             ref={referenceButton}
             className="reference-toggle"
             disabled={!p.loaded}
-            aria-label="动作参考"
+            aria-label={uiText("动作参考")}
             aria-pressed={p.exerciseReference}
-            title={p.exerciseReference ? "关闭动作参考" : "打开动作参考"}
+            title={uiText(p.exerciseReference ? "关闭动作参考" : "打开动作参考")}
             onClick={() =>
               void p.setExerciseReference(!p.exerciseReference).catch(p.report)
             }
           >
             <BookOpen size={18} aria-hidden="true" />
-            <span>参考</span>
+            <span>{uiText("参考")}</span>
           </button>
           <button
             ref={settingsButton}
-            aria-label="训练设置"
-            title="训练设置"
+            aria-label={uiText("训练设置")}
+            title={uiText("训练设置")}
             aria-haspopup="dialog"
             onClick={() => setSettingsOpen(true)}
           >
             <Settings2 size={18} aria-hidden="true" />
-            <span>设置</span>
+            <span>{uiText("设置")}</span>
           </button>
           <CameraViewControl
             view={view}
@@ -396,12 +438,12 @@ export function TrainingStage(p: Props) {
             setBackgroundBlur={p.setBackgroundBlur}
           />
           <button
-            aria-label="隐藏画面控件"
-            title="隐藏画面控件"
+            aria-label={uiText("隐藏画面控件")}
+            title={uiText("隐藏画面控件")}
             onClick={() => p.onHudHidden(true)}
           >
             <EyeOff size={18} aria-hidden="true" />
-            <span>隐藏</span>
+            <span>{uiText("隐藏")}</span>
           </button>
         </div>
       </div>
@@ -418,16 +460,16 @@ export function TrainingStage(p: Props) {
             <CameraOff size={43} strokeWidth={1.5} />
           </div>
           <h1>
-            {p.cameraStatus === "loading"
+            {uiText(p.cameraStatus === "loading"
               ? "正在连接摄像头…"
               : timed && active
                 ? "按自己的节奏练"
                 : active
                   ? "开启画面，继续训练"
-                  : "准备开始训练"}
+                  : "准备开始训练")}
           </h1>
           <p>
-            {p.cameraStatus === "loading"
+            {uiText(p.cameraStatus === "loading"
               ? "连接后，按画面提示调整站位"
               : timed
                 ? timed.cameraStatistics
@@ -435,29 +477,29 @@ export function TrainingStage(p: Props) {
                   : "可直接开始计时；开启摄像头可查看关节点和背景虚化"
                 : active
                   ? "点击「继续训练」，重新检查站位"
-                  : "选好动作，点击「开始训练」，按提示站到画面中"}
+                  : "选好动作，点击「开始训练」，按提示站到画面中")}
           </p>
           <small>
-            视频仅在本机处理
-            {!timed && p.voiceAvailable ? " · 语音随训练开启" : ""}
+            {uiText("视频仅在本机处理")}
+            {uiText(!timed && p.voiceAvailable ? " · 语音随训练开启" : "")}
           </small>
         </div>
       )}
 
       {state.status === "resting" && (cameraLive || !!timed) && (
         <div className="session-overlay">
-          <p>{afterRest ? `休息后 · ${afterRest}` : "休息一下，保持呼吸"}</p>
-          <strong>{time(state.remaining)}</strong>
+          <p>{uiText(afterRest ? `休息后 · ${afterRest}` : "休息一下，保持呼吸")}</p>
+          <strong>{uiText(time(state.remaining))}</strong>
           <button
             onClick={() =>
               void control({ type: "session", action: "cancel_rest" })
             }
           >
-            提前结束休息 <ArrowUpRight size={16} />
+            {uiText("提前结束休息 ")}<ArrowUpRight size={16} />
           </button>
           {skipTo && (
             <button className="skip-sets" onClick={() => void control({ type: "skip_remaining_sets" })}>
-              跳过剩余组，开始{skipTo}
+              {uiText("跳过剩余组，开始")}{uiText(skipTo)}
             </button>
           )}
         </div>
@@ -465,8 +507,8 @@ export function TrainingStage(p: Props) {
       {state.status === "paused" && (cameraLive || !!timed) && (
         <div className="session-overlay">
           <Pause size={32} />
-          <h2>训练已暂停</h2>
-          <p>准备好后，点击「继续训练」</p>
+          <h2>{uiText("训练已暂停")}</h2>
+          <p>{uiText("准备好后，点击「继续训练」")}</p>
         </div>
       )}
 
@@ -489,40 +531,40 @@ export function TrainingStage(p: Props) {
         {subtitle && (
           <div className={`coach-subtitle ${replyExpanded ? "expanded" : ""}`}>
             <div className="subtitle-heading">
-              <span>{p.latest?.role === "user" ? "你" : "教练"}</span>
+              <span>{uiText(p.latest?.role === "user" ? "你" : "教练")}</span>
               <button
                 aria-expanded={replyExpanded}
                 onClick={() => setReplyExpanded(!replyExpanded)}
               >
-                {replyExpanded ? "收起回复" : "展开回复"}
+                {uiText(replyExpanded ? "收起回复" : "展开回复")}
                 <ChevronDown size={15} />
               </button>
             </div>
             {p.heard && p.latest?.role !== "user" && (
               <p className="heard-transcript" title={p.heard}>
-                听到：{p.heard}
+                {uiText("听到：")}{p.heard}
               </p>
             )}
             <CoachMarkdown text={subtitle} />
           </div>
         )}
-        <div className="call-dock" aria-label="训练控制">
+        <div className="call-dock" aria-label={uiText("训练控制")}>
           <button
             className={`dock-device ${p.cameraStatus === "on" ? "is-on" : ""}`}
             disabled={!p.loaded}
             aria-label={
-              p.cameraStatus === "loading"
+              uiText(p.cameraStatus === "loading"
                 ? "取消开启摄像头"
                 : p.cameraStatus === "on"
                   ? "关闭摄像头"
-                  : "开启摄像头"
+                  : "开启摄像头")
             }
             title={
-              p.cameraStatus === "loading"
+              uiText(p.cameraStatus === "loading"
                 ? "取消开启摄像头"
                 : p.cameraStatus === "on"
                   ? "关闭摄像头"
-                  : "开启摄像头"
+                  : "开启摄像头")
             }
             aria-pressed={p.cameraStatus === "on"}
             onClick={() =>
@@ -554,19 +596,19 @@ export function TrainingStage(p: Props) {
             ) : (
               <Play size={20} fill="currentColor" />
             )}
-            {p.cameraStatus === "loading"
+            {uiText(p.cameraStatus === "loading"
               ? "连接中…"
               : !active
                 ? "开始训练"
                 : state.status === "paused" || (!timed && !cameraLive)
                   ? "继续训练"
-                  : "暂停训练"}
+                  : "暂停训练")}
           </button>
           <button
             className={`dock-device ${p.micOn ? "is-on" : ""}`}
             disabled={!p.loaded || !p.voiceAvailable}
-            aria-label={p.micOn ? "静音麦克风" : "开启麦克风"}
-            title={p.micOn ? "静音麦克风" : "开启麦克风"}
+            aria-label={uiText(p.micOn ? "静音麦克风" : "开启麦克风")}
+            title={uiText(p.micOn ? "静音麦克风" : "开启麦克风")}
             aria-pressed={p.micOn}
             onClick={() => void p.toggleMic()}
           >
@@ -578,7 +620,7 @@ export function TrainingStage(p: Props) {
               aria-haspopup="dialog"
               onClick={p.showVoiceGuide}
             >
-              你可以这样说 <ChevronDown size={13} />
+              {uiText("你可以这样说 ")}<ChevronDown size={13} />
             </button>
             <div
               className={`voice-status ${p.micOn ? "is-listening" : ""}`}
@@ -598,10 +640,10 @@ export function TrainingStage(p: Props) {
               ) : (
                 <span className="dot" />
               )}
-              <span title={micStatus}>{micStatus}</span>
+              <span title={uiText(micStatus)}>{uiText(micStatus)}</span>
               {p.speaking && (
-                <button aria-label="停止教练回复" onClick={p.cancel}>
-                  <Square size={12} /> 停止回复
+                <button aria-label={uiText("停止教练回复")} onClick={p.cancel}>
+                  <Square size={12} />{uiText(" 停止回复")}
                 </button>
               )}
             </div>
@@ -612,18 +654,18 @@ export function TrainingStage(p: Props) {
                 onClick={() => void control({ type: "new_set" })}
               >
                 <Plus size={18} />
-                <span>再来一组</span>
+                <span>{uiText("再来一组")}</span>
               </button>
             )}
             {inPlan && state.status==="training" && <button className="finish-action" onClick={()=>void control({type:"complete_plan_set"})}>
-              <Check size={18}/>完成本组</button>}
+              <Check size={18}/>{uiText("完成本组")}</button>}
             {active && (
               <button
                 className="finish-action save-action"
                 onClick={() => void control({ type: "session", action: "end" })}
               >
                 <Check size={19} />
-                <span>{inPlan ? "结束计划并保存" : "结束并保存"}</span>
+                <span>{uiText(inPlan ? "结束计划并保存" : "结束并保存")}</span>
               </button>
             )}
           </div>
@@ -634,10 +676,10 @@ export function TrainingStage(p: Props) {
         <button
           className="restore-hud"
           onClick={() => p.onHudHidden(false)}
-          aria-label="显示画面控件"
+          aria-label={uiText("显示画面控件")}
         >
           <Eye size={18} />
-          <span>显示控件</span>
+          <span>{uiText("显示控件")}</span>
           {p.micOn && <span className="dot live" />}
         </button>
       )}
@@ -658,22 +700,22 @@ export function TrainingStage(p: Props) {
       >
         <div className="dialog-heading">
           <div>
-            <small>选择本组动作</small>
-            <h2 id="exercise-title">今天，练什么？</h2>
+            <small>{uiText("选择本组动作")}</small>
+            <h2 id="exercise-title">{uiText("今天，练什么？")}</h2>
           </div>
           <button
-            aria-label="关闭动作选择"
+            aria-label={uiText("关闭动作选择")}
             onClick={() => setExerciseOpen(false)}
           >
             <X size={20} />
           </button>
         </div>
         <p className="exercise-help">
-          {inPlan
+          {uiText(inPlan
             ? "计划进行中，请先结束计划再切换动作。"
             : active
               ? "切换动作会保存当前组，新一组从零开始。"
-              : "选择动作后，按画面提示调整镜头。"}
+              : "选择动作后，按画面提示调整镜头。")}
         </p>
         <div
           className="exercise-options"
@@ -714,28 +756,32 @@ export function TrainingStage(p: Props) {
                 else if (item) void p.selectMovement(item);
                 setExerciseOpen(false);
               }}>
-              <span>{spec?.label ?? item?.name}{selected && <Check size={18}/>}</span>
-              <small>{spec ? (id==="plank" ? "姿态计时" : "自动计数")+" · "+joints : item && movementCapability(item)}</small>
+              <span>{uiText(spec?.label ?? item?.name)}{selected && <Check size={18}/>}</span>
+              <small>{uiText(spec ? (id==="plank" ? "姿态计时" : "自动计数")+" · "+joints : item && movementCapability(item))}</small>
             </button>;
           })}
         </div>
-        {p.library.failed && <button onClick={p.library.reload}>动作库未能读取，重新加载</button>}
-        {!p.shortcuts.length && <p className="exercise-help">快捷列表还是空的，添加你想练的动作即可开始。</p>}
-        <button className="all-movements-entry" disabled={!p.loaded || inPlan} onClick={()=>setManagingShortcuts(true)}>
-          <Settings2 size={16}/> 管理首页快捷动作
-        </button>
-        <button
-          className="shortcut-plan-link"
-          disabled={inPlan}
-          onClick={() => {
-            setExerciseOpen(false);
-            p.openPlans();
-          }}
-        >
-          去编排训练计划 <ArrowUpRight size={17} />
-        </button>
+        {p.library.failed && <button onClick={p.library.reload}>{uiText("动作库未能读取，重新加载")}</button>}
+        {!p.shortcuts.length && <p className="exercise-help">{uiText("快捷列表还是空的，添加你想练的动作即可开始。")}</p>}
+        <div className="exercise-list-actions">
+          <button
+            disabled={!p.loaded || inPlan}
+            onClick={() => setManagingShortcuts(true)}
+          >
+            <Settings2 size={17} aria-hidden="true" />{uiText(" 管理快捷动作")}
+          </button>
+          <button
+            disabled={inPlan}
+            onClick={() => {
+              setExerciseOpen(false);
+              p.openPlans();
+            }}
+          >
+            <ListChecks size={17} aria-hidden="true" />{uiText(" 编排训练计划")}
+          </button>
+        </div>
         <p className="exercise-help">
-          全部动作可使用摄像头、关节点和计时记录。自动计数能力以动作标识为准。
+          {uiText("全部动作可使用摄像头、关节点和计时记录。自动计数能力以动作标识为准。")}
         </p>
       </dialog>
 
@@ -757,28 +803,28 @@ export function TrainingStage(p: Props) {
         <div className="training-dialog-content">
           <div className="dialog-heading">
             <div>
-              <small>调整你的节奏</small>
-              <h2 id="training-settings-title">训练设置</h2>
+              <small>{uiText(inPlan ? "计划训练" : "调整你的节奏")}</small>
+              <h2 id="training-settings-title">{uiText("训练设置")}</h2>
             </div>
             <button
-              aria-label="关闭训练设置"
+              aria-label={uiText("关闭训练设置")}
               onClick={() => setSettingsOpen(false)}
             >
               <X size={20} />
             </button>
           </div>
           <p className="camera-diagnostic">
-            {p.cameraStatus === "on"
+            {uiText(p.cameraStatus === "on"
               ? `摄像头已开启 · ${p.fps} FPS`
-              : "摄像头已关闭"}{" "}
+              : "摄像头已关闭")}{" "}
             ·{" "}
-            {state.catalogPlan ? "关闭摄像头会暂停计划" : timed
+            {uiText(state.catalogPlan ? "关闭摄像头会暂停计划" : timed
               ? "关闭摄像头暂停自动统计，训练时长继续"
-              : "关闭摄像头会暂停计数"}
+              : "关闭摄像头会暂停计数")}
           </p>
           {timed && (
             <label className="compact-field">
-              摄像头自动统计
+              {uiText("摄像头自动统计")}
               <input
                 type="checkbox"
                 checked={timed.cameraStatistics}
@@ -786,26 +832,39 @@ export function TrainingStage(p: Props) {
                 onChange={(e) => p.onCameraStatistics(e.target.checked)}
               />
               <small>
-                {!timed.cameraStatisticsAvailable ? "此动作仅计时，可手动填写次数" : active ? "结束本组后可切换" : "关闭后仅计时，可手动填写次数"}
+                {uiText(!timed.cameraStatisticsAvailable ? "此动作仅计时，可手动填写次数" : inPlan ? "计划中按动作自动统计" : active ? "结束本组后可切换" : "关闭后仅计时，可手动填写次数")}
               </small>
             </label>
           )}
-          <div className="goal-setting">
+          {inPlan ? (
+            <section className="plan-settings-summary">
+              <strong>{uiText(afterRest ? `休息后 · ${afterRest}` : name)}</strong>
+              <small>{uiText(afterRest ? "下一组开始后可调整。" : "调整仅用于本组，下一组仍按原计划执行。")}</small>
+              {!afterRest && settingsOpen && planSetId && (
+                <PlanSetFields
+                  key={JSON.stringify([planSetId, goal, state.load, planRest])}
+                  goal={goal} load={state.load} rest={planRest} isHold={isHold} last={!!lastPlanSet}
+                  onApply={(target, load, rest) => void control({
+                    type: "adjust_plan_set", setId: planSetId, target, load, rest,
+                  })}
+                />
+              )}
+            </section>
+          ) : <div className="goal-setting">
             <label htmlFor="goal">
-              本组目标 <small>{isHold ? "秒" : "次"}</small>
+              {uiText("本组目标 ")}<small>{uiText(isHold ? "秒" : "次")}</small>
             </label>
             <div className="stepper">
               <button
-                aria-label="减少目标"
-                disabled={inPlan || goal <= 1}
+                aria-label={uiText("减少目标")}
+                disabled={goal <= 1}
                 onClick={() => changeGoal(goal - 1)}
               >
                 <Minus size={16} />
               </button>
               <input
-                disabled={inPlan}
                 id="goal"
-                aria-label="本组目标"
+                aria-label={uiText("本组目标")}
                 type="number"
                 min={1}
                 max={isHold ? 600 : 100}
@@ -813,18 +872,23 @@ export function TrainingStage(p: Props) {
                 onChange={(e) => changeGoal(+e.target.value)}
               />
               <button
-                aria-label="增加目标"
-                disabled={inPlan || goal >= (isHold ? 600 : 100)}
+                aria-label={uiText("增加目标")}
+                disabled={goal >= (isHold ? 600 : 100)}
                 onClick={() => changeGoal(goal + 1)}
               >
                 <Plus size={16} />
               </button>
             </div>
-          </div>
-          <div className="rest-control">
-            <span>{inPlan ? "完成本组并休息" : "立即开始休息"}</span>
+          </div>}
+          {!afterRest && <div className="rest-control">
+            <span>{uiText(lastPlanSet ? "最后一组" : inPlan ? "立即完成本组并休息" : "立即开始休息")}</span>
             <div>
-              {[30, 60, 90].map((seconds) => (
+              {lastPlanSet ? (
+                <button disabled={state.status !== "training"} onClick={() => {
+                  void control({ type: "complete_plan_set" });
+                  setSettingsOpen(false);
+                }}>{uiText("完成计划")}</button>
+              ) : [30, 60, 90].map((seconds) => (
                 <button
                   key={seconds}
                   disabled={!active || (inPlan && state.status !== "training")}
@@ -833,34 +897,34 @@ export function TrainingStage(p: Props) {
                     setSettingsOpen(false);
                   }}
                 >
-                  {seconds} 秒
+                  {seconds}{uiText(" 秒")}
                 </button>
               ))}
             </div>
-          </div>
-          <label className="compact-field">
-            负重 / kg
+          </div>}
+          {!inPlan && <label className="compact-field">
+            {uiText("负重 / kg")}
             <input
               type="number"
               min={0}
               max={500}
-              disabled={inPlan}
               value={state.load}
               onChange={(e) =>
                 void control({ type: "set_load", kg: +e.target.value })
               }
             />
-          </label>
+          </label>}
           {!timed && (
             <>
               <label className="compact-field">
-                下放节奏 / 秒
+                {uiText("参考下放节奏 / 秒")}
                 <input
                   type="number"
                   step={0.5}
                   min={0.5}
                   max={10}
                   value={state.tempo}
+                  disabled={state.catalogPlan?.between}
                   onChange={(e) =>
                     void control({
                       type: "set_tempo",
@@ -870,10 +934,11 @@ export function TrainingStage(p: Props) {
                 />
               </label>
               <label className="compact-field">
-                动作纠错播报
+                {uiText("动作纠错播报")}
                 <input
                   type="checkbox"
                   checked={state.cues}
+                  disabled={state.catalogPlan?.between}
                   onChange={(e) =>
                     void control({ type: "cues", enabled: e.target.checked })
                   }
@@ -881,7 +946,7 @@ export function TrainingStage(p: Props) {
               </label>
               <details>
                 <summary>
-                  拍摄与计数检查 <ChevronDown size={16} />
+                  {uiText("拍摄与计数检查 ")}<ChevronDown size={16} />
                 </summary>
                 <TrainingDetails state={state} control={control} />
               </details>
@@ -890,7 +955,7 @@ export function TrainingStage(p: Props) {
           {p.summary && (
             <div className="training-summary">
               <Check size={16} />
-              <p>{p.summary}</p>
+              <p>{uiText(p.summary)}</p>
             </div>
           )}
         </div>

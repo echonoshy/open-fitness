@@ -32,7 +32,7 @@ export function isLibraryVideoDownload(
   if (!isAllowedRendererUrl(pageUrl, dev)) return false;
   if (mimeType.toLowerCase().startsWith("video/")) return true;
   try {
-    return /^\/movekit-library\/(?:files|hd)\/[^/]+\.mp4$/i.test(
+    return /^\/library\/(?:files|hd)\/[^/]+\.mp4$/i.test(
       new URL(url).pathname,
     );
   } catch {

@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import {
@@ -14,19 +15,22 @@ export type MovementFacets = {
 };
 const groups = [
   { key: "level", label: "难度", options: movementLevels, visible: 4 },
-  { key: "muscle", label: "训练肌群", options: movementMuscles, visible: 8 },
-  { key: "equipment", label: "器械", options: movementEquipment, visible: 7 },
+  { key: "muscle", label: "训练肌群", options: movementMuscles, visible: 14 },
+  { key: "equipment", label: "器械", options: movementEquipment, visible: 15 },
 ] as const;
 
 export function MovementFilters({
   items,
   value,
   onChange,
+  showAll = false,
 }: {
+  showAll?: boolean;
   items: Movement[];
   value: MovementFacets;
   onChange: (value: MovementFacets) => void;
 }) {
+  const { uiText } = useUiLocale();
   const levels = useMemo(() => {
     const available = new Set(items.map((item) => item.level));
     return Object.entries(movementLevels).filter(([id]) => available.has(id));
@@ -38,17 +42,17 @@ export function MovementFilters({
     <div className="movement-facets">
       {groups.map(({ key, label, options, visible }) => {
         const entries = key === "level" ? levels : Object.entries(options);
-        const open = expanded[key];
+        const open = showAll || expanded[key];
         return (
           <fieldset className="facet-group" key={key}>
-            <legend>{label}</legend>
+            <legend>{uiText(label)}</legend>
             <div className="facet-options">
               <button
                 type="button"
                 aria-pressed={!value[key]}
                 onClick={() => onChange({ ...value, [key]: undefined })}
               >
-                全部
+                {uiText("全部")}
               </button>
               {entries
                 .filter(([id], i) => open || i < visible || id === value[key])
@@ -64,20 +68,20 @@ export function MovementFilters({
                       })
                     }
                   >
-                    {text}
+                    {uiText(text)}
                   </button>
                 ))}
-              {entries.length > visible && (
+              {!showAll && entries.length > visible && (
                 <button
                   className="facet-expand"
                   type="button"
                   aria-expanded={!!open}
-                  aria-label={`${open ? "收起" : "展开"}全部${label}`}
+                  aria-label={uiText(`${open ? "收起" : "展开"}全部${label}`)}
                   onClick={() =>
                     setExpanded((old) => ({ ...old, [key]: !open }))
                   }
                 >
-                  {open ? "收起" : "更多"}
+                  {uiText(open ? "收起" : "更多")}
                   {open ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
                 </button>
               )}

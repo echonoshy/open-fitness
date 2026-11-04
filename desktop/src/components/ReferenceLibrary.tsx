@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Activity, Check, Dumbbell, FolderOpen, X } from "lucide-react";
 import type { Data } from "../platform";
@@ -15,9 +16,10 @@ type Props = {
   persist: (update: (d: Data) => Data) => Promise<void>;
   report: (error: unknown) => void;
 };
-const dateText = (date: string) => new Date(date).toLocaleString("zh-CN");
+const dateText = (date: string, language: string) => new Date(date).toLocaleString(language);
 
 export function ReferenceLibrary({ data, persist, report }: Props) {
+  const { language, uiText } = useUiLocale();
   const [picker, setPicker] = useState<{ exercise?: Exercise } | null>(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -39,13 +41,13 @@ export function ReferenceLibrary({ data, persist, report }: Props) {
   return (
     <section
       className="feature-panel reference-panel"
-      aria-label="我的参考动作"
+      aria-label={uiText("我的参考动作")}
     >
       <div className="reference-library-heading">
         <div>
-          <SectionHeading title="我的参考动作" icon={Activity} />
+          <SectionHeading title={uiText("我的参考动作")} icon={Activity} />
           <p className="muted">
-            选一次已完成的动作，作为后续同类动作的对照。每种动作保留一份参考。
+            {uiText("选一次已完成的动作，作为后续同类动作的对照。每种动作保留一份参考。")}
           </p>
         </div>
         <button
@@ -57,7 +59,7 @@ export function ReferenceLibrary({ data, persist, report }: Props) {
           }}
         >
           <FolderOpen size={16} />
-          从训练记录中选择
+          {uiText("从训练记录中选择")}
         </button>
       </div>
       {!references.length && (
@@ -66,8 +68,8 @@ export function ReferenceLibrary({ data, persist, report }: Props) {
             <Dumbbell size={20} />
           </span>
           <div>
-            <strong>还没有设置参考动作</strong>
-            <p>点击「从训练记录中选择」，选出你想用来对照的一次动作。</p>
+            <strong>{uiText("还没有设置参考动作")}</strong>
+            <p>{uiText("点击「从训练记录中选择」，选出你想用来对照的一次动作。")}</p>
           </div>
         </div>
       )}
@@ -80,48 +82,48 @@ export function ReferenceLibrary({ data, persist, report }: Props) {
               <Dumbbell size={18} />
             </span>
             <div>
-              <strong>{EXERCISES[exercise].label}</strong>
+              <strong>{uiText(EXERCISES[exercise].label)}</strong>
               <p>
-                {reference.startedAt
-                  ? `训练于 ${dateText(reference.startedAt)}`
-                  : `保存于 ${dateText(reference.recorded)}`}
-                {reference.repIndex !== undefined
+                {uiText(reference.startedAt
+                  ? `训练于 ${dateText(reference.startedAt, language)}`
+                  : `保存于 ${dateText(reference.recorded, language)}`)}
+                {uiText(reference.repIndex !== undefined
                   ? ` · 第 ${reference.repIndex + 1} 次`
-                  : ""}
-                {` · 保存时评分 ${reference.score} 分`}
+                  : "")}
+                {uiText(` · 保存时评分 ${reference.score} 分`)}
               </p>
             </div>
             <div className="row-actions">
               <button
                 type="button"
                 disabled={busy}
-                aria-label={`更换${EXERCISES[exercise].label}参考`}
+                aria-label={uiText(`更换${EXERCISES[exercise].label}参考`)}
                 onClick={() => {
                   setNotice("");
                   setPicker({ exercise });
                 }}
               >
-                更换
+                {uiText("更换")}
               </button>
               <button
                 type="button"
                 disabled={busy}
-                aria-label={`删除${EXERCISES[exercise].label}参考`}
+                aria-label={uiText(`删除${EXERCISES[exercise].label}参考`)}
                 onClick={() => void remove(exercise)}
               >
-                删除参考
+                {uiText("删除参考")}
               </button>
             </div>
           </div>
         );
       })}
       <p className="panel-note">
-        用于比较动作轨迹的一致性，不改变原有评分标准；相似度高不代表动作一定标准。
+        {uiText("用于比较动作轨迹的一致性，不改变原有评分标准；相似度高不代表动作一定标准。")}
       </p>
       {notice && (
         <p className="success-notice" role="status">
           <Check size={15} />
-          {notice}
+          {uiText(notice)}
         </p>
       )}
       {picker && (
@@ -153,6 +155,7 @@ function ReferencePicker({
   onClose: () => void;
   onSaved: (exercise: Exercise, replaced: boolean) => void;
 }) {
+  const { language, uiText } = useUiLocale();
   const dialog = useRef<HTMLDialogElement>(null);
   const [filter, setFilter] = useState<Exercise | "all">(exercise ?? "all");
   const [selected, setSelected] = useState<{
@@ -215,16 +218,16 @@ function ReferencePicker({
       <header className="reference-picker-heading">
         <div>
           <h2 id="reference-picker-title">
-            {exercise
+            {uiText(exercise
               ? `更换${EXERCISES[exercise].label}参考`
-              : "从训练记录中选择"}
+              : "从训练记录中选择")}
           </h2>
-          <p>只显示有可用轨迹数据的动作。选择一次后，再保存为参考。</p>
+          <p>{uiText("只显示有可用轨迹数据的动作。选择一次后，再保存为参考。")}</p>
         </div>
         <button
           type="button"
           className="icon-button"
-          aria-label="关闭参考动作选择"
+          aria-label={uiText("关闭参考动作选择")}
           disabled={saving}
           onClick={onClose}
         >
@@ -233,9 +236,9 @@ function ReferencePicker({
       </header>
       <div className="reference-picker-toolbar">
         <label>
-          训练动作
+          {uiText("训练动作")}
           <select
-            aria-label="筛选参考动作"
+            aria-label={uiText("筛选参考动作")}
             disabled={saving || !!exercise}
             value={filter}
             onChange={(event) => {
@@ -245,39 +248,39 @@ function ReferencePicker({
               setError("");
             }}
           >
-            <option value="all">全部动作</option>
+            <option value="all">{uiText("全部动作")}</option>
             {Object.entries(EXERCISES)
               .filter(([id]) => id !== "plank")
               .map(([id, spec]) => (
                 <option key={id} value={id}>
-                  {spec.label}
+                  {uiText(spec.label)}
                 </option>
               ))}
           </select>
         </label>
-        <span>{candidates.length} 次可选动作 · 最近训练在前</span>
+        <span>{candidates.length}{uiText(" 次可选动作 · 最近训练在前")}</span>
       </div>
       <div
         className="reference-picker-list"
         role="radiogroup"
-        aria-label="选择一次训练动作"
+        aria-label={uiText("选择一次训练动作")}
         aria-busy={saving}
       >
         {!candidates.length && (
           <div className="reference-picker-empty">
             <FolderOpen size={28} strokeWidth={1.5} />
             <strong>
-              {filter === "all"
+              {uiText(filter === "all"
                 ? "暂无可用的动作轨迹"
-                : `暂无${EXERCISES[filter].label}的可用轨迹`}
+                : `暂无${EXERCISES[filter].label}的可用轨迹`)}
             </strong>
             <p>
-              {filter === "all"
+              {uiText(filter === "all"
                 ? "先在「训练」页开启摄像头，完成并结束一组计次训练，再回来选择。"
-                : `先完成并保存一组${EXERCISES[filter].label}训练，再回来选择。`}
+                : `先完成并保存一组${EXERCISES[filter].label}训练，再回来选择。`)}
             </p>
             <small>
-              没有轨迹的旧记录、表格导入记录和持续计时的平板支撑无法作为对照样本。
+              {uiText("没有轨迹的旧记录、表格导入记录和持续计时的平板支撑无法作为对照样本。")}
             </small>
           </div>
         )}
@@ -304,21 +307,21 @@ function ReferencePicker({
               />
               <span className="reference-choice-title">
                 <strong>
-                  {EXERCISES[record.exercise].label} · 第 {index + 1} 次
-                  {isCurrent && <em>当前参考</em>}
+                  {uiText(EXERCISES[record.exercise].label)}{uiText(" · 第 ")}{index + 1}{uiText(" 次")}
+                  {isCurrent && <em>{uiText("当前参考")}</em>}
                 </strong>
                 <small>
-                  {dateText(record.startedAt)}
-                  {record.setIndex !== undefined
+                  {dateText(record.startedAt, language)}
+                  {uiText(record.setIndex !== undefined
                     ? ` · 第 ${record.setIndex} 组`
-                    : ""}
+                    : "")}
                 </small>
               </span>
               <span className="reference-choice-score">
-                {rep.measured === false
+                {uiText(rep.measured === false
                   ? "评分未测量"
-                  : `${rep.score.toFixed(0)} 分`}
-                <small>动作评分</small>
+                  : `${rep.score.toFixed(0)} 分`)}
+                <small>{uiText("动作评分")}</small>
               </span>
             </label>
           );
@@ -330,22 +333,22 @@ function ReferencePicker({
             disabled={saving}
             onClick={() => setLimit((n) => n + 20)}
           >
-            显示更多动作（剩余 {candidates.length - limit} 次）
+            {uiText("显示更多动作（剩余 ")}{candidates.length - limit}{uiText(" 次）")}
           </button>
         )}
       </div>
       <footer className="reference-picker-footer">
-        {error && <p role="alert">{error}</p>}
+        {error && <p role="alert">{uiText(error)}</p>}
         <p>
-          {alreadySelected
+          {uiText(alreadySelected
             ? "这次动作已经是当前参考。"
             : chosen
               ? `${existing ? "将替换" : "将设置"}${EXERCISES[chosen.record.exercise].label}参考，仅用于之后完成的动作对比。`
-              : "每种动作保留一份参考，保存后可在这里更换或删除。"}
+              : "每种动作保留一份参考，保存后可在这里更换或删除。")}
         </p>
         <div>
           <button type="button" disabled={saving} onClick={onClose}>
-            取消
+            {uiText("取消")}
           </button>
           <button
             className="primary"
@@ -354,7 +357,7 @@ function ReferencePicker({
             onClick={() => void save()}
           >
             <Check size={16} />
-            {saving ? "保存中…" : existing ? "更换参考动作" : "设为参考动作"}
+            {uiText(saving ? "保存中…" : existing ? "更换参考动作" : "设为参考动作")}
           </button>
         </div>
       </footer>

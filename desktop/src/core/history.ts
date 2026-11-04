@@ -44,7 +44,21 @@ export function stats(r: RecordRow) {
 }
 export function overview(records: RecordRow[], now = new Date()) {
   const meaningful = records.filter((r) => r.reps.length || r.holdSeconds > 0);
-  const days = [...new Set(meaningful.map((r) => dayKey(r.startedAt)))].sort();
+  const result = activityOverview(meaningful.map((r) => ({
+    startedAt: r.startedAt, reps: r.reps.length, volume: stats(r).volume, seconds: r.holdSeconds,
+  })), now);
+  const faults: Record<string, number> = {};
+  for (const r of meaningful)
+    for (const [k, v] of Object.entries(stats(r).faults))
+      faults[k] = (faults[k] ?? 0) + v;
+  return { ...result, faults };
+}
+
+export function activityOverview(
+  sets: { startedAt: string; reps: number; volume: number; seconds: number }[],
+  now = new Date(),
+) {
+  const days = [...new Set(sets.map((r) => dayKey(r.startedAt)))].sort();
   let longest = 0,
     run = 0,
     previous = "";
@@ -69,30 +83,26 @@ export function overview(records: RecordRow[], now = new Date()) {
     const start = dayKey(end);
     end.setDate(end.getDate() + 7);
     const next = dayKey(end);
-    const rs = meaningful.filter(
+    const rs = sets.filter(
       (r) => dayKey(r.startedAt) >= start && dayKey(r.startedAt) < next,
     );
     return {
       start,
       sets: rs.length,
-      reps: rs.reduce((n, r) => n + r.reps.length, 0),
-      volume: rs.reduce((n, r) => n + stats(r).volume, 0),
-      seconds: rs.reduce((n, r) => n + r.holdSeconds, 0),
+      reps: rs.reduce((n, r) => n + r.reps, 0),
+      volume: rs.reduce((n, r) => n + r.volume, 0),
+      seconds: rs.reduce((n, r) => n + r.seconds, 0),
     };
   });
-  const faults: Record<string, number> = {};
-  for (const r of meaningful)
-    for (const [k, v] of Object.entries(stats(r).faults))
-      faults[k] = (faults[k] ?? 0) + v;
   return {
-    sets: meaningful.length,
+    sets: sets.length,
     days: days.length,
     current,
     longest,
     weeks,
-    faults,
-    volume: meaningful.reduce((n, r) => n + stats(r).volume, 0),
-    reps: meaningful.reduce((n, r) => n + r.reps.length, 0),
+    reps: sets.reduce((sum, r) => sum + r.reps, 0),
+    volume: sets.reduce((sum, r) => sum + r.volume, 0),
+    seconds: sets.reduce((sum, r) => sum + r.seconds, 0),
   };
 }
 export function personalRecords(records: RecordRow[]) {

@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Pause, Play, RotateCcw, Volume2, X } from "lucide-react";
 import { EXERCISES, type Exercise } from "../core/engine";
@@ -42,6 +43,7 @@ export function ExerciseReference(p: Props) {
 }
 
 function ReferencePlayer(p: Props & { returnHome?: () => void }) {
+  const { uiText } = useUiLocale();
   const reference = p.movement ?? EXERCISE_REFERENCES[p.exercise];
   const name = p.movement?.name ?? EXERCISES[p.exercise].label;
   const video = useRef<HTMLVideoElement>(null);
@@ -109,24 +111,21 @@ function ReferencePlayer(p: Props & { returnHome?: () => void }) {
   return (
     <aside
       className="exercise-reference-card"
-      aria-label="动作参考"
+      aria-label={uiText("动作参考")}
       data-size={p.size}
       style={{ "--reference-aspect": aspectRatio } as CSSProperties}
     >
       <div
         className="reference-heading"
-        title="拖动可移动视频，松手停在当前位置"
+        title={uiText("拖动可移动视频，松手停在当前位置")}
       >
-        <div>
-          <span>MoveKit · 内部参考</span>
-          <strong>{name}</strong>
-        </div>
+        <strong>{uiText(name)}</strong>
         {p.returnHome && (
           <button
             type="button"
             className="reference-return"
-            aria-label="将参考视频放回原位"
-            title="放回原位"
+            aria-label={uiText("将参考视频放回原位")}
+            title={uiText("放回原位")}
             onClick={p.returnHome}
           >
             <RotateCcw size={15} />
@@ -134,8 +133,8 @@ function ReferencePlayer(p: Props & { returnHome?: () => void }) {
         )}
         <button
           type="button"
-          aria-label="关闭动作参考"
-          title="关闭动作参考"
+          aria-label={uiText("关闭动作参考")}
+          title={uiText("关闭动作参考")}
           disabled={closing || changing}
           onClick={async () => {
             setClosing(true);
@@ -162,7 +161,7 @@ function ReferencePlayer(p: Props & { returnHome?: () => void }) {
           muted
           playsInline
           preload="metadata"
-          aria-label={`${name}动作示范`}
+          aria-label={uiText(`${name}动作示范`)}
           onLoadedMetadata={(event) => {
             const media = event.currentTarget;
             if (media.videoWidth > 0 && media.videoHeight > 0)
@@ -174,16 +173,16 @@ function ReferencePlayer(p: Props & { returnHome?: () => void }) {
         />
         {failed && (
           <p className="reference-error" role="status">
-            示范暂时无法播放，可重试或听语音讲解。
+            {uiText("示范暂时无法播放，可重试或听语音讲解。")}
           </p>
         )}
         <button
           className="reference-playback"
           type="button"
           aria-label={
-            failed ? "重试动作示范" : paused ? "播放动作示范" : "暂停动作示范"
+            uiText(failed ? "重试动作示范" : paused ? "播放动作示范" : "暂停动作示范")
           }
-          title={failed ? "重试播放" : paused ? "播放示范" : "暂停示范"}
+          title={uiText(failed ? "重试播放" : paused ? "播放示范" : "暂停示范")}
           onClick={() => void togglePlayback()}
         >
           {failed ? (
@@ -196,18 +195,18 @@ function ReferencePlayer(p: Props & { returnHome?: () => void }) {
         </button>
       </div>
       <div className="reference-footer">
-        <div className="reference-sizes" role="group" aria-label="参考视频尺寸">
+        <div className="reference-sizes" role="group" aria-label={uiText("参考视频尺寸")}>
           {REFERENCE_SIZES.map((size) => (
             <button
               key={size}
               type="button"
-              aria-label={`参考视频设为${REFERENCE_SIZE_LABELS[size]}`}
+              aria-label={uiText(`参考视频设为${REFERENCE_SIZE_LABELS[size]}`)}
               aria-pressed={p.size === size}
-              title={`参考视频${REFERENCE_SIZE_LABELS[size]}`}
+              title={uiText(`参考视频${REFERENCE_SIZE_LABELS[size]}`)}
               disabled={changing}
               onClick={() => void change(() => p.setSize(size))}
             >
-              {REFERENCE_SIZE_LABELS[size]}
+              {uiText(REFERENCE_SIZE_LABELS[size])}
             </button>
           ))}
         </div>
@@ -215,9 +214,9 @@ function ReferencePlayer(p: Props & { returnHome?: () => void }) {
           <button
             type="button"
             onClick={p.explain}
-            aria-label="讲解当前动作要点"
+            aria-label={uiText("讲解当前动作要点")}
           >
-            <Volume2 size={14} /> 讲解
+            <Volume2 size={14} />{uiText(" 讲解")}
           </button>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { EXERCISES } from "../core/engine";
@@ -13,6 +14,7 @@ export function AngleFeedback({
   state: Snapshot;
   cameraOn: boolean;
 }) {
+  const { uiText } = useUiLocale();
   const feedback = motionFeedback(state, cameraOn);
   const needsPosition =
     cameraOn &&
@@ -56,18 +58,18 @@ export function AngleFeedback({
             className={`counting-status ${needsPosition ? "needs-position" : ""}`}
             role="status"
           >
-            <strong>{feedback.title}</strong>
-            <p>{state.cameraView?.hint || feedback.detail}</p>
+            <strong>{uiText(feedback.title)}</strong>
+            <p>{uiText(state.cameraView?.hint || feedback.detail)}</p>
           </div>
           <details className="motion-details" key={state.exercise}>
             <summary>
-              <span>动作详情</span>
+              <span>{uiText("动作详情")}</span>
               <span className="motion-angle">
-                {feedback.joint}
+                {uiText(feedback.joint)}
                 <strong>
-                  {Number.isFinite(feedback.angle)
+                  {uiText(Number.isFinite(feedback.angle)
                     ? `${Math.round(feedback.angle!)}°`
-                    : "—"}
+                    : "—")}
                 </strong>
               </span>
               <ChevronDown size={15} aria-hidden="true" />
@@ -80,17 +82,17 @@ export function AngleFeedback({
                 />
               )}
               {state.exercise === "squat" && cameraOn && state.squatCheck && (
-                <ul className="position-checks" aria-label="深蹲站位检查">
+                <ul className="position-checks" aria-label={uiText("深蹲站位检查")}>
                   {state.squatCheck.checks.map((check) => (
                     <li key={check.label} className={check.ok ? "passed" : ""}>
-                      {check.ok ? "✓" : "○"} {check.label}
+                      {uiText(check.ok ? "✓" : "○")} {uiText(check.label)}
                     </li>
                   ))}
                 </ul>
               )}
               {state.trackingSide && (
                 <p className="tracking-side">
-                  当前分析{state.trackingSide === "left" ? "左" : "右"}侧关节
+                  {uiText("当前分析")}{uiText(state.trackingSide === "left" ? "左" : "右")}{uiText("侧关节")}
                 </p>
               )}
               <svg
@@ -98,9 +100,9 @@ export function AngleFeedback({
                 viewBox="0 0 280 82"
                 role="img"
                 aria-label={
-                  state.exercise === "pushup"
+                  uiText(state.exercise === "pushup"
                     ? "最近约六秒的参考肘角，计数同时结合肩部运动"
-                    : "最近约六秒的关节角度曲线，虚线为幅度与回位参考"
+                    : "最近约六秒的关节角度曲线，虚线为幅度与回位参考")
                 }
               >
                 {state.exercise !== "pushup" && (
@@ -116,7 +118,7 @@ export function AngleFeedback({
                       x="228"
                       y={y(state.exercise === "plank" ? 160 : spec.lockout) + 4}
                     >
-                      {state.exercise === "plank" ? "160°" : `${spec.lockout}°`}
+                      {uiText(state.exercise === "plank" ? "160°" : `${spec.lockout}°`)}
                     </text>
                     {state.exercise !== "plank" && (
                       <>
@@ -136,7 +138,7 @@ export function AngleFeedback({
                 )}
                 <path d={path} className="angle-trace" />
               </svg>
-              <div className="motion-stages" aria-label="动作阶段">
+              <div className="motion-stages" aria-label={uiText("动作阶段")}>
                 {feedback.stages.map((label, i) => (
                   <span
                     key={label}
@@ -148,7 +150,7 @@ export function AngleFeedback({
                         : ""
                     }
                   >
-                    {label}
+                    {uiText(label)}
                   </span>
                 ))}
               </div>
@@ -158,14 +160,14 @@ export function AngleFeedback({
       )}
       {state.last && state.status !== "ready" && (
         <small className="last-rep">
-          {state.last.assessment?.limited ? (
+          {uiText(state.last.assessment?.limited ? (
             "上次 +1 · 已完成往返 · 姿态仅局部评估"
           ) : (
             <>
-              上次 +1 · {state.last.score} 分
-              {state.last.full_depth ? " · 幅度充分" : " · 幅度可改善"}
+              {uiText("上次 +1 · ")}{state.last.score}{uiText(" 分")}
+              {uiText(state.last.full_depth ? " · 幅度充分" : " · 幅度可改善")}
             </>
-          )}
+          ))}
         </small>
       )}
     </div>

@@ -101,6 +101,7 @@ export const dataSchema = z.object({
     })
     .optional(),
   settings: z.object({
+    language: z.enum(["zh-CN", "en"]).optional(),
     onboardingSeen: z.boolean().optional(),
     backgroundBlur: z.boolean().optional(),
     exerciseReference: z.boolean().optional(),

@@ -12,6 +12,7 @@ import {
 import { encodeBytes, readWebResponse } from "./core/web-protocol";
 type VoiceServiceStatus = { available: boolean; usesVolcenginePresets: boolean };
 export interface Settings {
+  language?: "zh-CN" | "en";
   onboardingSeen?: boolean;
   backgroundBlur?: boolean;
   exerciseReference?: boolean;

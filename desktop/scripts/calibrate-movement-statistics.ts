@@ -15,7 +15,7 @@ const input = resolve(
 );
 const output = resolve(input, "..");
 const catalog: Movement[] = JSON.parse(
-  readFileSync(resolve(root, "public/movekit-library/catalog.json"), "utf8"),
+  readFileSync(resolve(root, "public/library/catalog.json"), "utf8"),
 ).movements;
 type Extracted = {
   sha256: string;

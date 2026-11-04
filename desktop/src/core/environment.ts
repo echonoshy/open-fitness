@@ -37,8 +37,6 @@ export function countingHints(state: {
   status: string;
   exercise: Exercise;
   phase: string;
-  auto?: boolean;
-  detected?: unknown;
   squatCheck?: { ready: boolean; message: string };
   pushupCheck?: { ready: boolean; message: string; assessment: string };
 }) {
@@ -63,8 +61,6 @@ export function countingHints(state: {
   else if (state.status === "paused") hints.push("训练已暂停，继续后才会计数");
   else if (state.status === "resting")
     hints.push("正在休息，倒计时结束后恢复计数");
-  else if (state.auto && !state.detected)
-    hints.push("正在识别动作，锁定后从下一次完整动作计数");
   else if (state.tracking && !hints.length)
     hints.push(
       state.exercise === "plank"

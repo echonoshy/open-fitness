@@ -1,12 +1,5 @@
 .app .free-practice {
   color-scheme: dark;
-  --bg: #1e1e1e;
-  --surface: #262626;
-  --surface-strong: #303030;
-  --text: #ededed;
-  --muted: #a4a49e;
-  --line: #ffffff15;
-  --accent: #d2ed9e;
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Microsoft YaHei", sans-serif;
@@ -16,8 +9,8 @@
 }
 .app .free-practice {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  background: var(--background);
+  color: var(--text-primary);
   font-size: 15px;
   line-height: 1.6;
 }
@@ -91,7 +84,7 @@
 .app .free-practice input,
 .app .free-practice select {
   background: var(--surface);
-  color: var(--text);
+  color: var(--text-primary);
   border: 1px solid var(--line);
   border-radius: 8px;
 }
@@ -107,13 +100,13 @@
   white-space: nowrap;
 }
 .app .free-practice .primary {
-  color: #202619;
-  background: var(--accent);
-  border-color: var(--accent);
+  color: var(--primary-ink);
+  background: var(--primary-fill);
+  border-color: var(--primary-fill);
 }
 .app .free-practice .primary:hover:not(:disabled) {
-  background: #dff7b5;
-  border-color: #dff7b5;
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 .app .free-practice .secondary {
   background: var(--surface);
@@ -130,7 +123,7 @@
   font-size: 14px;
 }
 .app .free-practice .text-button:hover:not(:disabled) {
-  color: var(--text);
+  color: var(--text-primary);
 }
 .app .free-practice .icon-button {
   width: 38px;
@@ -171,7 +164,7 @@
   height: 78px;
   padding: 0 40px;
   border-bottom: 1px solid var(--line);
-  background: var(--bg);
+  background: var(--background);
 }
 .app .free-practice .wordmark {
   font-size: 25px;
@@ -200,7 +193,7 @@
 }
 .app .free-practice .app-header nav button.active {
   color: var(--accent);
-  background: #d2ed9e0b;
+  background: var(--accent-soft);
 }
 .app .free-practice .header-note {
   color: #85857f;
@@ -368,13 +361,13 @@
   padding: 6px 12px;
   font-size: 12px;
   color: var(--accent);
-  background: #d2ed9e0c;
-  border-color: #d2ed9e24;
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
   border-radius: 7px;
 }
 .app .free-practice .card-start:hover,
 .app .free-practice .add-button:hover {
-  background: #d2ed9e20 !important;
+  background: var(--accent-soft) !important;
 }
 .app .free-practice .add-button.is-added {
   color: #a4a995;
@@ -550,7 +543,7 @@
   border-radius: 12px;
 }
 .app .free-practice .empty-state h3 {
-  color: var(--text);
+  color: var(--text-primary);
   font-size: 20px;
 }
 .app .free-practice .empty-state p {
@@ -650,20 +643,6 @@
   height: 100%;
   object-fit: contain;
 }
-.app .free-practice .video-label {
-  position: absolute;
-  z-index: 2;
-  left: 18px;
-  top: 18px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  color: #4f5847;
-  background: #ffffffd9;
-  padding: 6px 10px;
-  border-radius: 6px;
-}
 .app .free-practice .video-speed {
   position: absolute;
   z-index: 2;
@@ -701,12 +680,12 @@
   width: 78px;
   height: 78px;
   border-radius: 50%;
-  background: var(--accent);
-  color: #242d1a;
+  background: var(--primary-fill);
+  color: var(--primary-ink);
   padding-left: 4px;
 }
 .app .free-practice .video-resume:hover {
-  background: #e2f6c1 !important;
+  background: var(--primary-hover) !important;
 }
 .app .free-practice .video-overlay > span {
   padding: 5px 11px;
@@ -781,7 +760,7 @@
   position: sticky;
   z-index: 4;
   bottom: 0;
-  background: var(--bg);
+  background: var(--background);
   border-top: 1px solid var(--line);
   padding: 18px 0 12px;
   margin-top: 22px;
@@ -832,7 +811,7 @@
   overflow: auto;
   border: 1px solid #ffffff25;
   border-radius: 16px;
-  color: var(--text);
+  color: var(--text-primary);
   background: #242424;
   padding: 0;
   box-shadow: 0 24px 100px #0008;
@@ -939,7 +918,7 @@
 }
 .app .free-practice .picker-tabs button[aria-pressed="true"] {
   color: var(--accent);
-  background: #d2ed9e0d;
+  background: var(--accent-soft);
 }
 .app .free-practice .picker-tabs span {
   font-size: 11px;
@@ -1043,7 +1022,7 @@
 .app .free-practice .summary-movements span {
   font-size: 12px;
   color: #c1ccb1;
-  background: #d2ed9e0b;
+  background: var(--accent-soft);
   padding: 5px 12px;
   border-radius: 6px;
 }
@@ -1066,7 +1045,7 @@
   align-items: center;
   gap: 10px;
   max-width: calc(100vw - 32px);
-  background: #d2ed9e;
+  background: var(--accent);
   color: #27371b;
   border-radius: 9px;
   padding: 12px 18px;
@@ -1180,7 +1159,7 @@
   .app .free-practice .practice-controls {
     position: sticky;
     bottom: 0;
-    background: var(--bg);
+    background: var(--background);
     padding: 16px 0;
     margin-top: 16px;
   }
@@ -1355,11 +1334,6 @@
     min-height: 260px;
     border-radius: 10px;
   }
-  .app .free-practice .video-label {
-    left: 10px;
-    top: 10px;
-    font-size: 10px;
-  }
   .app .free-practice .practice-tips h2 {
     font-size: 18px;
   }
@@ -1474,9 +1448,9 @@
   font-size: 13px;
 }
 .app .free-practice .device-enabled {
-  border-color: #71895b !important;
-  color: #d2ed9e !important;
-  background: #2a3324 !important;
+  border-color: var(--accent-line) !important;
+  color: var(--accent) !important;
+  background: var(--accent-soft) !important;
 }
 .app .free-practice .device-tools select,
 .app .free-practice .camera-toolbar select {
@@ -1517,10 +1491,10 @@
   background: #a8afa0;
 }
 .app .free-practice .practice-voice-status.is-listening strong {
-  color: #d2ed9e;
+  color: var(--accent);
 }
 .app .free-practice .practice-voice-status.is-listening .voice-indicator {
-  background: #d2ed9e;
+  background: var(--accent);
 }
 .app .free-practice .heard-text {
   color: #e2e6da;
@@ -1598,7 +1572,7 @@
   gap: 7px;
   font-size: 12px;
   background: #1c241cdd;
-  color: #d2ed9e;
+  color: var(--accent);
   padding: 6px 10px;
   border-radius: 6px;
 }
@@ -1634,7 +1608,7 @@
   color: #c2caba;
 }
 .app .free-practice .camera-toolbar input {
-  accent-color: #d2ed9e;
+  accent-color: var(--accent);
 }
 .app .free-practice .camera-loading {
   height: 100%;
@@ -1678,7 +1652,7 @@
   left: 2px;
   border-radius: 4px;
   background: #252d22e8;
-  color: #d2ed9e;
+  color: var(--accent);
   padding: 2px 5px;
   font-size: 11px;
 }

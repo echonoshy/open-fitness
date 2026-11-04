@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useEffect, useRef, useState } from "react";
 import { Maximize, Minimize, Pause, Play } from "lucide-react";
 import type { Movement } from "../core/movement-library";
@@ -8,6 +9,7 @@ function clock(seconds: number) {
 }
 
 export function MovementPlayer({ item }: { item: Movement }) {
+  const { uiText } = useUiLocale();
   const container = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const fullscreenButton = useRef<HTMLButtonElement>(null);
@@ -91,7 +93,7 @@ export function MovementPlayer({ item }: { item: Movement }) {
       ref={container}
       className="movement-player"
       role="region"
-      aria-label={`${item.name}播放器`}
+      aria-label={uiText(`${item.name}播放器`)}
       onContextMenu={(event) => event.preventDefault()}
       onDragStart={(event) => event.preventDefault()}
     >
@@ -99,12 +101,12 @@ export function MovementPlayer({ item }: { item: Movement }) {
         <>
           <img
             src={item.poster}
-            alt={`${item.name}动作图示`}
+            alt={uiText(`${item.name}动作图示`)}
             draggable={false}
           />
           <div className="movement-video-error" role="alert">
-            <strong>视频暂时无法播放</strong>
-            <span>可以先看动作图示和要领，或重新加载。</span>
+            <strong>{uiText("视频暂时无法播放")}</strong>
+            <span>{uiText("可以先看动作图示和要领，或重新加载。")}</span>
             <button
               type="button"
               onClick={() => {
@@ -115,7 +117,7 @@ export function MovementPlayer({ item }: { item: Movement }) {
                 setRetry((value) => value + 1);
               }}
             >
-              重新加载视频
+              {uiText("重新加载视频")}
             </button>
           </div>
         </>
@@ -138,7 +140,7 @@ export function MovementPlayer({ item }: { item: Movement }) {
               !window.matchMedia("(prefers-reduced-motion: reduce)").matches
             }
             preload="metadata"
-            aria-label={`${item.name}动作视频`}
+            aria-label={uiText(`${item.name}动作视频`)}
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
             onTimeUpdate={(event) => setTime(event.currentTarget.currentTime)}
@@ -158,13 +160,13 @@ export function MovementPlayer({ item }: { item: Movement }) {
           type="button"
           className="icon-button"
           disabled={failed}
-          aria-label={playing ? "暂停演示" : "播放演示"}
+          aria-label={uiText(playing ? "暂停演示" : "播放演示")}
           onClick={() => void togglePlayback()}
         >
           {playing ? <Pause size={20} /> : <Play size={20} />}
         </button>
         <span className="movement-player-time">
-          {clock(time)} / {clock(duration)}
+          {uiText(clock(time))} / {uiText(clock(duration))}
         </span>
         <input
           type="range"
@@ -173,7 +175,7 @@ export function MovementPlayer({ item }: { item: Movement }) {
           step={0.01}
           value={time}
           disabled={!ready || failed}
-          aria-label="视频进度"
+          aria-label={uiText("视频进度")}
           aria-valuetext={`${clock(time)}，共 ${clock(duration)}`}
           onChange={(event) => {
             const next = Number(event.target.value);
@@ -185,8 +187,8 @@ export function MovementPlayer({ item }: { item: Movement }) {
           ref={fullscreenButton}
           type="button"
           className="icon-button"
-          aria-label={fullscreen ? "退出视频全屏" : "全屏观看"}
-          title={fullscreen ? "退出全屏（Esc）" : "全屏观看"}
+          aria-label={uiText(fullscreen ? "退出视频全屏" : "全屏观看")}
+          title={uiText(fullscreen ? "退出全屏（Esc）" : "全屏观看")}
           disabled={expanding}
           onClick={() => void toggleFullscreen()}
         >
@@ -195,7 +197,7 @@ export function MovementPlayer({ item }: { item: Movement }) {
       </div>
       {message && (
         <p className="movement-player-message" role="status">
-          {message}
+          {uiText(message)}
         </p>
       )}
     </div>

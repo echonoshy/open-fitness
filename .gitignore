@@ -1,5 +1,7 @@
 # Local tools and generated files
 .DS_Store
+.impeccable/
+/LOCAL_SOURCE.json
 .idea/
 .vscode/
 node_modules/

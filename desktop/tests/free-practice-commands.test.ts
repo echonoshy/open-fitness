@@ -1,15 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import type { Movement } from "../src/core/movement-library";
+import { catalog as items } from "./fixtures/movement-catalog";
 import { resolvePracticeCommand as resolve } from "../src/components/free-practice/voice-commands";
 
-const items: Movement[] = JSON.parse(
-  readFileSync(
-    new URL("../public/movekit-library/catalog.json", import.meta.url),
-    "utf8",
-  ),
-).movements;
 test("pause and resume are explicit, polite speech and punctuation accepted", () => {
   for (const text of ["暂停", "暂停一下。", "请帮我暂停跟练", "先停一下！"])
     assert.equal(resolve(text, items).kind, "pause", text);
@@ -31,7 +24,6 @@ test("negations, questions, incidental mentions and compound commands do not tri
     assert.equal(resolve(text, items).kind, "unknown", text);
 });
 test("all catalog names remain reachable without a counting definition", () => {
-  assert.equal(items.length, 582);
   for (const item of items) {
     const command = resolve(`换成${item.name}`, items);
     assert.ok(

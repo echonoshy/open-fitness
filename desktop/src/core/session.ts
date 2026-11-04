@@ -24,8 +24,6 @@ import {
   type BodySide,
 } from "./engine";
 import {
-  AutoDetector,
-  frameFeatures,
   velocityLoss,
   resample,
   similarity,
@@ -60,7 +58,6 @@ export const commandSchema = z.discriminatedUnion("type", [
     .strict(),
   z.object({ type: z.literal("start_program"), blocks: planSchema }).strict(),
   z.object({ type: z.literal("stop_program") }).strict(),
-  z.object({ type: z.literal("auto_detect"), enabled: z.boolean() }).strict(),
   z
     .object({
       type: z.literal("set_hold_goal"),
@@ -138,9 +135,7 @@ export interface Snapshot {
   holdGoal: number;
   holdBest: number;
   fatigue: number;
-  auto: boolean;
-  detected: Exercise | null;
-  program: { blocks: Block[]; block: number; set: number } | null;
+  program: { blocks: Block[]; block: number; set: number; between?: boolean; setId?: string; restSeconds?: number } | null;
   status: "ready" | "training" | "paused" | "resting";
   reps: number;
   hold: number;
@@ -170,11 +165,9 @@ export class SessionEngine {
   exercise: Exercise = "squat";
   goal = 12;
   holdGoal = 30;
-  auto = false;
-  detected: Exercise | null = null;
-  detector = new AutoDetector();
   program: Snapshot["program"] = null;
   nextSet = false;
+  private setRest = 0;
   pausedRest = 0;
   sessionId = "";
   recordId = "";
@@ -182,9 +175,8 @@ export class SessionEngine {
   references: Partial<Record<Exercise, Reference>> = {};
   trajectory: number[] = [];
   events: {
-    type: "start" | "set" | "finish" | "fatigue" | "detected" | "goal";
+    type: "start" | "set" | "finish" | "fatigue" | "goal";
     row?: RecordRow;
-    exercise?: Exercise;
     sessionId: string;
   }[] = [];
   fatigueWarned = false;
@@ -299,15 +291,17 @@ export class SessionEngine {
     this.pending.push(row);
     this.archived = true;
     this.events.push({ type: "set", row, sessionId: this.sessionId });
+    if (this.program) this.applyBlock();
   }
   applyBlock() {
     const b = this.program!.blocks[this.program!.block];
+    this.setRest = b.rest;
     this.exercise = b.exercise;
     this.load = b.load;
     if (b.exercise === "plank") this.holdGoal = b.target;
     else this.goal = b.target;
   }
-  finishSet(restSeconds?: number) {
+  finishSet(restSeconds = this.setRest) {
     if (!this.program || this.nextSet || !this.active) return;
     this.archive();
     const p = this.program,
@@ -325,7 +319,7 @@ export class SessionEngine {
       p.set = 1;
     }
     this.nextSet = true;
-    this.restUntil = this.now() + (restSeconds ?? b.rest);
+    this.restUntil = this.now() + restSeconds;
     this.counter.resetMotion();
     this.plank.resetMotion();
     this.tick();
@@ -356,6 +350,21 @@ export class SessionEngine {
     return this.active && !this.archived
       ? { ...this.currentRecord(), interrupted: true }
       : null;
+  }
+  private planGoalReached() {
+    return this.exercise === "plank" ? this.plank.total >= this.holdGoal : this.rows.length >= this.goal;
+  }
+  adjustPlanSet(c: import("./catalog-plan").PlanSetAdjustment) {
+    if (!this.program || this.nextSet || c.setId !== this.recordId)
+      return { ok: false, message: "本组已结束，请在当前组重新调整。" };
+    const goal = this.dispatch(this.exercise === "plank"
+      ? { type: "set_hold_goal", seconds: c.target }
+      : { type: "set_rep_goal", reps: c.target });
+    if (!goal.ok) return goal;
+    this.load = c.load;
+    this.setRest = c.rest;
+    if (!this.paused && this.planGoalReached()) this.finishSet();
+    return { ok: true, message: this.program ? "本组设置已生效。" : "计划已完成。" };
   }
   dispatch(raw: unknown): Receipt {
     const parsed = commandSchema.safeParse(raw);
@@ -392,7 +401,6 @@ export class SessionEngine {
       }
       if (!continuing) this.sessionId = crypto.randomUUID();
       this.active = true;
-      this.auto = false;
       this.nextSet = false;
       this.events.push({ type: "start", sessionId: this.sessionId });
       message = `${continuing ? "上一组已结束。" : ""}新一组${EXERCISES[this.exercise].label}从零开始，目标${this.exercise === "plank" ? this.holdGoal + "秒" : this.goal + "次"}，就位后开始计数。`;
@@ -401,7 +409,6 @@ export class SessionEngine {
       if (!this.cameraReady) return fail("请先开启摄像头，等待模型就绪。");
       if (this.active) return fail("请先结束当前训练，再启动计划。");
       this.program = { blocks: structuredClone(c.blocks), block: 0, set: 1 };
-      this.auto = false;
       this.nextSet = false;
       this.applyBlock();
       this.reset();
@@ -422,16 +429,6 @@ export class SessionEngine {
       this.events.push({ type: "finish", sessionId: this.sessionId });
       message = "计划已结束，已完成的训练已归档。";
     }
-    if (c.type === "auto_detect") {
-      if (c.enabled && this.active)
-        return fail("请在开始一组训练前开启自动识别，当前组记录已保留。");
-      if (c.enabled && this.program)
-        return fail("计划中按指定动作训练，请先结束计划。");
-      this.auto = c.enabled;
-      this.detector = new AutoDetector();
-      this.detected = null;
-      message = `自动识别已${c.enabled ? "开启，先识别动作再计次；卧推请手动选择" : "关闭"}。`;
-    }
     if (c.type === "set_hold_goal") {
       if (this.exercise !== "plank")
         return fail("当前不是平板支撑，请先切换动作。");
@@ -444,8 +441,6 @@ export class SessionEngine {
     if (this.nextSet && ["set_rep_goal", "set_load"].includes(c.type))
       return fail("请等下一组开始后再修改本组目标或负重。");
     if (c.type === "set_exercise") {
-      this.auto = false;
-      this.detected = null;
       if (this.exercise === c.exercise && !c.restart)
         message = `当前已是${EXERCISES[this.exercise].label}，保留本组次数。`;
       else {
@@ -513,12 +508,10 @@ export class SessionEngine {
         this.reset();
         this.active = true;
         this.sessionId = crypto.randomUUID();
-        this.detector = new AutoDetector();
-        this.detected = null;
         this.events.push({ type: "start", sessionId: this.sessionId });
         this.setPaused(false);
         message =
-          this.exercise === "squat" && !this.auto
+          this.exercise === "squat"
             ? "已开始侧身站位检查，通过后开始计数。"
             : "已开始准备检查，就位后自动计数。";
       }
@@ -570,6 +563,7 @@ export class SessionEngine {
             : 0;
         if (!this.paused) this.pausedRest = 0;
         this.tick();
+        if (!this.paused && this.program && !this.nextSet && this.planGoalReached()) this.finishSet();
         this.counter.resetMotion();
         this.plank.resetMotion();
         this.pushup.resetMotion();
@@ -599,7 +593,6 @@ export class SessionEngine {
     this.preparedSince = null;
     this.awaitingStart = false;
     this.squatPreparation = new SquatPreparation();
-    this.detector = new AutoDetector();
     this.smoother = new Smoother();
     this.trajectory = [];
     this.lastFrame = 0;
@@ -614,7 +607,7 @@ export class SessionEngine {
   }
   frame(points: Point[], t = this.now(), aspect = 1) {
     this.tick();
-    if (this.exercise === "pushup" && !(this.auto && !this.detected)) {
+    if (this.exercise === "pushup") {
       const enabled =
         this.active && !this.paused && this.restUntil <= this.now();
       const row = this.pushup.update(points, t, aspect, enabled);
@@ -639,7 +632,6 @@ export class SessionEngine {
       this.counter.resetMotion();
       this.plank.resetMotion();
       this.trajectory = [];
-      this.detector = new AutoDetector();
       this.smoother = new Smoother();
       this.trackingSide = undefined;
       this.squatPreparation = new SquatPreparation();
@@ -655,7 +647,7 @@ export class SessionEngine {
       this.missingSince ??= this.lastTracked ?? t;
     }
     this.lastFrame = t;
-    const exercise = this.auto && !this.detected ? undefined : this.exercise;
+    const exercise = this.exercise;
     const moving = this.counter.phase !== "IDLE" || this.plank.streak > 0;
     const recoveryLimit = this.recoveryBudget;
     if (this.missingSince !== null && t - this.missingSince > recoveryLimit) {
@@ -781,22 +773,6 @@ export class SessionEngine {
       }
       this.awaitingStart = false;
     }
-    if (this.auto && !this.detected) {
-      const detected = this.detector.update(
-        frameFeatures(this.angles, smoothed),
-        t,
-      );
-      if (!detected) return null;
-      this.exercise = detected;
-      this.detected = detected;
-      this.reset();
-      this.events.push({
-        type: "detected",
-        exercise: detected,
-        sessionId: this.sessionId,
-      });
-      return null;
-    }
     if (this.preparing && this.exercise !== "squat") {
       const angle = this.angles[EXERCISES[this.exercise].signal];
       const ready =
@@ -886,9 +862,7 @@ export class SessionEngine {
       holdGoal: this.holdGoal,
       holdBest: this.plank.best,
       fatigue: velocityLoss(this.rows.map((r) => r.velocity ?? 0)),
-      auto: this.auto,
-      detected: this.detected,
-      program: this.program ? structuredClone(this.program) : null,
+      program: this.program ? { ...structuredClone(this.program), between: this.nextSet, setId: this.recordId, restSeconds: this.setRest } : null,
       exercise: this.exercise,
       goal: this.goal,
       status: !this.active
@@ -910,11 +884,11 @@ export class SessionEngine {
       trackingSide: this.trackingSide,
       trackingNotice: this.trackingNotice,
       squatCheck:
-        this.exercise === "squat" && !(this.auto && !this.detected)
+        this.exercise === "squat"
           ? this.squatPreparation.state
           : undefined,
       pushupCheck:
-        this.exercise === "pushup" && !(this.auto && !this.detected)
+        this.exercise === "pushup"
           ? { ...this.pushup.check }
           : undefined,
       environment: this.environment,

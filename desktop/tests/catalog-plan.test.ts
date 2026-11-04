@@ -1,13 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { catalog as library } from "./fixtures/movement-catalog";
 import {
   CatalogPlan,
   blockForMovement,
   blockUnit,
   resolvePlan,
 } from "../src/core/catalog-plan";
-import { type Movement } from "../src/core/movement-library";
 import { SessionEngine } from "../src/core/session";
 import {
   TimedTraining,
@@ -19,12 +18,6 @@ import { moveToTrash, restoreTrash } from "../src/core/trash";
 import { practiceMovements } from "../src/core/free-practice";
 import { appControls } from "./helpers/app-controls";
 
-const library: Movement[] = JSON.parse(
-  readFileSync(
-    new URL("../public/movekit-library/catalog.json", import.meta.url),
-    "utf8",
-  ),
-).movements;
 const block = (slug: string, sets = 1, target = 1, rest = 0) => ({
   ...blockForMovement(library.find((m) => m.slug === slug)!),
   sets,
@@ -73,8 +66,51 @@ test("plan rest archives the set, continues its remaining sets, then starts the 
     }
   }
 });
+test("temporary plan settings change completion, rest and the record for just one set", () => {
+  for (const mode of ["traditional", "mixed-plank", "mixed-reps", "mixed-timer"]) {
+    let now = 0;
+    const engine = new SessionEngine();
+    engine.cameraReady = true;
+    engine.now = () => now;
+    const timed = new TimedTraining(() => now);
+    const plan = new CatalogPlan(engine, timed);
+    const traditional = mode === "traditional";
+    const slug = mode === "mixed-reps" ? "barbell-curl" : mode === "mixed-timer" ? "dumbbell-wrist-curl" : "front-plank";
+    const blocks = [block(slug, 2, 12, 60)];
+    if (traditional) engine.dispatch({ type: "start_program", blocks });
+    else plan.start(resolvePlan([...blocks, block("push-up")], library));
+    const setId = traditional ? engine.snapshot().program!.setId! : plan.view()!.setId;
+    const edit = { type: "adjust_plan_set" as const, setId, target: 18, rest: 7, load: 8.5 };
+    const apply = () => traditional ? engine.adjustPlanSet(edit) : plan.command(edit);
+    assert.ok(apply().ok);
+    now = 12;
+    if (mode === "mixed-reps") timed.setManualReps(12);
+    else if (!timed.movement) engine.plank.total = 12;
+    if (!traditional) assert.equal(plan.tick(), undefined, "original goal must not end the set");
+    // Lower to progress already achieved. Only the confirmed edit finishes the set.
+    edit.target = 12;
+    assert.ok(apply().ok);
+    assert.equal(traditional ? engine.snapshot().remaining : plan.overlay().remaining, 7);
+    assert.equal(apply().ok, false, "edits during rest must not carry forward");
+    const row = timed.movement ? timed.pending[0] : engine.pending[0];
+    assert.equal(row.load, 8.5);
+    now += 7;
+    if (traditional) engine.tick(); else plan.tick();
+    assert.equal(apply().ok, false, "a stale edit must not affect the next set");
+    const next = timed.snapshot();
+    assert.equal(next?.load ?? engine.load, 4);
+    assert.equal(next ? (mode === "mixed-reps" ? next.goalReps : next.goalSeconds) : engine.holdGoal, 12);
+    assert.equal(traditional ? engine.snapshot().program?.restSeconds : plan.view()?.restSeconds, 60);
+    edit.setId = traditional ? engine.snapshot().program!.setId! : plan.view()!.setId;
+    edit.target = 20;
+    assert.ok(apply().ok);
+    if (traditional) engine.dispatch({ type: "stop_program" }); else plan.stop();
+    assert.equal(timed.snapshot()?.load ?? engine.load, 4);
+    assert.equal((timed.movement ? timed.pending : engine.pending)[1].load, 8.5);
+    assert.deepEqual(blocks[0], block(slug, 2, 12, 60));
+  }
+});
 test("every library movement starts a plan set with its own identity, goal, load and tracker", () => {
-  assert.equal(library.length, 582);
   for (const movement of library) {
     const engine = new SessionEngine(),
       timed = new TimedTraining(),

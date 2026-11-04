@@ -1,36 +1,41 @@
-# open-fitness
+<h1>
+  <img src="website/assets/app-icon.png" alt="" width="52" height="52" align="middle">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="desktop/assets/branding/navigation-wordmark.svg">
+    <img src="website/assets/navigation-wordmark.svg" alt="open-fitness" width="192" align="middle">
+  </picture>
+</h1>
 
-面向 macOS Apple Silicon 的摄像头与语音健身教练，当前试用版 **0.3.48**。Electron + React + TypeScript 客户端在本机统一通过 MediaPipe Full 完成姿态分析，无需选择模型；语音识别、对话和合成连接独立服务。**使用、开发和打包均无需本地 Python 环境。**
+**简体中文** · [English](README.en.md)
 
-## 使用许可
+**你的 AI 视觉私教。** 在配备 Apple 芯片的 Mac 上，用摄像头记录动作，用声音和教练交流。你可以从一组深蹲开始，也可以从 582 个动作中挑选、编排自己的训练计划。
 
-本项目自有软件采用 [PolyForm Noncommercial 1.0.0](LICENSE)，允许按条款学习、使用和修改，商业使用须另获授权。项目原创图标和指定原创文字采用 [CC BY-NC 4.0](docs/licenses/CC-BY-NC-4.0.txt)。第三方素材保留原权利，尤其是 MoveKit 视频与封面，现有记录未确认对外分发授权。完整适用范围和署名方式见 [素材许可与来源](ASSET-LICENSES.md)，应用内可在「设置 → 关于与版本」离线查看。
+## 产品介绍视频
 
-## 开始试用
+[![观看 open-fitness 实机演示](website/preview-media/open-fitness-tour.jpg)](website/preview-media/open-fitness-tour.mp4?raw=true)
 
-解压 macOS arm64 试用 ZIP，将 `open-fitness.app` 拖入「应用程序」后打开。通过 `npm run package:public` 构建时，应用位于 `desktop/release/mac-arm64/open-fitness.app`。更换版本前先正常退出正在运行的应用。
+[观看 50 秒实机演示（MP4）](website/preview-media/open-fitness-tour.mp4?raw=true) · 看看如何挑选动作、开始计划、用摄像头数深蹲，以及训练中教练如何用语音回答提问。演示中的摄像头画面使用预录动作样本。
 
-首次使用在设置中选择摄像头、麦克风、扬声器并授权；开启摄像头后按引导侧身站稳，从一组深蹲开始。使用火山 Agent Plan 时，可在「设置 → 教练声音」试听并选择四款男声、四款女声，初次使用默认「女声 1 · 清透自然」。
+## 开始训练
 
-- [试用说明](docs/trial-guide.md)：首次使用、训练、语音、数据备份和问题反馈。
-- [开发维护](desktop/README.md)：启动命令、目录职责、服务配置与打包。
-- [验证清单与已知限制](docs/validation.md)：自动化覆盖、历史现场验证及待试用检查项。
-- [主动语音交互设计](docs/voice-interaction.md)：竞品依据、提醒节奏、模型表达和打断边界。
-- [音色维护](docs/voices.md)：已确认音色、参考音频与服务器恢复方式。
-- [版本记录](CHANGELOG.md)：供项目维护查阅；软件「设置 → 关于与版本」可查看版本、构建信息和使用许可。
-- [来源记录](docs/sources.md)：算法、动作资料与旧原型溯源。
+1. 将 `open-fitness.app` 拖到「应用程序」并打开。在设置中选择摄像头，按系统提示授权。
+2. 在「训练」页选择深蹲并开始。按提示侧身站好，让肩、髋、膝、踝完整入镜，完成一次深蹲后回到站姿，查看计数。
+3. 想在训练中提问或调整目标时，在「设置 → AI 服务」填入自己的 Agent Plan Key，测试通过后保存，并开启麦克风。
 
-## 当前功能
+**基础训练无需 API Key。** 动作库、计划、受支持动作的摄像头计次或计时，以及训练记录都可以单独使用。摄像头画面与姿态分析留在本机。启用在线语音教练后，语音片段、对话及必要的训练上下文会发送给配置的服务。
 
-- 九种动作的姿态计次或支撑计时、训练计划、自动休息、逐次反馈和个人参考动作。
-- 语音控制、流式回答、直接说话打断，以及服务与音视频设备诊断。
-- 训练历史、趋势和长期资料。动作库提供 582 个带演示的动作，支持中英文搜索和常练收藏。
-- JSON 备份、Strong / Hevy CSV 交换、旧 Python 数据导入和最近删除恢复。
-- 浏览器模式使用同一套界面和训练核心，数据与桌面端独立保存。
+## 动作、计划与记录
 
-## 开发入口
+| 你想做什么 | 在应用里怎么做 |
+| --- | --- |
+| 找一个动作 | 在「动作库」用中文或英文搜索，按肌群、器械或难度筛选，再加入「常练动作」。 |
+| 记录动作 | 深蹲、俯卧撑等动作可通过摄像头计次，平板支撑按保持时长记录。其他动作按各自标注的方式估算、计时或手动记录。 |
+| 重复一套训练 | 在「计划」里安排动作顺序、组数、次数或时长、负重和休息。保存后，下次可以直接开始。 |
+| 回顾或备份 | 在「记录」查看训练表现。完整备份使用 JSON，支持的训练记录也可通过 Strong 或 Hevy 格式的 CSV 交换。 |
 
-使用 Node.js 22.12+ 或 24.x 和 npm。本次维护验证环境为 Node.js 24.14.0 / npm 11.9.0。
+## 从源码运行
+
+准备好 Node.js 和 npm，在仓库根目录执行以下命令。首次安装会下载依赖和姿态模型，运行应用无需安装 Python。
 
 ```sh
 cd desktop
@@ -38,12 +43,10 @@ npm ci
 npm run dev
 ```
 
-`npm test` 运行本地回归；`npm run build` 构建桌面端与 Web；`npm run package:public` 在 Mac 上生成无 Key 的 arm64 应用。维护者的 `npm run package` 自动读取本机密钥文件用于自用包。首次安装需要下载 npm 依赖和姿态模型，之后姿态推理与人声检测离线运行。
+在同一目录运行 `npm run web` 可启动浏览器模式，浏览器和桌面端各自保存训练资料。`npm test` 运行回归测试，`npm run package:public` 在 Mac 上构建不含个人密钥的分发包。环境要求和完整命令见[开发维护指南](desktop/README.md)。
 
-## 项目边界
+## 文档与许可
 
-活动源码集中在 `desktop/`；`data/` 只放动作目录和知识原文；`docs/` 只保留当前使用、维护与来源说明。测试样本在 `desktop/tests/fixtures/`，生成资源和本机验证报告不作为源码提交。
+[使用指南](docs/trial-guide.md) · [验证范围与已知限制](docs/validation.md) · [教练语音](docs/voices.md)
 
-viaim Connect 作为摄像头、麦克风和扬声器外设使用；应用运行在 Mac 上。
-
-全新安装的桌面数据位于 `~/Library/Application Support/open-fitness/`。已有安装继续使用同级的 `Viaim Coach/` 目录。根目录已有的旧训练记录和上传视频是个人资料，继续保留并从 Git 排除。
+项目自有代码采用 PolyForm Noncommercial 许可，商业使用需要另获授权。原创图标和指定文档采用署名、非商业性使用许可。第三方动作视频、模型和音频按各自条款使用。详见[代码许可](LICENSE)、[素材许可与署名](ASSET-LICENSES.md)和[项目来源](docs/sources.md)。

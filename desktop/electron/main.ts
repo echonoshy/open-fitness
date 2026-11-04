@@ -74,6 +74,7 @@ const allowed = (url: string) => isAllowedRendererUrl(url, dev);
 const serviceMetrics: ServiceMetric[] = [];
 const controllers = new Map<string, AbortController>();
 let writes = Promise.resolve();
+let interfaceLanguage: "zh-CN" | "en" = "zh-CN";
 let knownPlans: string | undefined;
 function sender(event: Electron.IpcMainInvokeEvent) {
   if (!event.senderFrame || !allowed(event.senderFrame.url))
@@ -84,6 +85,7 @@ async function load() {
     const data = JSON.parse(
       await readFile(join(app.getPath("userData"), "data.json"), "utf8"),
     );
+    interfaceLanguage = data.settings?.language === "en" ? "en" : "zh-CN";
     knownPlans = JSON.stringify(data.plans ?? []);
     return data;
   } catch (e) {
@@ -100,7 +102,7 @@ async function createWindow() {
     height: 960,
     minWidth: 1000,
     minHeight: 760,
-    backgroundColor: "#202020",
+    backgroundColor: "#18191b",
     title: "open-fitness",
     webPreferences: {
       preload: join(__dirname, "preload.cjs"),
@@ -306,6 +308,7 @@ app.whenReady().then(async () => {
         }
         await writeFile(file + ".tmp", JSON.stringify(data));
         await rename(file + ".tmp", file);
+        interfaceLanguage = checked.data.settings.language ?? "zh-CN";
         knownPlans = nextPlans;
       });
     writes = task;
@@ -325,7 +328,9 @@ app.whenReady().then(async () => {
     if (!["legacy", "csv", "backup"].includes(kind))
       throw Error("不支持的导入格式");
     const choice = await dialog.showOpenDialog(win!, {
-      title: kind === "legacy" ? "选择旧版项目文件夹" : "选择训练数据",
+      title: interfaceLanguage === "en"
+        ? (kind === "legacy" ? "Choose a legacy project folder" : "Choose workout data")
+        : (kind === "legacy" ? "选择旧版项目文件夹" : "选择训练数据"),
       properties: kind === "legacy" ? ["openDirectory"] : ["openFile"],
       filters:
         kind === "csv"

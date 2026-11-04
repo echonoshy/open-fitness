@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useEffect, useRef, useState } from "react";
 import { Check, KeyRound, LoaderCircle, RefreshCw } from "lucide-react";
 import { readAiServices, testAiServices, saveAiServices } from "../ai-services";
@@ -17,6 +18,7 @@ export function AiServiceSettings({
   beforeApply: () => void;
   onSaved: () => void;
 }) {
+  const { uiText } = useUiLocale();
   const [view, setView] = useState<AiServicesView>();
   const [draft, setDraft] = useState<AiServicesDraft>();
   const [result, setResult] = useState<AiServicesTestResult>();
@@ -108,11 +110,10 @@ export function AiServiceSettings({
         <div>
           <div className="settings-heading">
             <KeyRound size={21} />
-            <h2 id="ai-service-title">AI 服务</h2>
+            <h2 id="ai-service-title">{uiText("AI 服务")}</h2>
           </div>
           <p>
-            教练对话（LLM）、语音识别（ASR）和语音合成（TTS）共用一个火山引擎
-            Agent Plan Key。
+            {uiText("教练对话（LLM）、语音识别（ASR）和语音合成（TTS）共用一个火山引擎 Agent Plan Key。")}
           </p>
         </div>
         <span className="ai-provider">Agent Plan</span>
@@ -129,9 +130,9 @@ export function AiServiceSettings({
                 spellCheck={false}
                 value={draft.apiKey}
                 onChange={(e) => edit({ ...draft, apiKey: e.target.value })}
-                placeholder={hint(view.configured, view.suffix)}
+                placeholder={uiText(hint(view.configured, view.suffix))}
               />
-              <p>当前对话模型 · {view.model}</p>
+              <p>{uiText("当前对话模型 · ")}{uiText(view.model)}</p>
             </div>
           </fieldset>
           <div
@@ -142,32 +143,32 @@ export function AiServiceSettings({
             {busy === "test" && (
               <p className="ai-testing">
                 <LoaderCircle size={16} className="ai-spin" />
-                正在分别测试三项服务，通常需要几秒钟…
+                {uiText("正在分别测试三项服务，通常需要几秒钟…")}
               </p>
             )}
             {result &&
               result.results.map((row) => (
                 <div className="ai-test-row" key={row.name}>
-                  <span>{AI_SERVICE_NAMES[row.name]}</span>
+                  <span>{uiText(AI_SERVICE_NAMES[row.name])}</span>
                   <span className={row.ok ? "ai-ok" : "ai-failed"}>
-                    {row.ok
+                    {uiText(row.ok
                       ? `通过 · ${(row.ms / 1000).toFixed(1)} 秒`
-                      : row.error || "测试失败"}
+                      : row.error || "测试失败")}
                   </span>
                 </div>
               ))}
             {result?.ticket && (
               <p className="ai-ok">
-                三项测试通过，请在 5 分钟内保存。修改 Key 后需要重新测试。
+                {uiText("三项测试通过，请在 5 分钟内保存。修改 Key 后需要重新测试。")}
               </p>
             )}
             {result && !result.ticket && (
-              <p>测试未全部通过，当前使用的配置未改变。</p>
+              <p>{uiText("测试未全部通过，当前使用的配置未改变。")}</p>
             )}
           </div>
           <div className="ai-service-actions">
             <button type="button" disabled={!!busy} onClick={() => void test()}>
-              {busy === "test" ? "测试中…" : "测试连接"}
+              {uiText(busy === "test" ? "测试中…" : "测试连接")}
             </button>
             <button
               type="button"
@@ -176,26 +177,26 @@ export function AiServiceSettings({
               onClick={() => void save()}
             >
               <Check size={16} />
-              {busy === "save" ? "保存中…" : "保存并生效"}
+              {uiText(busy === "save" ? "保存中…" : "保存并生效")}
             </button>
           </div>
           <p className="ai-service-note">
-            测试会发起少量真实请求，使用套餐额度。语音服务需已开启额度抵扣。保存会停止当前语音回复。
+            {uiText("测试会发起少量真实请求，使用套餐额度。语音服务需已开启额度抵扣。保存会停止当前语音回复。")}
           </p>
           <p className="ai-service-note">
-            Key 保存在本机，不包含在训练数据备份中。
+            {uiText("Key 保存在本机，不包含在训练数据备份中。")}
           </p>
         </>
       )}
-      {busy === "load" && <p role="status">正在读取服务设置…</p>}
+      {busy === "load" && <p role="status">{uiText("正在读取服务设置…")}</p>}
       {message && (
         <p role="status" className="ai-ok">
-          {message}
+          {uiText(message)}
         </p>
       )}
       {error && (
         <p role="alert" className="ai-failed">
-          {error}
+          {uiText(error)}
         </p>
       )}
       <button
@@ -205,7 +206,7 @@ export function AiServiceSettings({
         onClick={() => void load()}
       >
         <RefreshCw size={14} />
-        重新载入已保存配置
+        {uiText("重新载入已保存配置")}
       </button>
     </section>
   );

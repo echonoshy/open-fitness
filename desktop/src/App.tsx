@@ -1,3 +1,4 @@
+import { createUiLocale, UiLocale } from "./i18n";
 import { resolvePracticeCommand } from "./components/free-practice/voice-commands";
 import { exerciseNarrationSource } from "./media/exercise-narration";
 import { localExerciseIntroduction } from "./core/exercise-reference";
@@ -52,8 +53,9 @@ import {
 import { ServiceCheck } from "./components/ServiceDiagnostics";
 import { AiServiceSettings } from "./components/AiServiceSettings";
 import { VersionInfo } from "./components/VersionInfo";
+import { ProductLogo } from "./components/ProductLogo";
 import { WelcomeGuide } from "./components/WelcomeGuide";
-import { Activity, useCallback, useEffect, useRef, useState } from "react";
+import { Activity, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CatalogPlan, catalogPlanControl, resolvePlan, type PlanCommand } from "./core/catalog-plan";
 import {
   practiceMovements,
@@ -73,14 +75,10 @@ import {
 import { timedVoiceIntent, timedStatusText } from "./core/timed-voice";
 import { flushSync } from "react-dom";
 import {
-  AudioLines,
   Camera as CameraIcon,
-  Check,
   ChevronDown,
   CircleHelp,
   Headphones,
-  Play,
-  Square,
   Volume2,
   X,
 } from "lucide-react";
@@ -96,6 +94,7 @@ import { Camera, drawPose } from "./media/camera";
 import { listen } from "./media/audio";
 import { VoicePlayback } from "./media/playback";
 import { resolveOutputDevice } from "./media/output-device";
+import { VoiceCard } from "./components/VoiceCard";
 import { COACH_VOICES, coachVoice, PRESET_SAMPLE_TEXT } from "./core/voices";
 import {
   desktop,
@@ -136,7 +135,6 @@ const snapshot = (): Snapshot => {
           squatCheck: undefined,
           pushupCheck: undefined,
           preparing: false,
-          auto: false,
           program: null,
           trackingNotice: timed.statistics.notice,
         }
@@ -158,6 +156,10 @@ export default function App() {
     [loaded, setLoaded] = useState(false),
     [error, setError] = useState("");
   const [movementLibrary, setMovementLibrary] = useState<Movement[]>([]);
+  const language = data.settings.language ?? "zh-CN";
+  const locale = useMemo(() => createUiLocale(language, movementLibrary), [language, movementLibrary]);
+  const { uiText } = locale;
+  useEffect(() => { document.documentElement.lang = language; }, [language]);
   const [libraryFailed, setLibraryFailed] = useState(false);
   const reloadLibrary = useCallback(() => {
     setLibraryFailed(false);
@@ -565,6 +567,8 @@ export default function App() {
           if (token!==startRequest.current || !engine.cameraReady) return failure("摄像头尚未就绪，计划未开始。");
         }
         result=catalogPlan.start(items);
+      } else if (command.type === "adjust_plan_set") {
+        result = catalogPlan.active ? catalogPlan.command(command) : engine.adjustPlanSet(command);
       } else if (command.type === "skip_remaining_sets") {
         result = catalogPlan.active ? catalogPlan.skipRemainingSets() : engine.skipRemainingSets();
       } else if (command.type === "complete_plan_set") {
@@ -954,7 +958,7 @@ export default function App() {
       }, dataRef.current.settings.speaker);
       if (completed && token === previewToken.current)
         setVoiceNotice(
-          `${voiceName(id)}试听结束，喜欢的话可以点击「使用此声音」。`,
+          `${voiceName(id)}试听结束，喜欢的话可以点击「选用」。`,
         );
     } catch (e) {
       notify(e);
@@ -1741,8 +1745,6 @@ export default function App() {
         }
         if (event.type === "fatigue")
           text = "最近两次动作速度较前几次下降超过20%，可以考虑休息。";
-        if (event.type === "detected")
-          text = `识别为${EXERCISES[event.exercise!].label}，从下一次完整动作开始计数。`;
         if (text) {
           setMessages((m) =>
             [...m, { role: "assistant", content: text }].slice(-12),
@@ -1794,7 +1796,6 @@ export default function App() {
                 "动作速度比前几次慢了，可以按感受决定是否休息。",
                 scene(),
               );
-            if (event.type === "detected") guide.offer("start", text, scene());
           }
         }
       }
@@ -1941,7 +1942,7 @@ export default function App() {
     label: string,
   ) => (
     <label className="field" key={key}>
-      <span>{label}</span>
+      <span>{uiText(label)}</span>
       <select
         value={data.settings[key] || ""}
         disabled={
@@ -1963,37 +1964,38 @@ export default function App() {
           });
         }}
       >
-        <option value="">使用系统默认设备</option>
+        <option value="">{uiText("使用系统默认设备")}</option>
         {devices
           .filter((d) => d.kind === kind)
           .map((d, i) => (
             <option key={d.deviceId || i} value={d.deviceId}>
-              {displayDeviceName(d.label) || `设备 ${i + 1}`}
+              {uiText(displayDeviceName(d.label) || `设备 ${i + 1}`)}
             </option>
           ))}
       </select>
     </label>
   );
   return (
+    <UiLocale.Provider value={locale}>
     <div
       className={`app ${page === "train" ? "immersive" : "content-app"} ${hudHidden && page === "train" ? "controls-hidden" : ""}`}
     >
       <header className="app-header" inert={hudHidden && page === "train"}>
         <a
           className="brand"
-          aria-label="open-fitness，返回训练"
+          aria-label={uiText("open-fitness，返回训练")}
           href="#"
           onClick={(e) => {
             e.preventDefault();
             setPage("train");
           }}
         >
-          open<span>-fitness</span>
+          <ProductLogo />
         </a>
-        <nav aria-label="主导航">
+        <nav aria-label={uiText("主导航")}>
           <TabNavigation
             primary
-            label="页面导航"
+            label={uiText("页面导航")}
             value={page}
             onChange={setPage}
             items={[
@@ -2010,8 +2012,8 @@ export default function App() {
             <button
               ref={guideButton}
               className="guide-trigger"
-              aria-label="使用指南"
-              title="使用指南"
+              aria-label={uiText("使用指南")}
+              title={uiText("使用指南")}
               aria-haspopup="dialog"
               disabled={!loaded}
               onClick={() => setGuidePage("overview")}
@@ -2020,22 +2022,22 @@ export default function App() {
             </button>
             <button
               className="device-pill"
-              aria-label={cameraStatus === "on" ? cameraLabel : "连接设备"}
-              title={cameraStatus === "on" ? cameraLabel : "连接设备"}
+              aria-label={uiText(cameraStatus === "on" ? cameraLabel : "连接设备")}
+              title={uiText(cameraStatus === "on" ? cameraLabel : "连接设备")}
               onClick={() => {
                 setSettingsTab("devices");
                 setPage("settings");
               }}
             >
               <span className={"dot " + (cameraStatus === "on" ? "live" : "")} />
-              <span>{cameraStatus === "on" ? cameraLabel : "连接设备"}</span>
+              <span>{uiText(cameraStatus === "on" ? cameraLabel : "连接设备")}</span>
               <ChevronDown size={14} aria-hidden="true" />
             </button>
           </div>
       </header>
       {error && (
         <div role="alert" className="error">
-          <span>{error}</span>
+          <span>{uiText(error)}</span>
           {(engine.pending.length > 0 || timedTraining.pending.length > 0) && (
             <button
               onClick={() =>
@@ -2044,10 +2046,10 @@ export default function App() {
                   .catch(notify)
               }
             >
-              重试保存
+              {uiText("重试保存")}
             </button>
           )}
-          <button aria-label="关闭提示" onClick={() => setError("")}>
+          <button aria-label={uiText("关闭提示")} onClick={() => setError("")}>
             <X size={16} />
           </button>
         </div>
@@ -2138,7 +2140,7 @@ export default function App() {
         />
       </Activity>
       <Activity mode={page === "history" ? "visible" : "hidden"}>
-        <HistoryPanel data={data} />
+        <HistoryPanel data={data} library={library} />
       </Activity>
       <Activity mode={page === "profile" ? "visible" : "hidden"}>
         <ProfilePanel data={data} persist={persist} report={notify} />
@@ -2155,25 +2157,40 @@ export default function App() {
       <Activity mode={page === "settings" ? "visible" : "hidden"}>
         <main className="feature-page settings-page">
           <PageHeading
-            title="设置"
-            sub="管理教练声音、AI 服务、音视频设备、隐私和训练数据。"
+            title={uiText("设置")}
+            sub={uiText("管理教练声音、AI 服务、音视频设备、隐私和训练数据。")}
           />
           <div className="settings-tabs">
             <TabNavigation
               value={settingsTab}
               onChange={setSettingsTab}
-              label="设置分类"
+              label={uiText("设置分类")}
               items={[
                 ["voice", "教练声音"],
                 ["ai", "AI 服务"],
                 ["devices", "音视频设备"],
                 ["privacy", "教练与隐私"],
                 ["data", "数据与备份"],
+                ["language", "语言"],
                 ["about", "关于与版本"],
               ]}
             />
           </div>
           <div className="settings-grid">
+            {settingsTab === "language" && (
+              <section className="settings-card device-settings">
+                <div className="settings-heading"><h2>{uiText("界面语言")}</h2></div>
+                <label className="field">
+                  {uiText("显示语言")}
+                  <select value={language} disabled={!loaded} onChange={event => {
+                    void updateSettings({ language: event.target.value === "en" ? "en" : "zh-CN" });
+                  }}>
+                    <option value="zh-CN" lang="zh-CN" translate="no">简体中文</option>
+                    <option value="en" lang="en">English</option>
+                  </select>
+                </label>
+              </section>
+            )}
             {settingsTab === "about" && <VersionInfo />}
             {settingsTab === "ai" && (
               <AiServiceSettings
@@ -2193,23 +2210,23 @@ export default function App() {
                 <div>
                   <div className="settings-heading">
                     <Volume2 size={21} />
-                    <h2 id="voice-library-title">选择你的教练声音</h2>
+                    <h2 id="voice-library-title">{uiText("选择你的教练声音")}</h2>
                   </div>
                   <p>
-                    试听同一段训练口令，选择用于训练报数和教练回复的声音。
+                    {uiText("试听同一段训练口令，选择用于训练报数和教练回复的声音。")}
                   </p>
                 </div>
                 <span className="current-voice">
-                  {voiceService?.available
+                  {uiText(voiceService?.available
                     ? `当前 · ${voiceName(data.settings.coachVoice)}`
-                    : voiceService ? "语音服务未连接" : "正在读取音色…"}
+                    : voiceService ? "语音服务未连接" : "正在读取音色…")}
                 </span>
               </div>
               <div className="guidance-preference">
                 <label className="compact-field">
-                  主动提醒频率
+                  {uiText("主动提醒频率")}
                   <select
-                    aria-label="主动提醒频率"
+                    aria-label={uiText("主动提醒频率")}
                     value={data.settings.guidance ?? "balanced"}
                     onChange={(e) => {
                       proactive.current.cancel();
@@ -2219,97 +2236,54 @@ export default function App() {
                       });
                     }}
                   >
-                    <option value="quiet" data-description="只提醒关键阶段和动作问题">安静</option>
-                    <option value="balanced" data-description="提醒关键进度，偶尔给予鼓励">适中</option>
-                    <option value="active" data-description="更频繁地播报进度、给予鼓励">积极</option>
+                    <option value="quiet" data-description={uiText("只提醒关键阶段和动作问题")}>{uiText("安静")}</option>
+                    <option value="balanced" data-description={uiText("提醒关键进度，偶尔给予鼓励")}>{uiText("适中")}</option>
+                    <option value="active" data-description={uiText("更频繁地播报进度、给予鼓励")}>{uiText("积极")}</option>
                   </select>
                 </label>
                 <p>
-                  默认使用「适中」，每组最多提醒两次进度。训练时也可以对教练说「少说一点」或「多鼓励我」。
+                  {uiText("默认使用「适中」，每组最多提醒两次进度。训练时也可以对教练说「少说一点」或「多鼓励我」。")}
                 </p>
               </div>
               {voiceService?.available && ["男声", "女声"].map((gender) => (
                 <div className="voice-group" key={gender}>
                   <h3>
-                    {gender}
+                    {uiText(gender)}
                     <span>
                       {COACH_VOICES.filter((v) => v.gender === gender).length}{" "}
-                      款声音
+                      {uiText("款声音")}
                     </span>
                   </h3>
                   <div className="voice-options approved-voices">
-                    {COACH_VOICES.filter((v) => v.gender === gender).map(
-                      (v) => {
-                        const selected =
-                          coachVoice(data.settings.coachVoice).id === v.id;
-                        const playing = previewVoice === v.id;
-                        const name = voiceName(v.id);
-                        return (
-                          <article
-                            className={`voice-option ${selected ? "selected" : ""} ${playing ? "is-playing" : ""}`}
-                            data-gender={gender}
-                            key={v.id}
-                          >
-                            <div className="voice-avatar" aria-hidden="true">
-                              <AudioLines size={25} strokeWidth={1.5} />
-                              {selected && (
-                                <span className="voice-check">
-                                  <Check size={12} />
-                                </span>
-                              )}
-                            </div>
-                            <div className="voice-option-title">
-                              <h4>{name}</h4>
-                              {!usesPresets && <span>{v.tag}</span>}
-                            </div>
-                            {!usesPresets && <p>{v.description}</p>}
-                            <div className="voice-actions">
-                              <button
-                                className="secondary"
-                                disabled={busy}
-                                aria-label={`${playing ? "停止试听" : "试听"}${name}`}
-                                onClick={() => void preview(v.id)}
-                              >
-                                {playing ? (
-                                  <Square size={14} />
-                                ) : (
-                                  <Play size={14} />
-                                )}
-                                {playing ? "停止试听" : "试听"}
-                              </button>
-                              <button
-                                className={
-                                  selected ? "voice-selected" : "secondary"
-                                }
-                                disabled={!loaded || selected}
-                                aria-pressed={selected}
-                                aria-label={`${selected ? "已选择" : "使用"}${name}`}
-                                onClick={() => void selectVoice(v.id)}
-                              >
-                                {selected && <Check size={14} />}
-                                {selected ? "已选择" : "使用此声音"}
-                              </button>
-                            </div>
-                          </article>
-                        );
-                      },
-                    )}
+                    {COACH_VOICES.filter((v) => v.gender === gender).map((voice) => (
+                      <VoiceCard
+                        key={voice.id}
+                        voice={voice}
+                        selected={coachVoice(data.settings.coachVoice).id === voice.id}
+                        playing={previewVoice === voice.id}
+                        busy={busy}
+                        loaded={loaded}
+                        showDescription={!usesPresets}
+                        preview={preview}
+                        select={selectVoice}
+                      />
+                    ))}
                   </div>
                 </div>
               ))}
               <div className="voice-sample" hidden={!voiceService?.available}>
-                <span>试听口令</span>
+                <span>{uiText("试听口令")}</span>
                 <p>
-                  {sampleText(previewVoice || data.settings.coachVoice)}
+                  {uiText(sampleText(previewVoice || data.settings.coachVoice))}
                 </p>
               </div>
               <div className="voice-library-footer">
-                <small>在线回复和训练提醒使用所选音色。动作示范讲解使用预录音频。</small>
+                <small>{uiText("在线回复和训练提醒使用所选音色。动作示范讲解使用预录音频。")}</small>
                 <span role="status">
-                  {voiceNotice ||
+                  {uiText(voiceNotice ||
                     (previewVoice
                       ? `正在试听「${voiceName(previewVoice)}」 · 输出：${names("speaker")}`
-                      : "点击「使用此声音」保存选择。")}
+                      : "点击「选用」保存选择。"))}
                 </span>
               </div>
             </section>
@@ -2319,20 +2293,19 @@ export default function App() {
             >
               <div className="settings-heading">
                 <CameraIcon size={21} />
-                <h2>音视频设备</h2>
+                <h2>{uiText("音视频设备")}</h2>
               </div>
               <p>
-                摄像头和麦克风优先选择 viaim
-                Connect；声音跟随系统默认输出，也可手动选择。已选设备会记住。
+                {uiText("摄像头和麦克风优先选择 viaim Connect；声音跟随系统默认输出，也可手动选择。已选设备会记住。")}
               </p>
               <button className="secondary" onClick={() => void discover()}>
-                授权并刷新设备
+                {uiText("授权并刷新设备")}
               </button>
               {deviceSelect("camera", "videoinput", "摄像头")}
               {deviceSelect("microphone", "audioinput", "麦克风")}
               {deviceSelect("speaker", "audiooutput", "声音输出")}
               <small>
-                切换摄像头前请先关闭画面；切换麦克风前请先关闭语音。
+                {uiText("切换摄像头前请先关闭画面；切换麦克风前请先关闭语音。")}
               </small>
               <button
                 className="secondary"
@@ -2347,13 +2320,13 @@ export default function App() {
                 }
               >
                 <Volume2 size={16} />
-                测试声音输出
+                {uiText("测试声音输出")}
               </button>
               {(!voiceAvailable || !data.settings.voice) && (
                 <small>
-                  {!voiceAvailable
+                  {uiText(!voiceAvailable
                     ? "语音服务尚未连接，请使用下方「语音与设备检查」。"
-                    : "请先在「教练与隐私」中开启语音回复，再测试在线声音输出。"}
+                    : "请先在「教练与隐私」中开启语音回复，再测试在线声音输出。")}
                 </small>
               )}
               <ServiceCheck
@@ -2367,10 +2340,10 @@ export default function App() {
             >
               <div className="settings-heading">
                 <Headphones size={21} />
-                <h2>教练与隐私</h2>
+                <h2>{uiText("教练与隐私")}</h2>
               </div>
               <label className="compact-field">
-                教练语音回复
+                {uiText("教练语音回复")}
                 <input
                   type="checkbox"
                   checked={data.settings.voice}
@@ -2381,39 +2354,38 @@ export default function App() {
                 />
               </label>
               <p>
-                摄像头视频和姿态分析在本机运行。开启语音教练后，语音片段和对话会发送到当前配置的
-                ASR、语言模型与语音合成服务。
+                {uiText("摄像头视频和姿态分析在本机运行。开启语音教练后，语音片段和对话会发送到当前配置的 ASR、语言模型与语音合成服务。")}
               </p>
               <div className="service-row">
-                <span>姿态识别</span>
-                <span>MediaPipe Full · 本机</span>
+                <span>{uiText("姿态识别")}</span>
+                <span>{uiText("MediaPipe Full · 本机")}</span>
               </div>
               <div className="service-row">
-                <span>实时推理</span>
+                <span>{uiText("实时推理")}</span>
                 <span>
-                  {cameraStatus === "on"
+                  {uiText(cameraStatus === "on"
                     ? `${inference} ms / 帧`
-                    : "等待开启摄像头"}
+                    : "等待开启摄像头")}
                 </span>
               </div>
               <div className="service-row">
-                <span>麦克风</span>
-                <span>{names("microphone")}</span>
+                <span>{uiText("麦克风")}</span>
+                <span>{uiText(names("microphone"))}</span>
               </div>
               <div className="service-row">
-                <span>声音输出</span>
-                <span>{names("speaker")}</span>
+                <span>{uiText("声音输出")}</span>
+                <span>{uiText(names("speaker"))}</span>
               </div>
               <div className="service-row">
-                <span>语音服务</span>
+                <span>{uiText("语音服务")}</span>
                 <span>
-                  {voiceAvailable
+                  {uiText(voiceAvailable
                     ? "语音服务已接入 · 联网使用"
-                    : "语音后端未连接"}
+                    : "语音后端未连接")}
                 </span>
               </div>
               <p className="hint">
-                动作评分用于训练反馈。保持全身入镜，画面不足时会停止计次。
+                {uiText("动作评分用于训练反馈。保持全身入镜，画面不足时会停止计次。")}
               </p>
             </section>
           </div>
@@ -2435,5 +2407,6 @@ export default function App() {
         />
       )}
     </div>
+    </UiLocale.Provider>
   );
 }

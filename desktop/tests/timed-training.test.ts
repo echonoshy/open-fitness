@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { catalog } from "./fixtures/movement-catalog";
 import {
   TimedTraining,
   recoverTimedCheckpoint,
@@ -8,19 +8,10 @@ import {
 } from "../src/core/timed-training";
 import { dataSchema } from "../src/core/data";
 import { mergeImportedData } from "../src/core/data-edits";
-import {
-  movementCapability,
-  type Movement,
-} from "../src/core/movement-library";
+import { movementCapability } from "../src/core/movement-library";
 import { timedVoiceIntent } from "../src/core/timed-voice";
 import { appControls } from "./helpers/app-controls";
 
-const catalog: Movement[] = JSON.parse(
-  readFileSync(
-    new URL("../public/movekit-library/catalog.json", import.meta.url),
-    "utf8",
-  ),
-).movements;
 const movement = catalog.find((m) => m.slug === "dumbbell-lateral-raise")!;
 assert.ok(movement && !movement.trainingExercise);
 const make = () => {
@@ -41,7 +32,6 @@ const command = (
 ) => t.dispatch({ type: "session", action });
 
 test("all catalogue movements have explicit capabilities; variants do not inherit counters", () => {
-  assert.equal(catalog.length, 582);
   assert.equal(
     catalog.filter((m) => movementCapability(m) === "自动计数").length,
     8,
@@ -128,7 +118,6 @@ test("timer validates input and never changes a set in response to a rep target"
   );
   assert.equal(t.dispatch({ type: "set_hold_goal", seconds: -1 }).ok, false);
   assert.equal(t.dispatch({ type: "set_load", kg: NaN }).ok, false);
-  assert.equal(t.dispatch({ type: "auto_detect", enabled: true }).ok, false);
   assert.equal(t.checkpoint()!.id, before);
   assert.equal(t.pending.length, 0);
 });

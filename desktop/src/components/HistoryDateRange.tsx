@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { CalendarDays, X } from "lucide-react";
 
 function DateField({
@@ -15,11 +16,12 @@ function DateField({
   max?: string;
   onChange: (value: string) => void;
 }) {
+  const { language, uiText } = useUiLocale();
   const [year, month, day] = value.split("-");
   return (
     <label className="date-field">
       <input
-        aria-label={label}
+        aria-label={uiText(label)}
         type="date"
         value={value}
         min={min || undefined}
@@ -28,7 +30,7 @@ function DateField({
       />
       <span className="date-display" aria-hidden="true">
         <CalendarDays size={15} />
-        {value ? `${year}年${Number(month)}月${Number(day)}日` : placeholder}
+        {value ? new Date(Number(year), Number(month) - 1, Number(day)).toLocaleDateString(language, {year: "numeric", month: "short", day: "numeric"}) : uiText(placeholder)}
       </span>
     </label>
   );
@@ -45,21 +47,22 @@ export function HistoryDateRange({
   to: string;
   onChange: (from: string, to: string) => void;
 }) {
+  const { uiText } = useUiLocale();
   return (
-    <div className="date-range" role="group" aria-label={label + "日期范围"}>
+    <div className="date-range" role="group" aria-label={uiText(label + "日期范围")}>
       <DateField
-        label={label + "开始日期"}
-        placeholder="开始日期"
+        label={uiText(label + "开始日期")}
+        placeholder={uiText("开始日期")}
         value={from}
         max={to}
         onChange={(value) => onChange(value, to)}
       />
       <span className="date-until" aria-hidden="true">
-        至
+        {uiText("至")}
       </span>
       <DateField
-        label={label + "结束日期"}
-        placeholder="结束日期"
+        label={uiText(label + "结束日期")}
+        placeholder={uiText("结束日期")}
         value={to}
         min={from}
         onChange={(value) => onChange(from, value)}
@@ -68,8 +71,8 @@ export function HistoryDateRange({
         <button
           type="button"
           className="icon-button"
-          aria-label="清除日期筛选"
-          title="清除日期筛选"
+          aria-label={uiText("清除日期筛选")}
+          title={uiText("清除日期筛选")}
           onClick={() => onChange("", "")}
         >
           <X size={15} />

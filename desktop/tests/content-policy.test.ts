@@ -47,7 +47,7 @@ test("library videos cannot be downloaded while training exports remain availabl
   const page = "coach://app/index.html";
   assert.equal(
     isLibraryVideoDownload(
-      "coach://app/movekit-library/hd/squat.mp4",
+      "coach://app/library/hd/squat.mp4",
       "application/octet-stream",
       page,
     ),
@@ -55,7 +55,7 @@ test("library videos cannot be downloaded while training exports remain availabl
   );
   assert.equal(
     isLibraryVideoDownload(
-      "coach://app/movekit-library/files/squat.mp4",
+      "coach://app/library/files/squat.mp4",
       "application/octet-stream",
       page,
     ),
@@ -67,7 +67,7 @@ test("library videos cannot be downloaded while training exports remain availabl
   );
   assert.equal(
     isLibraryVideoDownload(
-      "http://127.0.0.1:5178/movekit-library/files/squat.mp4",
+      "http://127.0.0.1:5178/library/files/squat.mp4",
       "application/octet-stream",
       "http://127.0.0.1:5178/",
       true,

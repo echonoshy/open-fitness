@@ -26,7 +26,6 @@ npm run dev
 | `npm run package:public` | 生成不含 Key 的分发包 |
 | `npm run verify:vad` | 用本地样本执行真实 Silero 推理，结果在 `output/` |
 | `npm run verify:services` | 显式调用真实 LLM / ASR / TTS，测试合成语音和内存训练状态 |
-| `npm run voices:register` | 维护命令：向配置的 TTS 服务补注册缺失的已确认音色 |
 
 修改动作资料或姿态 Worker 后，先执行 `npm run build` 或重新启动 `npm run dev`，让生成资源更新。只部署 `dist/` 时，语音功能还需要 `dist-web/server.mjs` 提供接口。
 
@@ -41,15 +40,14 @@ npm run dev
 | `web/` | 同源语音 API 和 Web 静态服务 |
 | `config/` | 随包默认服务配置 |
 | `assets/branding/` | 最终图标源文件；生成的图标在 `build/` |
-| `assets/voices/` | 已确认音色的注册元数据和参考母带，不放入客户端静态资源 |
-| `public/voices/`、`public/pcm-worklet.js` | 客户端使用的八款试听与录音 Worklet |
+| `public/exercise-narration/`、`public/pcm-worklet.js` | 动作示范的预录讲解与录音 Worklet，教练音色试听由当前 TTS 服务实时合成 |
 | `tests/` | 功能回归；算法对照 JSON 位于 `fixtures/`，无需运行 Python |
 | `scripts/` | 构建、资源准备和仍适用的维护命令 |
 | `output/`、`release/`、`dist*/`、`build/` | 本机生成内容，Git 忽略 |
 
 从「训练」页开始训练，在「动作库 → 常练动作」管理收藏，在「计划」页编排训练。全库 582 个动作中，原有 8 个计数动作和平板支撑继续使用 `SessionEngine`；其余动作通过 `TimedTraining` 保存独立统计：385 个估算计数、19 个保持计时、148 个活动计时、21 个普通计时。共享摄像头、关节点、背景虚化与动作示范，不复用无关动作的评分。
 
-新增统计规则在 `src/core/movement-statistics.ts`，视频标定数据在 `movement-calibration.json`。更新演示素材后，先在单独 Python 环境安装 MediaPipe / OpenCV，执行 `scripts/extract-movement-poses.py --output <缓存目录>`，再执行 `npx tsx scripts/calibrate-movement-statistics.ts <缓存目录>`；提取过程离线进行，不属于应用运行依赖。覆盖清单与验收边界见 [本版验证记录](../docs/movement-statistics-validation-20261103.md)。
+新增统计规则在 `src/core/movement-statistics.ts`，视频标定数据在 `movement-calibration.json`。更新演示素材后，先在单独 Python 环境安装 MediaPipe / OpenCV，执行 `scripts/extract-movement-poses.py --output <缓存目录>`，再执行 `npx tsx scripts/calibrate-movement-statistics.ts <缓存目录>`；提取过程离线进行，不属于应用运行依赖。实际训练与记录的核验方法见[验证清单](../docs/validation.md)。
 
 自动计数和姿态计时状态以本地 `SessionEngine` 为准；模型调用工具后读取实际执行结果。摄像头视频与姿态推理在本机进行。开启语音时，音频片段、对话和所需训练上下文发往配置的服务。
 
@@ -104,7 +102,7 @@ shasum -a 256 open-fitness-trial.zip > open-fitness-trial.zip.sha256
 
 实际交付时将 `trial` 换为版本与日期，避免覆盖既有发布。分发包需检查 ZIP 完整性、解压内容与 `.app` 一致，再做真实设备检查；build 成功不代表现场验收。当前未做 Developer ID 签名或 Apple 公证。
 
-版本唯一来源是 `package.json` 的 `version`；发布时同步 `package-lock.json`，把 [CHANGELOG](../CHANGELOG.md) 的未发布条目归入具体版本。更新记录仅供项目维护查阅，不再打包或显示在软件中；设置保留当前版本号、构建时间、运行模式与使用许可。日常清理不提升版本，也不把旧 ZIP 视为包含新源码。
+版本号取自 `package.json` 的 `version`，发布时同步 `package-lock.json`。设置页显示当前版本号、构建时间、运行模式与使用许可。日常清理不提升版本，也不把旧 ZIP 视为包含新源码。
 
 ### 内测临时签名与画面远近
 

@@ -39,8 +39,8 @@ export function historyRange(filter: HistoryFilter = {}, now = new Date()) {
   }
   return { from, to };
 }
-export function filterHistory(
-  records: RecordRow[],
+export function filterHistory<T extends { exercise: string; startedAt: string }>(
+  records: T[],
   filter: HistoryFilter = {},
   now = new Date(),
 ) {
@@ -109,7 +109,7 @@ export function progressByExercise(records: RecordRow[]) {
     ];
   });
 }
-const muscles: Record<Exercise, string[]> = {
+export const exerciseMuscles: Record<Exercise, string[]> = {
   squat: ["股四头肌", "臀部"],
   lunge: ["股四头肌", "臀部"],
   deadlift: ["臀部", "腿后侧", "背部"],
@@ -121,21 +121,25 @@ const muscles: Record<Exercise, string[]> = {
   plank: ["核心"],
 };
 export function muscleCoverage(records: RecordRow[], now = new Date()) {
-  const recent = new Set(
-    filterHistory(records, { days: 7 }, now).map((r) => r.id),
-  );
+  return coverageByMuscle(records
+    .filter((r) => r.reps.length || r.holdSeconds)
+    .map((r) => ({ startedAt: r.startedAt, muscles: exerciseMuscles[r.exercise] })), now);
+}
+
+export function coverageByMuscle(
+  records: { startedAt: string; muscles: string[] }[],
+  now = new Date(),
+) {
+  const { from } = historyRange({ days: 7 }, now);
   const groups = new Map<
     string,
     { muscle: string; sets: number; last: string }
   >();
   for (const r of records)
-    if (
-      (r.reps.length || r.holdSeconds) &&
-      Date.parse(r.startedAt) <= now.getTime()
-    )
-      for (const muscle of muscles[r.exercise] ?? []) {
+    if (Date.parse(r.startedAt) <= now.getTime())
+      for (const muscle of r.muscles) {
         const g = groups.get(muscle) ?? { muscle, sets: 0, last: "" };
-        if (recent.has(r.id)) g.sets++;
+        if (dayKey(r.startedAt) >= from) g.sets++;
         if (r.startedAt > g.last) g.last = r.startedAt;
         groups.set(muscle, g);
       }

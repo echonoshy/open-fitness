@@ -348,19 +348,6 @@ const regression: Case[] = [
       assert.equal(h.dataRef.current.settings.guidance, "balanced");
     },
   },
-  {
-    text: "打开自动识别",
-    mode: "ready",
-    check: (h) => assert.equal(h.engine.auto, true),
-  },
-  {
-    text: "打开自动识别",
-    check: (h, r) => {
-      assert.equal(h.engine.auto, false);
-      assert.equal(h.snapshot().reps, 6);
-      assert.match(r, /开始.*前|当前组/);
-    },
-  },
   { text: "重量设成十公斤", check: (h) => assert.equal(h.engine.load, 10) },
   { text: "下放改成四秒", check: (h) => assert.equal(h.engine.tempo, 4) },
   {

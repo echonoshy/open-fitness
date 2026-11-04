@@ -9,7 +9,7 @@ import { SpeechTurnDetector } from "../src/core/speech-turn";
 ort.env.wasm.numThreads = 1;
 const bytes = await readFile("public/vad/silero_vad_v5.onnx");
 const model = await Silero.new(ort, async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
-const wav = await readFile("public/voices/viaim-coach-female-w01-approved-v1.wav");
+const wav = await readFile(new URL("../tests/fixtures/vad/w01-speech.wav", import.meta.url));
 let rate = 0, channels = 0, pcm: Buffer | undefined;
 for (let p = 12; p + 8 <= wav.length;) {
   const size = wav.readUInt32LE(p + 4);

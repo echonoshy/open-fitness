@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Camera, Minus, Plus, X } from "lucide-react";
 import type { CameraCommand, CameraView } from "../core/camera-framing";
@@ -13,6 +14,7 @@ export function CameraViewControl(p: {
   blurNotice: string;
   setBackgroundBlur: (enabled: boolean) => Promise<void>;
 }) {
+  const { uiText } = useUiLocale();
   const [open, setOpen] = useState(false);
   const [notice, setNotice] = useState("");
   const root = useRef<HTMLDivElement>(null);
@@ -57,10 +59,10 @@ export function CameraViewControl(p: {
       <button
         ref={trigger}
         className="camera-view-trigger"
-        aria-label="取景设置"
+        aria-label={uiText("取景设置")}
         aria-expanded={open}
         aria-controls={open ? "camera-view-panel" : undefined}
-        title="取景设置"
+        title={uiText("取景设置")}
         disabled={!p.enabled}
         onClick={() => {
           setOpen(!open);
@@ -68,18 +70,18 @@ export function CameraViewControl(p: {
         }}
       >
         <Camera size={18} aria-hidden="true" />
-        <span>取景</span>
+        <span>{uiText("取景")}</span>
       </button>
       {open && (
         <section
           id="camera-view-panel"
           className="camera-view-panel"
-          aria-label="取景设置"
+          aria-label={uiText("取景设置")}
         >
           <div className="camera-view-heading">
-            <span>取景 · {p.view.automatic ? "自动取景" : "已固定"}</span>
+            <span>{uiText("取景 · ")}{uiText(p.view.automatic ? "自动取景" : "已固定")}</span>
             <button
-              aria-label="关闭取景设置"
+              aria-label={uiText("关闭取景设置")}
               onClick={() => {
                 setOpen(false);
                 trigger.current?.focus();
@@ -92,36 +94,36 @@ export function CameraViewControl(p: {
             <button
               role="switch"
               aria-checked={p.backgroundBlur}
-              aria-label="背景虚化"
+              aria-label={uiText("背景虚化")}
               onClick={() => void p.setBackgroundBlur(!p.backgroundBlur)}
             >
-              背景虚化
-              <span>{p.backgroundBlur ? "已开启" : "已关闭"}</span>
+              {uiText("背景虚化")}
+              <span>{uiText(p.backgroundBlur ? "已开启" : "已关闭")}</span>
             </button>
           </div>
-          <p>也可以说“打开背景虚化”或“关闭背景虚化”。</p>
-          {p.blurNotice && <p role="status">{p.blurNotice}</p>}
+          <p>{uiText("也可以说“打开背景虚化”或“关闭背景虚化”。")}</p>
+          {p.blurNotice && <p role="status">{uiText(p.blurNotice)}</p>}
           <div className="camera-view-presets">
             <button
               ref={first}
               aria-pressed={p.view.automatic}
               onClick={() => void change(p.view.automatic ? "lock" : "auto")}
             >
-              {p.view.automatic ? "固定当前画面" : "恢复自动取景"}
+              {uiText(p.view.automatic ? "固定当前画面" : "恢复自动取景")}
             </button>
-            <button onClick={() => void change("full")}>恢复全身</button>
+            <button onClick={() => void change("full")}>{uiText("恢复全身")}</button>
           </div>
           <div className="camera-view-slider">
             <button
-              aria-label="拉远画面"
+              aria-label={uiText("拉远画面")}
               disabled={p.view.zoom <= 1.01}
               onClick={() => void change("zoom_out")}
             >
               <Minus size={18} />
             </button>
-            <output aria-label="当前放大倍数">{p.view.zoom.toFixed(1)}×</output>
+            <output aria-label={uiText("当前放大倍数")}>{p.view.zoom.toFixed(1)}×</output>
             <button
-              aria-label="拉近画面"
+              aria-label={uiText("拉近画面")}
               disabled={p.view.zoom >= p.view.maxZoom - 0.01}
               onClick={() => void change("zoom_in")}
             >
@@ -131,32 +133,32 @@ export function CameraViewControl(p: {
           <div className="camera-view-presets">
             <button onClick={() => void change("left")}>
               <ArrowLeft size={16} />
-              往左看
+              {uiText("往左看")}
             </button>
             <button onClick={() => void change("right")}>
               <ArrowRight size={16} />
-              往右看
+              {uiText("往右看")}
             </button>
           </div>
           <p id="camera-view-help">
-            说“放大一点”会明显拉近，自动取景时继续跟随。也可以说“放大到2倍”或“回到刚才”。按钮用于微调，调整后固定；最多
-            {p.view.maxZoom}倍。
+            {uiText("说“放大一点”会明显拉近，自动取景时继续跟随。也可以说“放大到2倍”或“回到刚才”。按钮用于微调，调整后固定；最多")}
+            {p.view.maxZoom}{uiText("倍。")}
           </p>
           <div className="camera-view-presets">
             <button
               disabled={!p.view.canUndo}
               onClick={() => void change("undo")}
             >
-              撤销上次调整
+              {uiText("撤销上次调整")}
             </button>
             {p.view.automatic && (
-              <button onClick={() => void change("auto")}>恢复默认取景</button>
+              <button onClick={() => void change("auto")}>{uiText("恢复默认取景")}</button>
             )}
           </div>
           {p.view.automatic && p.view.hint && (
-            <p role="status">{p.view.hint}</p>
+            <p role="status">{uiText(p.view.hint)}</p>
           )}
-          {notice && <p role="status">{notice}</p>}
+          {notice && <p role="status">{uiText(notice)}</p>}
         </section>
       )}
     </div>

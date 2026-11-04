@@ -1,8 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { SessionEngine, planSchema } from "../src/core/session";
-import { AutoDetector, velocityLoss, similarity } from "../src/core/analysis";
+import { velocityLoss, similarity } from "../src/core/analysis";
 import {
   stats,
   overview,
@@ -15,13 +14,7 @@ import {
 import { plates, searchLibrary, safetyResponse } from "../src/core/knowledge";
 import { dataSchema } from "../src/core/data";
 import { events } from "../electron/sse";
-import { coachTurn } from "../src/core/coach";
-const fixture = JSON.parse(
-  readFileSync(
-    new URL("./fixtures/upstream-parity.json", import.meta.url),
-    "utf8",
-  ),
-);
+import { coachTurn, tools } from "../src/core/coach";
 const rep = () => ({
   count: 1,
   duration: 3,
@@ -57,21 +50,6 @@ test("empty attempts remain in history without creating personal records", () =>
   assert.equal(best.plank.hold, 20);
   assert.equal(overview([empty, completed, hold]).sets, 2);
 });
-for (const c of fixture.detect_cases)
-  test("Python auto parity " + c.name, () => {
-    const d = new AutoDetector();
-    let first: number | null = null,
-      value = null;
-    for (let i = 0; i < c.frames.length; i++) {
-      const r = d.update(c.frames[i], i / c.fps);
-      if (r && first === null) {
-        first = i;
-        value = r;
-      }
-    }
-    assert.equal(value, c.expected.exercise);
-    assert.equal(first, c.expected.at_frame);
-  });
 test("program advances once, rests without extra archive, completes final hold", () => {
   const e = new SessionEngine();
   let t = 100;
@@ -326,12 +304,16 @@ test("risk expression pauses through actual executor before responding", async (
 test("denying one symptom does not hide another risk", () => {
   assert.ok(safetyResponse("没有胸痛，但是呼吸困难"));
 });
-test("automatic mode cannot discard an active set", () => {
+test("the retired detection command cannot start recognition or change the selected exercise", () => {
+  assert.ok(!tools.some((tool) => tool.name === "auto_detect"));
   const e = new SessionEngine();
+  e.dispatch({ type: "set_exercise", exercise: "curl" });
+  assert.equal(e.dispatch({ type: "auto_detect", enabled: true }).ok, false);
   e.cameraReady = true;
   e.dispatch({ type: "session", action: "start" });
   e.acceptRep(rep());
   assert.equal(e.dispatch({ type: "auto_detect", enabled: true }).ok, false);
+  assert.equal(e.exercise, "curl");
   assert.equal(e.rows.length, 1);
 });
 test("crash checkpoint restores once and never overwrites archived record", async () => {

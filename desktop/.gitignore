@@ -16,16 +16,16 @@ public/pose-worker.js
 public/vad/
 
 # Only the existing nine bundled references and the provenance manifest belong in Git.
-public/movekit-library/files/
-public/movekit-library/hd/*
-!public/movekit-library/hd/manifest.json
-!public/movekit-library/hd/bodyweight-squat.*
-!public/movekit-library/hd/push-up.*
-!public/movekit-library/hd/barbell-bench-press.*
-!public/movekit-library/hd/barbell-deadlift.*
-!public/movekit-library/hd/forward-lunge.*
-!public/movekit-library/hd/standing-dumbbell-overhead-press.*
-!public/movekit-library/hd/dumbbell-curl.*
-!public/movekit-library/hd/pull-ups.*
-!public/movekit-library/hd/front-plank.*
-public/movekit-library/catalog.json
+public/library/files/
+public/library/hd/*
+!public/library/hd/manifest.json
+!public/library/hd/bodyweight-squat.*
+!public/library/hd/push-up.*
+!public/library/hd/barbell-bench-press.*
+!public/library/hd/barbell-deadlift.*
+!public/library/hd/forward-lunge.*
+!public/library/hd/standing-dumbbell-overhead-press.*
+!public/library/hd/dumbbell-curl.*
+!public/library/hd/pull-ups.*
+!public/library/hd/front-plank.*
+public/library/catalog.json

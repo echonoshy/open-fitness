@@ -70,7 +70,7 @@ if __name__ == "__main__":
     parser.add_argument("--limit", type=int, default=0)
     args = parser.parse_args()
     Path(args.output).mkdir(parents=True, exist_ok=True)
-    movements = json.loads((ROOT / "public/movekit-library/catalog.json").read_text())["movements"]
+    movements = json.loads((ROOT / "public/library/catalog.json").read_text())["movements"]
     if args.limit:
         movements = movements[:args.limit]
     with concurrent.futures.ProcessPoolExecutor(max_workers=args.workers) as pool:

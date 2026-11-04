@@ -240,7 +240,7 @@ test("nine local demo assets match provenance and current-action tips", async ()
   const { createHash } = await import("node:crypto");
   const manifest = JSON.parse(
     readFileSync(
-      new URL("../public/movekit-library/hd/manifest.json", import.meta.url),
+      new URL("../public/library/hd/manifest.json", import.meta.url),
       "utf8",
     ),
   );
@@ -249,7 +249,7 @@ test("nine local demo assets match provenance and current-action tips", async ()
   for (const [exercise, reference] of Object.entries(EXERCISE_REFERENCES)) {
     const slug = primaryMovementSlugs[exercise as keyof typeof primaryMovementSlugs];
     const clip = manifest.clips.find((clip: { slug: string }) => clip.slug === slug);
-    assert.equal(reference.video, `./movekit-library/hd/${slug}.mp4`);
+    assert.equal(reference.video, `./library/hd/${slug}.mp4`);
     assert.equal(clip.height, 720);
     const bytes = readFileSync(
       new URL("../public/" + reference.video, import.meta.url),

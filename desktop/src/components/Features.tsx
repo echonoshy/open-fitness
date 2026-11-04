@@ -1,10 +1,13 @@
+import { useUiLocale } from "../i18n";
 import { blockForMovement, blockName, blockUnit, type PlanBlock, type PlanCommand } from "../core/catalog-plan";
 import { practiceMovements } from "../core/free-practice";
 import { MovementPicker } from "./MovementPicker";
 import { PlanAppearanceDialog, PlanBadge, type PlanAppearance } from "./PlanAppearance";
 import type { LibrarySource } from "./MovementLibrary";
 import { HistoryDateRange } from "./HistoryDateRange";
-import { TimedHistory } from "./TimedHistory";
+import { TimedRecordDetail } from "./TimedRecordDetail";
+import { historyChoices, historySets, movementResults } from "../core/catalog-history";
+import { primaryMovementSlugs } from "../core/movement-library";
 import {
   recoverTimedCheckpoint,
   type TimedRecord,
@@ -12,7 +15,7 @@ import {
 import {
   filterHistory,
   progressByExercise,
-  muscleCoverage,
+  coverageByMuscle,
 } from "../core/progress";
 import { countingHints } from "../core/environment";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -30,7 +33,6 @@ import {
   FolderOpen,
   Heart,
   ListChecks,
-  MessageCircle,
   Pencil,
   Play,
   Plus,
@@ -70,8 +72,7 @@ import {
 import {
   stats,
   recoverCheckpoint,
-  overview,
-  personalRecords,
+  activityOverview,
   importCSV,
   exportCSV,
   setSummary,
@@ -89,8 +90,7 @@ const n = (v: number | null | undefined, d = 1) =>
 const starterBlocks = (): PlanBlock[] => [
   { exercise: "squat", sets: 3, target: 12, rest: 60, load: 0 },
 ];
-function nextPlanName(plans: SavedPlan[] = []) {
-  const base = "我的训练计划";
+function nextPlanName(base: string, plans: SavedPlan[] = []) {
   const names = new Set(plans.map((plan) => plan.name));
   let name = base;
   for (let suffix = 2; names.has(name); suffix++) name = `${base} ${suffix}`;
@@ -108,11 +108,12 @@ export function Planner({
   state: Snapshot;
   library: LibrarySource;
 } & Props) {
+  const { language, uiText, message } = useUiLocale();
   const [appearance, setAppearance] = useState<PlanAppearance | null>(null),
     [blocks, setBlocks] = useState<PlanBlock[]>(starterBlocks),
     [notice, setNotice] = useState("");
   const defaultIdentity = {
-    name: nextPlanName(data.plans), icon: defaultPlanIcon, color: defaultPlanColor,
+    name: nextPlanName(uiText("我的训练计划"), data.plans), icon: defaultPlanIcon, color: defaultPlanColor,
   };
   const identity = appearance ?? defaultIdentity;
   const [appearanceOpen, setAppearanceOpen] = useState(false);
@@ -194,14 +195,14 @@ export function Planner({
   return (
     <main className="feature-page planner-page">
       <Heading
-        title="训练计划"
-        sub="安排训练动作和组数，或载入已保存的计划。"
+        title={uiText("训练计划")}
+        sub={uiText("安排训练动作和组数，或载入已保存的计划。")}
       />
       <div className="planner-layout">
-        <fieldset className="feature-panel plan-editor" aria-label="计划编辑器" disabled={saving}>
+        <fieldset className="feature-panel plan-editor" aria-label={uiText("计划编辑器")} disabled={saving}>
           <div className="editor-heading">
             <button className="plan-identity-button" ref={identityButton}
-              aria-haspopup="dialog" aria-label={`编辑计划名称与图标，${identity.name}`}
+              aria-haspopup="dialog" aria-label={message("编辑计划名称与图标，{0}", identity.name)}
               onClick={() => setAppearanceOpen(true)}>
               <PlanBadge icon={identity.icon} color={identity.color} />
               <strong>{identity.name}</strong>
@@ -209,11 +210,11 @@ export function Planner({
             </button>
           </div>
           <div className="plan-head">
-            <span>训练动作</span>
-            <span>组数</span>
-            <span>次数 / 秒</span>
-            <span>休息 / 秒</span>
-            <span>负重 / kg</span>
+            <span>{uiText("训练动作")}</span>
+            <span>{uiText("组数")}</span>
+            <span>{uiText("次数 / 秒")}</span>
+            <span>{uiText("休息 / 秒")}</span>
+            <span>{uiText("负重 / kg")}</span>
             <span />
           </div>
           {blocks.map((b, i) => (
@@ -222,25 +223,25 @@ export function Planner({
                 <span className="exercise-number">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <button className="plan-movement-button" aria-label={`更换动作${i+1}：${blockName(b)}`} onClick={()=>setPicking(i)}>
-                  <span>{blockName(b)}<small>{blockUnit(b)==="seconds" ? "每组按秒" : "每组按次"}</small></span><ChevronDown size={15}/>
+                <button className="plan-movement-button" aria-label={uiText(`更换动作${i+1}：${blockName(b)}`)} onClick={()=>setPicking(i)}>
+                  <span>{uiText(blockName(b))}<small>{uiText(blockUnit(b)==="seconds" ? "每组按秒" : "每组按次")}</small></span><ChevronDown size={15}/>
                 </button>
               </div>
               {(["sets", "target", "rest", "load"] as const).map((k, j) => (
                 <label className="plan-number" key={k}>
                   <span>
                     {
-                      [
+                      uiText([
                         "组数",
                         blockUnit(b) === "seconds" ? "时长 / 秒" : "次数",
                         "休息 / 秒",
                         "负重 / kg",
-                      ][j]
+                      ][j])
                     }
                   </span>
                   <input
                     type="number"
-                    aria-label={`动作${i + 1}${k}`}
+                    aria-label={language === "en" ? `Exercise ${i + 1}: ${k}` : `动作${i + 1}${k}`}
                     min={k === "rest" || k === "load" ? 0 : 1}
                     max={
                       k === "sets"
@@ -260,7 +261,7 @@ export function Planner({
               ))}
               <button
                 className="icon-button remove-action"
-                aria-label={`移除动作${i + 1}`}
+                aria-label={uiText(`移除动作${i + 1}`)}
                 disabled={blocks.length === 1}
                 onClick={() => revise(blocks.filter((_, j) => i !== j))}
               >
@@ -274,42 +275,42 @@ export function Planner({
             onClick={() => setPicking(blocks.length)}
           >
             <Plus size={17} />
-            添加动作<span>最多 20 个</span>
+            {uiText("添加动作")}<span>{uiText("最多 20 个")}</span>
           </button>
           <div className="editor-footer">
             <span className="muted" role="status">
               {notice || justSaved ? <Check size={15} /> : <ShieldCheck size={15} />}
-              {notice || (justSaved ? "已保存。继续调整将创建新计划。" : selection ? "正在编辑原计划" : "新计划草稿")}
+              {uiText(notice || (justSaved ? "已保存。继续调整将创建新计划。" : selection ? "正在编辑原计划" : "新计划草稿"))}
             </span>
             <div className="plan-save-actions">
               <button disabled={saving || justSaved} onClick={() => void save()}>
                 <Save size={16} />
-                {justSaved ? "已保存" : "保存"}
+                {uiText(justSaved ? "已保存" : "保存")}
               </button>
             </div>
           </div>
         </fieldset>
-        <aside className="feature-panel plan-overview" ref={overview} tabIndex={-1} aria-label="本次训练">
+        <aside className="feature-panel plan-overview" ref={overview} tabIndex={-1} aria-label={uiText("本次训练")}>
           <SectionHeading
-            title={<><PlanBadge icon={identity.icon} color={identity.color} />本次训练</>}
+            title={<><PlanBadge icon={identity.icon} color={identity.color} />{uiText("本次训练")}</>}
             detail={identity.name}
           />
           <div className="plan-total">
             <strong>{String(setCount).padStart(2, "0")}</strong>
-            <span>训练组</span>
+            <span>{uiText("训练组")}</span>
           </div>
           <div className="plan-summary-line">
-            <span>动作</span>
-            <b>{blocks.length} 个</b>
+            <span>{uiText("动作")}</span>
+            <b>{blocks.length}{uiText(" 个")}</b>
           </div>
           <div className="plan-summary-line">
-            <span>目标次数</span>
-            <b>{repCount} 次</b>
+            <span>{uiText("目标次数")}</span>
+            <b>{repCount}{uiText(" 次")}</b>
           </div>
           {holdCount > 0 && (
             <div className="plan-summary-line">
-              <span>目标时长</span>
-              <b>{holdCount} 秒</b>
+              <span>{uiText("目标时长")}</span>
+              <b>{holdCount}{uiText(" 秒")}</b>
             </div>
           )}
           <div className="plan-sequence">
@@ -318,10 +319,10 @@ export function Planner({
                 <i
                   style={{ background: chartColors[i % chartColors.length] }}
                 />
-                <span>{blockName(b)}</span>
+                <span>{uiText(blockName(b))}</span>
                 <small>
                   {b.sets} × {b.target}
-                  {blockUnit(b) === "seconds" ? "秒" : "次"}
+                  {uiText(blockUnit(b) === "seconds" ? "秒" : "次")}
                 </small>
               </div>
             ))}
@@ -343,25 +344,25 @@ export function Planner({
             }}
           >
             <Play size={16} fill="currentColor" />
-            {starting ? "正在准备训练…" : "开始此计划"}
+            {uiText(starting ? "正在准备训练…" : "开始此计划")}
           </button>
           <p className="panel-note">
-            {state.status !== "ready"
+            {uiText(state.status !== "ready"
               ? "请先结束当前训练，再开始新计划。"
-              : "每组达标后自动休息，也可点「完成本组」。做完一个动作的全部组数，休息后会切到下一个动作。"}
+              : "每组达标后自动休息，也可点「完成本组」。做完一个动作的全部组数，休息后会切到下一个动作。")}
           </p>
         </aside>
       </div>
       <section className="feature-panel saved-plans">
         <SectionHeading
-          title="已保存的计划"
-          detail={`${data.plans?.length ?? 0} 份计划`}
+          title={uiText("已保存的计划")}
+          detail={uiText(`${data.plans?.length ?? 0} 份计划`)}
         />
         {!data.plans?.length && (
           <EmptyState
             icon={FolderOpen}
-            title="还没有保存的计划"
-            text="保存后，可在这里载入训练或编辑原计划。"
+            title={uiText("还没有保存的计划")}
+            text={uiText("保存后，可在这里载入训练或编辑原计划。")}
           />
         )}
         {data.plans?.map((p) => (
@@ -370,21 +371,21 @@ export function Planner({
             <div className="saved-plan-copy">
               <strong>{p.name}</strong>
               {selection?.id === p.id && (
-                <span className="saved-plan-state">当前计划</span>
+                <span className="saved-plan-state">{uiText("当前计划")}</span>
               )}
               <p>
-                {p.blocks
+                {uiText(p.blocks
                   .map(
                     (b) =>
                       `${blockName(b)} ${b.sets}×${b.target}${blockUnit(b) === "seconds" ? "秒" : "次"}`,
                   )
-                  .join(" · ")}
+                  .join(" · "))}
               </p>
             </div>
             <div className="saved-plan-actions">
-              <button disabled={saving} onClick={() => selectPlan(p, "load")}>载入</button>
-              <button disabled={saving} onClick={() => selectPlan(p, "edit")}>编辑</button>
-              <button className="remove-action" disabled={saving} onClick={() => void removePlan(p)}>删除</button>
+              <button disabled={saving} onClick={() => selectPlan(p, "load")}>{uiText("载入")}</button>
+              <button disabled={saving} onClick={() => selectPlan(p, "edit")}>{uiText("编辑")}</button>
+              <button className="remove-action" disabled={saving} onClick={() => void removePlan(p)}>{uiText("删除")}</button>
             </div>
           </div>
         ))}
@@ -429,16 +430,17 @@ function Trend({
   values: (number | null)[];
   label: string;
 }) {
+  const { uiText } = useUiLocale();
   const finite = values.filter((v): v is number => v !== null),
     max = Math.max(1, ...finite);
   return (
     <div className="trend">
-      <strong>{description}</strong>
+      <strong>{uiText(description)}</strong>
       {finite.length ? (
         <svg
           viewBox="0 0 600 90"
           role="img"
-          aria-label={description + "，按时间从左至右"}
+          aria-label={uiText(description + "，按时间从左至右")}
         >
           {values.map((v, i) =>
             v === null ? null : (
@@ -449,7 +451,7 @@ function Trend({
                   width={Math.max(2, 600 / Math.max(1, values.length) - 6)}
                   height={Math.max(1, (v / max) * 60)}
                   rx="3"
-                  fill="#c9ed89"
+                  fill="var(--accent)"
                 />
                 <text
                   x={(i * 600) / Math.max(1, values.length) + 5}
@@ -464,38 +466,42 @@ function Trend({
           )}
         </svg>
       ) : (
-        <p className="muted">暂无测量数据</p>
+        <p className="muted">{uiText("暂无测量数据")}</p>
       )}
     </div>
   );
 }
-function RecordDetail({r}: {r: RecordRow}) {
+function RecordDetail({ r, name }: { r: RecordRow; name: string }) {
+  const { language, uiText } = useUiLocale();
   const s = stats(r);
   return (
     <details className="record-detail">
       <summary>
-        <strong>{label(r.exercise)}</strong>
-        <span data-label="训练时间">
-          {new Date(r.startedAt).toLocaleString("zh-CN")}
+        <strong>{uiText(name)}</strong>
+        <span data-label={uiText("训练时间")}>
+          {new Date(r.startedAt).toLocaleString(language)}
         </span>
-        <span data-label="完成情况">
-          {r.exercise === "plank"
+        <span data-label={uiText("完成情况")}>
+          {uiText(!s.reps && !r.holdSeconds
+            ? `记录时长 ${n(r.duration, 0)} 秒`
+            : r.exercise === "plank"
             ? `${n(r.holdSeconds)}秒`
-            : `${s.reps}次 · ${s.score === null ? "未测量" : n(s.score) + "分"}`}
+            : `${s.reps}次 · ${s.score === null ? "未测量" : n(s.score) + "分"}`)}
         </span>
-        <span data-label="记录来源">
-          {r.source === "Python"
+        <span data-label={uiText("记录来源")}>
+          {uiText(r.source === "Python"
             ? "旧版导入"
             : r.source === "CSV"
               ? "表格导入"
-              : (r.source ?? "本机训练")}
-          {r.interrupted ? " · 中断保存" : ""}
+              : (r.source ?? "本机训练"))}
+          {uiText(r.interrupted ? " · 中断保存" : "")}
         </span>
         <ChevronDown className="disclosure-icon" size={16} />
       </summary>
       <p>
-        {setSummary(r)} {s.e1rm ? `估算1RM ${n(s.e1rm)}kg（Epley公式）` : ""}{" "}
-        {s.fatigue ? `速度下降 ${n(s.fatigue * 100)}%` : ""}
+        {uiText(s.reps || r.holdSeconds ? setSummary(r) : "本组未记录次数或保持时间。")}{uiText(" 训练时长 ")}{uiText(n(r.duration, 0))}{uiText(" 秒。")}{" "}
+        {uiText(s.e1rm ? `估算1RM ${n(s.e1rm)}kg（Epley公式）` : "")}{" "}
+        {uiText(s.fatigue ? `速度下降 ${n(s.fatigue * 100)}%` : "")}
       </p>
       {r.reps.length > 0 && (
         <div className="table-scroll">
@@ -511,7 +517,7 @@ function RecordDetail({r}: {r: RecordRow}) {
                   "最低角度",
                   "纠错",
                 ].map((h) => (
-                  <th key={h}>{h}</th>
+                  <th key={h}>{uiText(h)}</th>
                 ))}
               </tr>
             </thead>
@@ -519,20 +525,20 @@ function RecordDetail({r}: {r: RecordRow}) {
               {r.reps.map((rep, i) => (
                 <tr key={i}>
                   <td>{i + 1}</td>
-                  <td>{n(rep.load_kg ?? r.load)}</td>
-                  <td title={rep.assessment?.note}>
-                    {rep.assessment?.limited
+                  <td>{uiText(n(rep.load_kg ?? r.load))}</td>
+                  <td title={uiText(rep.assessment?.note)}>
+                    {uiText(rep.assessment?.limited
                       ? "局部评估"
                       : rep.measured === false
                         ? "未测量"
-                        : n(rep.score, 0)}
+                        : n(rep.score, 0))}
                   </td>
-                  <td>{rep.measured === false ? "—" : n(rep.eccentric_s)}</td>
-                  <td>{rep.measured === false ? "—" : n(rep.concentric_s)}</td>
-                  <td>{rep.measured === false ? "—" : n(rep.min_angle)}</td>
+                  <td>{uiText(rep.measured === false ? "—" : n(rep.eccentric_s))}</td>
+                  <td>{uiText(rep.measured === false ? "—" : n(rep.concentric_s))}</td>
+                  <td>{uiText(rep.measured === false ? "—" : n(rep.min_angle))}</td>
                   <td>
-                    {rep.faults.map((f) => FAULTS[f]?.text ?? f).join("；") ||
-                      "—"}
+                    {uiText(rep.faults.map((f) => FAULTS[f]?.text ?? f).join("；") ||
+                      "—")}
                   </td>
                 </tr>
               ))}
@@ -543,15 +549,27 @@ function RecordDetail({r}: {r: RecordRow}) {
     </details>
   );
 }
-export function HistoryPanel({ data }: Pick<Props,"data">) {
-  const [recordMode, setRecordMode] = useState("automatic");
+export function HistoryPanel({
+  data,
+  library,
+}: Pick<Props, "data"> & { library: LibrarySource }) {
+  const { uiText } = useUiLocale();
+  const [recordMode, setRecordMode] = useState("all");
   const [exercise, setExercise] = useState("all"),
     [from, setFrom] = useState(""),
     [to, setTo] = useState(""),
     [period, setPeriod] = useState("all");
-  const records = useMemo(
+  const allRows = useMemo(
+    () => historySets(data.records, data.timedRecords ?? [], library.items),
+    [data.records, data.timedRecords, library.items],
+  );
+  const choices = useMemo(
+    () => historyChoices(library.items, allRows),
+    [library.items, allRows],
+  );
+  const rows = useMemo(
     () =>
-      filterHistory(data.records, {
+      filterHistory(allRows, {
         exercise: exercise === "all" ? undefined : exercise,
         from: from || undefined,
         to: to || undefined,
@@ -561,290 +579,367 @@ export function HistoryPanel({ data }: Pick<Props,"data">) {
             : period === "month"
               ? "this_month"
               : undefined,
-      }),
-    [data.records, exercise, from, to, period],
+      }).filter(
+        ({ record }) =>
+          recordMode === "all" ||
+          (recordMode === "automatic"
+            ? "exercise" in record
+            : "movementSlug" in record),
+      ),
+    [allRows, exercise, from, to, period, recordMode],
   );
-  const progress = useMemo(() => progressByExercise(records), [records]),
-    coverage = useMemo(() => muscleCoverage(records), [records]);
-  const totals = useMemo(() => overview(records), [records]),
-    prs = useMemo(() => personalRecords(records), [records]);
+  const totals = useMemo(() => activityOverview(rows), [rows]);
+  const coverage = useMemo(
+    () => coverageByMuscle(rows).filter((g) => g.sets),
+    [rows],
+  );
+  const results = useMemo(() => movementResults(rows), [rows]);
+  const records = useMemo(
+    () => rows.flatMap(({ record }) => ("exercise" in record ? [record] : [])),
+    [rows],
+  );
+  const quality = useMemo(
+    () =>
+      new Map(
+        progressByExercise(records).map((p) => [
+          primaryMovementSlugs[p.exercise as Exercise],
+          p,
+        ]),
+      ),
+    [records],
+  );
+  const assessments = useMemo(
+    () =>
+      records
+        .map(stats)
+        .filter(
+          (s) =>
+            s.score !== null ||
+            s.tempo !== null ||
+            Object.keys(s.faults).length,
+        ),
+    [records],
+  );
+  const faults = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const set of assessments)
+      for (const [key, count] of Object.entries(set.faults))
+        counts[key] = (counts[key] ?? 0) + count;
+    return counts;
+  }, [assessments]);
+  const bests = results.filter((r) => r.series.some((s) => s.best > 0));
   return (
     <main className="feature-page history-page">
       <Heading
-        title="训练记录"
-        sub="查看训练量、动作趋势和每组详情。"
-        extra={
-          <span className="page-meta">
-            <CalendarDays size={16} />
-            训练记录
-          </span>
-        }
+        title={uiText("训练记录")}
+        sub={uiText("查看训练量、动作趋势和每组详情。")}
       />
       <TabNavigation
-        label="记录类型"
+        label={uiText("记录类型")}
         value={recordMode}
         onChange={setRecordMode}
         items={[
+          ["all", `全部记录 · ${allRows.length}`],
           ["automatic", `自动计数 / 姿态计时 · ${data.records.length}`],
           ["timed", `动作库统计 · ${data.timedRecords?.length ?? 0}`],
         ]}
       />
-      {recordMode === "timed" ? (
-        <TimedHistory records={data.timedRecords ?? []} />
-      ) : (
-        <>
-          <div className="history-toolbar">
-            <select
-              aria-label="筛选历史动作"
-              value={exercise}
-              onChange={(e) => setExercise(e.target.value)}
-            >
-              <option value="all">全部动作</option>
-              {Object.entries(EXERCISES).map(([id, spec]) => (
-                <option key={id} value={id}>
-                  {spec.label}
+
+      <div className="history-toolbar">
+        <select
+          aria-label={uiText("筛选历史动作")}
+          value={exercise}
+          onChange={(e) => setExercise(e.target.value)}
+        >
+          <option value="all">{uiText("全部动作")}</option>
+          {choices.recorded.length > 0 && (
+            <optgroup label={uiText("有训练记录")}>
+              {choices.recorded.map(([slug, name]) => (
+                <option key={slug} value={slug}>
+                  {uiText(name)}
                 </option>
               ))}
-            </select>
-            <TabNavigation
-              value={period}
-              onChange={(v) => {
-                setPeriod(v);
-                setFrom("");
-                setTo("");
-              }}
-              items={[
-                ["all", "全部"],
-                ["month", "本月"],
-                ["week", "本周"],
-              ]}
-              label="记录时间范围"
-            />
-            <HistoryDateRange
-              label="历史"
-              from={from}
-              to={to}
-              onChange={(start, end) => {
-                setFrom(start);
-                setTo(end);
-                setPeriod("all");
-              }}
-            />
-          </div>
-          {from && to && from > to && (
-            <p role="alert">开始日期不能晚于结束日期</p>
+            </optgroup>
           )}
-          <div className="stats-overview">
-            <Metric
-              label="训练组"
-              value={totals.sets}
-              unit="组"
-              color={chartColors[0]}
-            />
-            <Metric
-              label="训练天数"
-              value={totals.days}
-              unit="天"
-              color={chartColors[1]}
-            />
-            <Metric
-              label="累计次数"
-              value={totals.reps}
-              unit="次"
-              color={chartColors[2]}
-            />
-            <Metric
-              label="负重训练量"
-              value={n(totals.volume)}
-              unit="kg·次"
-              color={chartColors[3]}
-            />
-          </div>
-          <div className="history-charts">
-            <section className="feature-panel activity-panel">
-              <SectionHeading title="最近 12 周" detail="训练组数" />
-              <div className="activity-chart">
-                {!totals.weeks.some((w) => w.sets) && (
-                  <p className="chart-empty-label">
-                    完成训练后，这里会留下你的节奏。
-                  </p>
-                )}
-                <div className="weeks">
-                  {totals.weeks.map((w) => (
+          <optgroup label={uiText("动作库")}>
+            {choices.remaining.map(([slug, name]) => (
+              <option key={slug} value={slug}>
+                {uiText(name)}
+              </option>
+            ))}
+          </optgroup>
+        </select>
+        <TabNavigation
+          value={period}
+          onChange={(v) => {
+            setPeriod(v);
+            setFrom("");
+            setTo("");
+          }}
+          items={[
+            ["all", "全部"],
+            ["month", "本月"],
+            ["week", "本周"],
+          ]}
+          label={uiText("记录时间范围")}
+        />
+        <HistoryDateRange
+          label={uiText("历史")}
+          from={from}
+          to={to}
+          onChange={(start, end) => {
+            setFrom(start);
+            setTo(end);
+            setPeriod("all");
+          }}
+        />
+      </div>
+      {library.failed && (
+        <button onClick={library.reload}>{uiText("动作库未加载，重新加载")}</button>
+      )}
+      {from && to && from > to && <p role="alert">{uiText("开始日期不能晚于结束日期")}</p>}
+      <div className="stats-overview history-overview">
+        <Metric
+          label={uiText("训练组")}
+          value={totals.sets}
+          unit="组"
+          color={chartColors[0]}
+        />
+        <Metric
+          label={uiText("训练天数")}
+          value={totals.days}
+          unit="天"
+          color={chartColors[1]}
+        />
+        <Metric
+          label={uiText("累计次数")}
+          value={totals.reps}
+          unit="次"
+          color={chartColors[2]}
+        />
+        <Metric
+          label={uiText("累计训练时长")}
+          value={
+            totals.seconds >= 60 ? n(totals.seconds / 60) : n(totals.seconds, 0)
+          }
+          unit={totals.seconds >= 60 ? "分钟" : "秒"}
+          color={chartColors[4]}
+        />
+        <Metric
+          label={uiText("负重训练量")}
+          value={n(totals.volume)}
+          unit="kg·次"
+          color={chartColors[3]}
+        />
+      </div>
+      <div className="history-charts">
+        <section className="feature-panel activity-panel">
+          <SectionHeading title={uiText("最近 12 周")} detail={uiText("训练组数")} />
+          <div className="activity-chart">
+            {!totals.weeks.some((w) => w.sets) && (
+              <p className="chart-empty-label">
+                {uiText("完成训练后，这里会留下你的节奏。")}
+              </p>
+            )}
+            <div className="weeks">
+              {totals.weeks.map((w) => (
+                <div
+                  key={w.start}
+                  aria-label={uiText(`${w.start}起：${w.sets}组、${w.reps}次、训练${n(w.seconds)}秒`)}
+                  title={uiText(`${w.start}起：${w.sets}组、${w.reps}次、${n(w.volume)}kg·次、训练${n(w.seconds)}秒`)}
+                >
+                  <div className="week-track">
                     <div
-                      key={w.start}
-                      aria-label={`${w.start}起：${w.sets}组、${w.reps}次`}
-                      title={`${w.start}起：${w.sets}组、${w.reps}次、${n(w.volume)}kg·次、支撑${n(w.seconds)}秒`}
-                    >
-                      <div className="week-track">
-                        <div
-                          style={{
-                            height: `${Math.max(w.sets ? 5 : 1.5, (w.sets / Math.max(1, ...totals.weeks.map((x) => x.sets))) * 100)}%`,
-                          }}
-                        />
-                      </div>
-                      <small>{w.start.slice(5)}</small>
-                      <b>{w.sets}</b>
-                    </div>
-                  ))}
+                      style={{
+                        height: `${Math.max(w.sets ? 5 : 1.5, (w.sets / Math.max(1, ...totals.weeks.map((x) => x.sets))) * 100)}%`,
+                      }}
+                    />
+                  </div>
+                  <small>{uiText(w.start.slice(5))}</small>
+                  <b>{w.sets}</b>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="streak-summary">
+            <span>
+              <i
+                className="legend-dot"
+                style={{ background: chartColors[3] }}
+              />
+              {uiText("当前连续 ")}<b>{totals.current}</b>{uiText(" 天")}
+            </span>
+            <span>
+              <Trophy size={14} />
+              {uiText("最长连续 ")}<b>{totals.longest}</b>{uiText(" 天")}
+            </span>
+          </div>
+        </section>
+        <section className="feature-panel coverage-panel">
+          <SectionHeading title={uiText("肌群训练分布")} detail={uiText("近 7 天")} />
+          <Distribution groups={coverage} />
+          <p className="panel-note">
+            {uiText("按动作的主要肌群统计，一组可计入多个肌群。")}
+          </p>
+        </section>
+      </div>
+      <div className="two-columns">
+        <section className="feature-panel">
+          <SectionHeading title={uiText("动作趋势")} icon={Activity} />
+          {!results.length ? (
+            <EmptyState
+              icon={Activity}
+              title={uiText("暂无动作趋势")}
+              text={uiText("有记录后，可以在这里对比每组次数或时长。")}
+            />
+          ) : (
+            results.map((item) => {
+              const p = quality.get(item.slug);
+              return (
+                <div className="progress-entry" key={item.slug}>
+                  <div>
+                    <strong>{uiText(item.name)}</strong>
+                    <span>{item.sets}{uiText(" 组")}</span>
+                  </div>
+                  {item.series
+                    .filter((s) => s.unit === "秒" || s.unit === "次")
+                    .map((s) => (
+                      <p key={s.label}>
+                        {uiText(s.label)} ·{" "}
+                        {s.recent.map((v) => +v.toFixed(1)).join(" → ")}{" "}
+                        {uiText(s.unit)}
+                      </p>
+                    ))}
+                  {!item.series.length && <p>{uiText("本组未记录次数或保持时间")}</p>}
+                  {p?.scoreDelta != null && (
+                    <p>
+                      {uiText("平均动作分 ")}{p.previousScore} → {p.recentScore}（
+                      {p.scoreDelta > 0 ? "+" : ""}
+                      {p.scoreDelta}）
+                    </p>
+                  )}
+                  {p?.recentTempo != null && (
+                    <p>{uiText("近期平均下放 ")}{p.recentTempo}{uiText(" 秒")}</p>
+                  )}
+                  {!!p?.topFaults.length && (
+                    <small>{uiText("常见提醒：")}{uiText(p.topFaults[0].text)}</small>
+                  )}
+                </div>
+              );
+            })
+          )}
+          <p className="panel-note">
+            {uiText("次数与时长展示最近三组同类记录。评分比较最近三组与此前三组有评分的记录。")}
+          </p>
+        </section>
+        <section className="feature-panel">
+          <SectionHeading title={uiText("个人纪录")} icon={Trophy} />
+          {!bests.length ? (
+            <EmptyState
+              icon={Trophy}
+              title={uiText("暂无个人纪录")}
+              text={uiText("记录次数、保持时间或训练时长后，可在这里查看各动作的单组最佳。")}
+            />
+          ) : (
+            bests.map((item) => (
+              <div className="personal-record-row" key={item.slug}>
+                <span className="list-icon">
+                  <Dumbbell size={18} />
+                </span>
+                <div>
+                  <strong>{uiText(item.name)}</strong>
+                  <p>
+                    {item.series
+                      .filter((s) => s.best > 0)
+                      .map((s) => `${s.label} ${+s.best.toFixed(1)} ${s.unit}`)
+                      .join(" · ")}
+                  </p>
                 </div>
               </div>
-              <div className="streak-summary">
-                <span>
-                  <i
-                    className="legend-dot"
-                    style={{ background: chartColors[3] }}
-                  />
-                  当前连续 <b>{totals.current}</b> 天
-                </span>
-                <span>
-                  <Trophy size={14} />
-                  最长连续 <b>{totals.longest}</b> 天
-                </span>
-              </div>
-            </section>
-            <section className="feature-panel coverage-panel">
-              <SectionHeading title="肌群训练分布" detail="近 7 天" />
-              <Distribution groups={coverage} />
-              <p className="panel-note">
-                一组可涉及多个肌群；不用于判断身体是否恢复。
-              </p>
-            </section>
-          </div>
-          <div className="two-columns">
-            <section className="feature-panel">
-              <SectionHeading title="动作趋势" icon={Activity} />
-              {!progress.length ? (
-                <EmptyState
-                  icon={Activity}
-                  title="进步，会慢慢变得清晰"
-                  text="完成训练后，在这里查看动作评分与节奏变化。"
-                />
-              ) : (
-                progress.map((p) => (
-                  <div className="progress-entry" key={p.exercise}>
-                    <div>
-                      <strong>{p.name}</strong>
-                      <span>
-                        {p.sets} 组 · {p.reps} 次
-                      </span>
-                    </div>
-                    <p>
-                      {p.scoreDelta === null
-                        ? "评分样本不足，暂不判断趋势"
-                        : `平均动作分 ${p.previousScore} → ${p.recentScore}（${p.scoreDelta > 0 ? "+" : ""}${p.scoreDelta}）`}
-                      {p.recentTempo !== null
-                        ? ` · 近期平均下放 ${p.recentTempo} 秒`
-                        : ""}
-                    </p>
-                    {p.topFaults.length > 0 && (
-                      <small>常见提醒：{p.topFaults[0].text}</small>
-                    )}
-                  </div>
-                ))
-              )}
-              <p className="panel-note">
-                最近 3 组与此前 3 组对比；无评分记录不参与评分趋势。
-              </p>
-            </section>
-            <section className="feature-panel">
-              <SectionHeading title="个人纪录" icon={Trophy} />
-              {!Object.keys(prs).length ? (
-                <EmptyState
-                  icon={Trophy}
-                  title="下一次，就是新的起点"
-                  text="你在各个动作上的最佳表现将显示在这里。"
-                />
-              ) : (
-                Object.entries(prs).map(([e, p]) => (
-                  <div className="personal-record-row" key={e}>
-                    <span className="list-icon">
-                      <Dumbbell size={18} />
-                    </span>
-                    <div>
-                      <strong>{label(e)}</strong>
-                      <p>
-                        {e === "plank"
-                          ? `连续支撑 ${n(p.hold)} 秒`
-                          : `单组 ${p.reps} 次${p.e1rm ? ` · 估算1RM ${n(p.e1rm)} kg · 单组训练量 ${n(p.volume)} kg·次` : " · 无负重成绩"}`}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              )}
-            </section>
-          </div>
-          {records.length > 0 && (
-            <div className="two-columns">
-              <section className="feature-panel">
-                <Trend
-                  label="最近 20 组动作评分"
-                  values={records.slice(-20).map((r) => stats(r).score)}
-                />
-                <Trend
-                  label="最近 20 组平均下放秒数"
-                  values={records.slice(-20).map((r) => stats(r).tempo)}
-                />
-              </section>
-              <section className="feature-panel">
-                <SectionHeading title="纠错记录" icon={CircleHelp} />
-                {Object.entries(totals.faults)
-                  .sort((a, b) => b[1] - a[1])
-                  .map(([f, count]) => (
-                    <p className="feature-row" key={f}>
-                      <span>{FAULTS[f]?.text ?? f}</span>
-                      <strong>{count} 次</strong>
-                    </p>
-                  ))}
-                {!Object.keys(totals.faults).length && (
-                  <EmptyState icon={Check} title="暂无已记录错误" />
-                )}
-              </section>
-            </div>
+            ))
           )}
-          <section className="feature-panel record-list-panel">
-            <SectionHeading
-              title="每组详情"
-              detail={`${records.length} 条记录`}
-            />
-            {records.length > 0 && (
-              <div className="record-list-heading" aria-hidden="true">
-                <span>训练动作</span>
-                <span>训练时间</span>
-                <span>完成情况</span>
-                <span>记录来源</span>
-                <span />
-              </div>
-            )}
-            {!records.length && (
-              <EmptyState
-                icon={ListChecks}
-                title={
-                  data.records.length
-                    ? "没有符合筛选条件的记录"
-                    : "每一组，都值得记录"
-                }
-                text={
-                  data.records.length
-                    ? "试试其他动作或日期范围；选择「全部」可清除日期限制。"
-                    : "完成训练或导入旧记录后，会显示在这里。"
-                }
-              />
-            )}
-            {[...records].reverse().map((r) => (
-              <RecordDetail key={r.id} r={r} />
-            ))}
-          </section>
-          <p className="page-footnote">
-            评分来自姿态规则；估算力量与速度下降用于训练对比，不代替实测或身体评估。
-          </p>
-        </>
+        </section>
+      </div>
+      {rows.length > 0 && (
+        <section className="feature-panel">
+          <Trend label={uiText("最近 20 组训练时长（秒）")} values={rows.slice(-20).map((row) => row.seconds)} />
+        </section>
       )}
+      {assessments.length > 0 && (
+        <div className="two-columns">
+          <section className="feature-panel">
+            <Trend
+              label={uiText("最近 20 组动作评分")}
+              values={assessments.slice(-20).map((s) => s.score)}
+            />
+            <Trend
+              label={uiText("最近 20 组平均下放秒数")}
+              values={assessments.slice(-20).map((s) => s.tempo)}
+            />
+          </section>
+          <section className="feature-panel">
+            <SectionHeading title={uiText("纠错记录")} icon={CircleHelp} />
+            {Object.entries(faults)
+              .sort((a, b) => b[1] - a[1])
+              .map(([f, count]) => (
+                <p className="feature-row" key={f}>
+                  <span>{uiText(FAULTS[f]?.text ?? f)}</span>
+                  <strong>{count}{uiText(" 次")}</strong>
+                </p>
+              ))}
+            {!Object.keys(faults).length && (
+              <EmptyState icon={Check} title={uiText("暂无已记录错误")} />
+            )}
+          </section>
+        </div>
+      )}
+      <section className="feature-panel record-list-panel">
+        <SectionHeading title={uiText("每组详情")} detail={uiText(`${rows.length} 条记录`)} />
+        {rows.length > 0 && (
+          <div className="record-list-heading" aria-hidden="true">
+            <span>{uiText("训练动作")}</span>
+            <span>{uiText("训练时间")}</span>
+            <span>{uiText("完成情况")}</span>
+            <span>{uiText("记录来源")}</span>
+            <span />
+          </div>
+        )}
+        {!rows.length && (
+          <EmptyState
+            icon={ListChecks}
+            title={
+              uiText(allRows.length ? "没有符合筛选条件的记录" : "每一组，都值得记录")
+            }
+            text={
+              allRows.length
+                ? "试试其他动作或日期范围；选择「全部」可清除日期限制。"
+                : "完成训练或导入旧记录后，会显示在这里。"
+            }
+          />
+        )}
+        {[...rows]
+          .reverse()
+          .map(({ record, name }) =>
+            "exercise" in record ? (
+              <RecordDetail key={"pose-" + record.id} r={record} name={name} />
+            ) : (
+              <TimedRecordDetail
+                key={"catalog-" + record.id}
+                r={record}
+                name={name}
+              />
+            ),
+          )}
+      </section>
+      <p className="page-footnote">
+        {uiText("累计次数优先采用手动修正值，没有修正时使用本组记录的计数。只计时的组计入时长和组数。")}
+      </p>
     </main>
   );
 }
 
 export function ProfilePanel({ data, persist, report }: Props) {
+  const { uiText, message } = useUiLocale();
   const [saving, setSaving] = useState(false);
   const [category, setCategory] =
     useState<(typeof categories)[number]>("goals");
@@ -919,27 +1014,17 @@ export function ProfilePanel({ data, persist, report }: Props) {
   return (
     <main className="feature-page profile-page">
       <Heading
-        title="我的资料"
-        sub="管理目标、习惯和偏好，教练会在对话中参考。"
+        title={uiText("我的资料")}
+        sub={uiText("按需填写目标和偏好，供教练在对话中参考。")}
         extra={
           <span className="page-meta">
             <UserRound size={16} />
-            已记住 {data.profile?.length ?? 0} 条信息
+            {uiText("已记住 ")}{data.profile?.length ?? 0}{uiText(" 条信息")}
           </span>
         }
       />
-      <div className="profile-purpose">
-        <MessageCircle size={22} strokeWidth={1.6} />
-        <div>
-          <strong>用于教练对话</strong>
-          <p>
-            教练回答时会参考这里的信息。训练动作、组数与评分仍按原有训练设置执行。
-          </p>
-        </div>
-        <span>按需填写，随时修改</span>
-      </div>
       <div className="profile-layout">
-        <aside className="profile-sidebar" aria-label="资料分类">
+        <aside className="profile-sidebar" aria-label={uiText("资料分类")}>
           {categories.map((c, i) => {
             const Icon = categoryIcons[i];
             return (
@@ -956,34 +1041,35 @@ export function ProfilePanel({ data, persist, report }: Props) {
                 }}
               >
                 <Icon size={18} strokeWidth={1.7} />
-                <span>{profileCopy[c].label}</span>
+                <span>{uiText(profileCopy[c].label)}</span>
                 <small>
-                  {data.profile?.filter((f) => f.category === c).length || ""}
+                  {uiText(data.profile?.filter((f) => f.category === c).length || "")}
                 </small>
                 <ChevronRight size={14} />
               </button>
             );
           })}
           <p className="sidebar-note">
-            <ShieldCheck size={16} />
-            只填写你愿意分享的内容，
-            <br />
-            不需要把每一项都填满。
+            <ShieldCheck size={16} aria-hidden="true" />
+            <span>
+              <strong>{uiText("资料选填")}</strong>
+              {uiText("只写你愿意分享的内容。")}
+            </span>
           </p>
         </aside>
         <div className="profile-content">
           <section className="feature-panel profile-editor">
             <SectionHeading
-              title={guide.label}
+              title={uiText(guide.label)}
               detail={
-                editingKey === undefined ? "添加一条信息" : "已保存，可随时更新"
+                uiText(editingKey === undefined ? "添加一条信息" : "已保存，可随时更新")
               }
             />
-            <p className="profile-category-intro">{guide.description}</p>
+            <p className="profile-category-intro">{uiText(guide.description)}</p>
             <div
               className="profile-topics"
               role="group"
-              aria-label={`${guide.label}话题`}
+              aria-label={uiText(`${guide.label}话题`)}
             >
               {guide.topics.map((t) => (
                 <button
@@ -993,7 +1079,7 @@ export function ProfilePanel({ data, persist, report }: Props) {
                   aria-pressed={!custom && key === t.key}
                   onClick={() => chooseTopic(t.key)}
                 >
-                  {t.key}
+                  {uiText(t.key)}
                 </button>
               ))}
               <button
@@ -1006,7 +1092,7 @@ export function ProfilePanel({ data, persist, report }: Props) {
                 }}
               >
                 <Plus size={14} />
-                自定义
+                {uiText("自定义")}
               </button>
             </div>
             <form
@@ -1017,10 +1103,10 @@ export function ProfilePanel({ data, persist, report }: Props) {
             >
               {custom && (
                 <label className="form-field profile-topic-name">
-                  给这条信息起个名字
+                  {uiText("给这条信息起个名字")}
                   <input
-                    aria-label="信息名称"
-                    placeholder={`例如：${guide.topics[0].key}`}
+                    aria-label={uiText("信息名称")}
+                    placeholder={uiText(`例如：${guide.topics[0].key}`)}
                     value={key}
                     maxLength={80}
                     required
@@ -1033,15 +1119,15 @@ export function ProfilePanel({ data, persist, report }: Props) {
                 </label>
               )}
               <label className="form-field profile-answer">
-                {custom ? "有什么想让教练了解的？" : topic?.question}
+                {uiText(custom ? "有什么想让教练了解的？" : topic?.question)}
                 <textarea
                   ref={contentInput}
-                  aria-label="告诉教练"
+                  aria-label={uiText("告诉教练")}
                   aria-describedby="profile-answer-hint"
                   placeholder={
-                    custom
+                    uiText(custom
                       ? `用自己的话写下来。${guide.topics[0].example}`
-                      : topic?.example
+                      : topic?.example)
                   }
                   value={value}
                   maxLength={800}
@@ -1055,15 +1141,15 @@ export function ProfilePanel({ data, persist, report }: Props) {
                 />
               </label>
               <p className="profile-answer-hint" id="profile-answer-hint">
-                <span>如何使用</span>
-                {guide.use}
+                <span>{uiText("如何使用")}</span>
+                {uiText(guide.use)}
               </p>
               <div className="editor-footer">
                 <span role="status" className="success-notice">
                   {notice && (
                     <>
                       <Check size={15} />
-                      {notice}
+                      {uiText(notice)}
                     </>
                   )}
                 </span>
@@ -1087,7 +1173,7 @@ export function ProfilePanel({ data, persist, report }: Props) {
                       setNotice("");
                     }}
                   >
-                    取消修改
+                    {uiText("取消修改")}
                   </button>
                 )}
                 <button
@@ -1096,24 +1182,23 @@ export function ProfilePanel({ data, persist, report }: Props) {
                   disabled={saving || !key.trim() || !value.trim() || !changed}
                 >
                   <Check size={16} />
-                  {saving
+                  {uiText(saving
                     ? "保存中…"
                     : editingKey === undefined
                       ? "记住这条信息"
-                      : "保存修改"}
+                      : "保存修改")}
                 </button>
               </div>
             </form>
           </section>
           <section className="feature-panel profile-facts">
             <SectionHeading
-              title="教练已记住"
-              detail={`${guide.label} · ${facts.length} 条`}
+              title={uiText("教练已记住")}
+              detail={uiText(`${guide.label} · ${facts.length} 条`)}
             />
             {!facts.length && (
               <p className="profile-empty-note">
-                还没有关于{guide.label}
-                的信息。在上方写下并保存，之后对话时教练就能参考。
+                {message("还没有关于{0}的信息。在上方写下并保存，之后对话时教练就能参考。", uiText(guide.label))}
               </p>
             )}
             {facts.map((f) => (
@@ -1136,11 +1221,11 @@ export function ProfilePanel({ data, persist, report }: Props) {
                       contentInput.current?.focus();
                     }}
                   >
-                    修改
+                    {uiText("修改")}
                   </button>
                   <button
                     className="icon-button remove-action"
-                    aria-label={`遗忘${f.key}`}
+                    aria-label={message("遗忘{0}", f.key)}
                     disabled={saving}
                     onClick={() =>
                       void persist((d) =>
@@ -1170,8 +1255,7 @@ export function ProfilePanel({ data, persist, report }: Props) {
           <p className="privacy-note">
             <ShieldCheck size={17} />
             <span>
-              信息保存在本机，对话时会发送给你配置的 AI
-              服务。你可以随时修改或删除。
+              {uiText("信息保存在本机，对话时会发送给你配置的 AI 服务。你可以随时修改或删除。")}
             </span>
           </p>
         </div>
@@ -1195,20 +1279,27 @@ function RecentlyDeleted({
   kinds,
   collapsible = false,
 }: Props & { kinds: string[]; collapsible?: boolean }) {
-  const [confirming, setConfirming] = useState<string>();
+  const { language, uiText, message } = useUiLocale();
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
   const entries = [...(data.trash ?? [])]
     .reverse()
     .filter((e) => kinds.includes(e.kind));
-  if (!entries.length && !notice) return null;
-  const restore = async (id: string) => {
+  if (!entries.length && !notice && !busy) return null;
+  const updateTrash = async (id: string, restore: boolean) => {
     setBusy(true);
     setNotice("");
     try {
-      await persist((d) => restoreTrash(d, id));
-      setNotice("已恢复，可以在原来的列表中继续使用。");
-      setConfirming(undefined);
+      await persist((d) =>
+        restore
+          ? restoreTrash(d, id)
+          : { ...d, trash: d.trash?.filter((entry) => entry.id !== id) },
+      );
+      setNotice(
+        restore
+          ? "已恢复，可以在原来的列表中继续使用。"
+          : "已永久删除所选内容。",
+      );
     } catch (e) {
       report(e);
     } finally {
@@ -1217,23 +1308,30 @@ function RecentlyDeleted({
   };
   const Panel = collapsible ? "details" : "section";
   return (
-    <Panel className="feature-panel recently-deleted" aria-label="最近删除"
-      onToggle={(event) => {
-        if (!event.currentTarget.hasAttribute("open")) setConfirming(undefined);
-      }}>
+    <Panel className="feature-panel recently-deleted" aria-label={uiText("最近删除")}>
       {collapsible ? (
         <summary className="trash-disclosure">
           <h2>
             <Trash2 size={18} aria-hidden="true" />
-            最近删除 <small>{entries.length} 项</small>
-            <ChevronDown className="disclosure-icon" size={16} aria-hidden="true" />
+            {uiText("最近删除 ")}<small>{entries.length}{uiText(" 项")}</small>
+            <ChevronDown
+              className="disclosure-icon"
+              size={16}
+              aria-hidden="true"
+            />
           </h2>
         </summary>
       ) : (
-        <SectionHeading title="最近删除" detail={`${entries.length} 项`} icon={Trash2} />
+        <SectionHeading
+          title={uiText("最近删除")}
+          detail={uiText(`${entries.length} 项`)}
+          icon={Trash2}
+        />
       )}
-      <p className="trash-help">这里的内容不会用于训练或教练回复。可恢复到原处，永久删除后无法找回。</p>
-      {!entries.length && <p className="trash-empty">暂无已删除内容</p>}
+      <p className="trash-help">
+        {uiText("这里的内容不会用于训练或教练回复。可恢复到原处，永久删除后无法找回。")}
+      </p>
+      {!entries.length && <p className="trash-empty">{uiText("暂无已删除内容")}</p>}
       {entries.map((entry) => {
         const title =
           entry.kind === "plan"
@@ -1246,22 +1344,23 @@ function RecentlyDeleted({
           <div className="deleted-item" key={entry.id}>
             <div className="deleted-row">
               <div className="deleted-info">
-                <strong>{title}</strong>
+                <strong>{entry.kind === "reference" ? uiText(title) : title}</strong>
                 <div className="deleted-meta">
                   <span>
-                    {entry.kind === "plan"
+                    {uiText(entry.kind === "plan"
                       ? "训练计划"
                       : entry.kind === "profile"
                         ? categoryNames[entry.value.category]
-                        : "参考动作"}
+                        : "参考动作")}
                   </span>
                   {Number.isFinite(deleted.getTime()) && (
                     <time dateTime={entry.deletedAt}>
-                      {deleted.toLocaleString("zh-CN", {
+                      {deleted.toLocaleString(language, {
                         dateStyle: "long",
                         timeStyle: "short",
                         hour12: false,
-                      })} 删除
+                      })}{" "}
+                      {uiText("删除")}
                     </time>
                   )}
                 </div>
@@ -1269,67 +1368,33 @@ function RecentlyDeleted({
               <div className="deleted-actions">
                 <button
                   disabled={busy}
-                  aria-label={`恢复${title}`}
-                  onClick={() => void restore(entry.id)}
+                  aria-label={message("恢复{0}", entry.kind === "reference" ? uiText(title) : title)}
+                  onClick={() => void updateTrash(entry.id, true)}
                 >
-                  恢复
+                  {uiText("恢复")}
                 </button>
                 <button
                   className="trash-remove"
                   disabled={busy}
-                  aria-label={`永久删除${title}`}
-                  onClick={() => setConfirming(entry.id)}
+                  aria-label={message("永久删除{0}", entry.kind === "reference" ? uiText(title) : title)}
+                  onClick={() => void updateTrash(entry.id, false)}
                 >
-                  永久删除
+                  {uiText("永久删除")}
                 </button>
               </div>
             </div>
-            {confirming === entry.id && (
-              <div
-                className="delete-confirmation"
-                role="group"
-                aria-label={`确认永久删除${title}`}
-              >
-                <p>永久删除「{title}」后无法恢复。</p>
-                <button
-                  disabled={busy}
-                  onClick={() => setConfirming(undefined)}
-                >
-                  保留
-                </button>
-                <button
-                  className="trash-confirm"
-                  disabled={busy}
-                  onClick={() => {
-                    setBusy(true);
-                    setNotice("");
-                    void persist((d) => ({
-                      ...d,
-                      trash: d.trash?.filter((e) => e.id !== entry.id),
-                    }))
-                      .then(() => {
-                        setConfirming(undefined);
-                        setNotice("已永久删除所选内容。");
-                      })
-                      .catch(report)
-                      .finally(() => setBusy(false));
-                  }}
-                >
-                  确认永久删除
-                </button>
-              </div>
-            )}
           </div>
         );
       })}
       <p className="success-notice" role="status">
-        {notice}
+        {uiText(notice)}
       </p>
     </Panel>
   );
 }
 
 export function DataPanel({ data, persist, report }: Props) {
+  const { uiText } = useUiLocale();
   const [notice, setNotice] = useState(""),
     [busy, setBusy] = useState(false);
   const importing = async (kind: "csv" | "backup") => {
@@ -1426,16 +1491,15 @@ export function DataPanel({ data, persist, report }: Props) {
   return (
     <section className="feature-panel data-panel">
       <SectionHeading
-        title="训练数据与备份"
+        title={uiText("训练数据与备份")}
         icon={FolderOpen}
-        detail={`${data.records.length + (data.timedRecords?.length ?? 0)} 条训练记录`}
+        detail={uiText(`${data.records.length + (data.timedRecords?.length ?? 0)} 条训练记录`)}
       />
-      <p className="muted">给每一次训练，留一份安心的备份。</p>
+      <p className="muted">{uiText("给每一次训练，留一份安心的备份。")}</p>
       {!desktop && (
         <p className="privacy-note">
           <CircleHelp size={16} />
-          文件在浏览器本机读取，不会上传。导出完整 JSON
-          备份后，可以在桌面端导入；桌面端备份也可以在这里导入。设备设置各自保留。
+          {uiText("文件在浏览器本机读取，不会上传。导出完整 JSON 备份后，可以在桌面端导入；桌面端备份也可以在这里导入。设备设置各自保留。")}
         </p>
       )}
       <div className="data-action-row">
@@ -1443,15 +1507,14 @@ export function DataPanel({ data, persist, report }: Props) {
           <ArrowDownToLine size={21} />
         </span>
         <div>
-          <h3>导入训练数据</h3>
+          <h3>{uiText("导入训练数据")}</h3>
           <p>
-            从备份恢复数据，或导入 Strong / Hevy
-            的训练记录。重复记录会自动去重，保留本机设备设置与同名资料。
+            {uiText("从备份恢复数据，或导入 Strong / Hevy 的训练记录。重复记录会自动去重，保留本机设备设置与同名资料。")}
           </p>
           <div className="feature-row">
             {(["backup", "csv"] as const).map((k) => (
               <button key={k} disabled={busy} onClick={() => void importing(k)}>
-                {k === "backup" ? "导入完整备份" : "导入 Strong / Hevy CSV"}
+                {uiText(k === "backup" ? "导入完整备份" : "导入 Strong / Hevy CSV")}
               </button>
             ))}
           </div>
@@ -1462,28 +1525,26 @@ export function DataPanel({ data, persist, report }: Props) {
           <ArrowUpFromLine size={21} />
         </span>
         <div>
-          <h3>导出与备份</h3>
+          <h3>{uiText("导出与备份")}</h3>
           <p>
-            完整备份（JSON）包含自动计数、动作库统计、手动修正、常练动作、首页快捷动作、资料、计划和最近删除，适合备份或换设备。Strong
-            / Hevy CSV
-            仅导出原有自动计数与姿态计时记录；动作库统计请使用完整备份保存。
+            {uiText("完整备份（JSON）包含自动计数、动作库统计、手动修正、常练动作、首页快捷动作、资料、计划和最近删除，适合备份或换设备。Strong / Hevy CSV 仅导出原有自动计数与姿态计时记录；动作库统计请使用完整备份保存。")}
           </p>
           <div className="feature-row">
             {(["json", "strong", "hevy"] as const).map((k) => (
               <button key={k} disabled={busy} onClick={() => void exporting(k)}>
-                导出{" "}
-                {k === "json"
+                {uiText("导出")}{" "}
+                {uiText(k === "json"
                   ? "完整备份"
                   : k === "strong"
                     ? "Strong CSV"
-                    : "Hevy CSV"}
+                    : "Hevy CSV")}
               </button>
             ))}
           </div>
         </div>
       </div>
       <p className="success-notice" role="status">
-        {notice}
+        {uiText(notice)}
       </p>
     </section>
   );
@@ -1496,101 +1557,69 @@ export function TrainingDetails({
   state: Snapshot;
   control: (c: Command) => Promise<void>;
 }) {
+  const { uiText } = useUiLocale();
   const spec = EXERCISES[state.exercise];
   return (
     <div className="training-details">
-      <div className="feature-panel" aria-label="拍摄与计数检查">
-        <strong>拍摄与计数检查</strong>
+      <div className="feature-panel" aria-label={uiText("拍摄与计数检查")}>
+        <strong>{uiText("拍摄与计数检查")}</strong>
         {countingHints(state).map((hint) => (
-          <p key={hint}>{hint}</p>
+          <p key={hint}>{uiText(hint)}</p>
         ))}
         {state.environment && (
           <small className="muted">
-            {state.environment.cameraHint} ·{" "}
-            {state.environment.brightness === null
+            {uiText(state.environment.cameraHint)} ·{" "}
+            {uiText(state.environment.brightness === null
               ? "光线检测中"
-              : `画面亮度 ${Math.round(state.environment.brightness * 100)}%`}
+              : `画面亮度 ${Math.round(state.environment.brightness * 100)}%`)}
           </small>
         )}
       </div>
-      <div className="feature-row">
-        {state.catalogPlan ? <strong>计划 · 动作 {state.catalogPlan.block+1}/{state.catalogPlan.blocks} · 第 {state.catalogPlan.set}/{state.catalogPlan.sets} 组</strong> : state.program ? (
+      {state.catalogPlan && (
+        <div className="feature-row">
+          <strong>{uiText("计划 · 动作 ")}{state.catalogPlan.block+1}/{state.catalogPlan.blocks}{uiText(" · 第 ")}{state.catalogPlan.set}/{state.catalogPlan.sets}{uiText(" 组")}</strong>
+        </div>
+      )}
+      {state.program && (
+        <div className="feature-row">
           <strong>
-            计划：第 {state.program.block + 1}/{state.program.blocks.length}{" "}
-            个动作 · 第 {state.program.set}/
-            {state.program.blocks[state.program.block].sets} 组
-            {state.status === "resting"
-              ? `，下一组 ${label(state.program.blocks[state.program.block].exercise)}`
-              : ""}
+            {uiText("计划：第 ")}{state.program.block + 1}/{state.program.blocks.length}{uiText(" 个动作 · 第 ")}{state.program.set}/
+            {state.program.blocks[state.program.block].sets}{uiText(" 组")}
+            {uiText(state.status === "resting" ? `，下一组 ${label(state.program.blocks[state.program.block].exercise)}` : "")}
           </strong>
-        ) : (
-          <label>
-            <input
-              type="checkbox"
-              checked={state.auto}
-              onChange={(e) =>
-                void control({ type: "auto_detect", enabled: e.target.checked })
-              }
-            />{" "}
-            自动识别动作{" "}
-            {state.auto
-              ? state.detected
-                ? `· 已锁定${label(state.detected)}`
-                : "· 等待连续动作，识别后开始计次"
-              : ""}
-          </label>
-        )}
-        {state.program && (
-          <button onClick={() => void control({ type: "stop_program" })}>
-            结束计划
-          </button>
-        )}
-      </div>
-      {state.auto && (
-        <small className="muted">
-          每组开始识别一次；卧推请手动选择。切换动作可关闭自动模式。
-        </small>
+          <button onClick={() => void control({ type: "stop_program" })}>{uiText("结束计划")}</button>
+        </div>
       )}
       <div className="feature-row">
         <span>
-          阶段：
+          {uiText("阶段：")}
           {
-            (
+            uiText((
               {
                 IDLE: "准备",
                 DESCENT: "下放",
                 BOTTOM: "底部",
                 ASCENT: "抬起",
               } as Record<string, string>
-            )[state.phase]
+            )[state.phase])
           }
         </span>
         <span>
-          {spec.signal}：{n(state.angles[spec.signal], 0)}°
+          {uiText(spec.signal)}：{uiText(n(state.angles[spec.signal], 0))}°
         </span>
         {state.exercise !== "plank" && (
           <span className="muted">
-            开始 &lt; {spec.start}° · 底部 &lt; {spec.bottom}° · 回位 &gt;{" "}
+            {uiText("开始 < ")}{spec.start}{uiText("° · 底部 < ")}{spec.bottom}{uiText("° · 回位 >")}{" "}
             {spec.lockout}°
           </span>
         )}
-        <span>速度下降 {n(state.fatigue * 100, 0)}%</span>
+        <span>{uiText("速度下降 ")}{uiText(n(state.fatigue * 100, 0))}%</span>
 
       </div>
       {state.exercise === "plank" && (
-        <label className="feature-row">
-          有效支撑目标 / 秒{" "}
-          <input
-            type="number"
-            min={1}
-            max={600}
-            value={state.holdGoal}
-            onChange={(e) =>
-              void control({ type: "set_hold_goal", seconds: +e.target.value })
-            }
-          />
-          <span>本组最长连续 {n(state.holdBest)}秒</span>
-        </label>
+        <div className="feature-row">
+          <span>{uiText("本组最长连续 ")}{uiText(n(state.holdBest))}{uiText("秒")}</span>
+        </div>
       )}
     </div>
   );

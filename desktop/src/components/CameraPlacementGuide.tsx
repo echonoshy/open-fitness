@@ -1,3 +1,4 @@
+import { useUiLocale } from "../i18n";
 type Point = readonly [number, number];
 export interface CameraGuide {
   title: string;
@@ -19,14 +20,15 @@ export function CameraPlacementGuide({
   name: string;
   guide: CameraGuide;
 }) {
+  const { uiText } = useUiLocale();
   const tripodBase = Math.min(29, 82 - guide.cameraY);
   return (
-    <div className="exercise-guide" aria-label={`${name}拍摄引导`}>
+    <div className="exercise-guide" aria-label={uiText(`${name}拍摄引导`)}>
       <svg
         className="exercise-guide-diagram"
         viewBox="0 0 128 80"
         role="img"
-        aria-label={guide.description ?? `${guide.title}。${guide.detail}`}
+        aria-label={uiText(guide.description ?? `${guide.title}。${guide.detail}`)}
       >
         <g transform={`translate(0 ${guide.cameraY - 6})`}>
           <rect x="4" y="0" width="15" height="12" rx="2.5" />
@@ -46,8 +48,8 @@ export function CameraPlacementGuide({
         ))}
       </svg>
       <div className="exercise-guide-copy">
-        <strong>{guide.title}</strong>
-        <small>{guide.detail}</small>
+        <strong>{uiText(guide.title)}</strong>
+        <small>{uiText(guide.detail)}</small>
       </div>
     </div>
   );

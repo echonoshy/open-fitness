@@ -19,18 +19,18 @@
   height: 40px;
   gap: 9px;
   padding: 0 12px;
-  border: 1px solid #414141;
-  border-radius: 9px;
-  background: #292929;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  background: var(--surface-inset);
   cursor: text;
 }
 .movement-toolbar .library-search:hover {
-  border-color: #606060;
+  border-color: var(--line-hover);
 }
 .movement-toolbar .library-search:focus-within {
-  border-color: var(--focus);
-  background: #303030;
-  outline: none;
+  background: var(--surface);
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 .movement-library .movement-toolbar .library-search input,
 .movement-library .movement-toolbar .library-search input:focus {
@@ -52,9 +52,9 @@
   color: var(--muted);
 }
 .movement-library .movement-trainable.selected {
-  border-color: #d2ed9e66;
+  border-color: var(--accent-line);
   color: var(--accent);
-  background: #d2ed9e0b;
+  background: var(--accent-soft);
 }
 .movement-filter-row {
   display: flex;
@@ -105,8 +105,8 @@
 }
 .movement-library .movement-category button[aria-pressed="true"] {
   color: var(--accent);
-  border-color: #d2ed9e66;
-  background: #d2ed9e0b;
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
 }
 .movement-result-count {
   color: var(--muted);
@@ -137,10 +137,7 @@
   background: var(--surface);
   min-width: 0;
 }
-.movement-library .movement-card:hover {
-  background: var(--surface);
-  border-color: #ffffff48;
-}
+
 .movement-library .movement-card:focus-visible {
   outline-offset: 4px;
 }
@@ -174,9 +171,7 @@
 .movement-play svg {
   margin-left: 2px;
 }
-.movement-card:hover .movement-play {
-  background: #151817;
-}
+
 .movement-duration {
   position: absolute;
   left: 12px;
@@ -202,7 +197,7 @@
 }
 .movement-card-copy > span {
   font-size: 12px;
-  color: #b4b4ad;
+  color: var(--muted);
 }
 .movement-card-meta {
   display: flex;
@@ -214,7 +209,7 @@
 }
 .movement-card-meta > span {
   font-size: 12px;
-  color: #b4b4ad;
+  color: var(--muted);
 }
 .movement-card-meta .movement-level {
   margin-left: auto;
@@ -262,7 +257,7 @@
   overscroll-behavior: contain;
   border: 1px solid #ffffff26;
   border-radius: var(--radius-dialog);
-  background: #262626;
+  background: var(--surface);
   color: var(--text-primary);
   box-shadow: 0 28px 100px #0008;
 }
@@ -588,8 +583,16 @@
   border-radius: 14px;
   overflow: hidden;
   background: var(--surface);
+  box-shadow: var(--panel-shadow);
 }
-.movement-choice .movement-card {
+.movement-choice:hover,
+.movement-choice:focus-within {
+  background: color-mix(in srgb, var(--surface) 96%, white);
+  border-color: color-mix(in srgb, var(--accent) 25%, var(--line));
+}
+.movement-library .movement-choice .movement-card,
+.movement-library .movement-choice .movement-card:hover {
+  background: transparent;
   width: 100%;
   height: 100%;
   border: 0;
@@ -613,14 +616,14 @@
   border: 1px solid #666861;
   border-radius: 20px;
   background: transparent;
-  color: #d4d6cf;
+  color: var(--text-secondary);
   font-size: 12px;
   line-height: 18px;
 }
 .movement-library button.favorite-toggle[aria-pressed="true"] {
   border-color: transparent;
-  background: #323232;
-  color: #a5a5a5;
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 .movement-library button.favorite-toggle:hover:not(:disabled) {
   border-color: var(--line-strong);
@@ -658,14 +661,6 @@
   }
 }
 
-.timed-history-list {
-  display: grid;
-  gap: 12px;
-  margin-top: 20px;
-}
-.timed-history-row h3 {
-  margin: 0;
-}
 .timed-history-row dl {
   display: flex;
   flex-wrap: wrap;
@@ -715,23 +710,29 @@
   border-radius: 7px; font-size: 12px; line-height: 18px;
   background: transparent; color: var(--muted);
 }
-.movement-facets .facet-options button:hover:not(:disabled), .picker-tabs button:hover:not(:disabled) {background: #ffffff12;}
-.movement-facets .facet-options button[aria-pressed="true"], .picker-tabs button[aria-pressed="true"] {
-  color: var(--text-primary); background: var(--surface-raised); border-color: var(--line-strong);
+.movement-facets .facet-options button:hover:not(:disabled, [aria-pressed="true"]),
+.picker-tabs button:hover:not(:disabled, [aria-pressed="true"]) {
+  background: var(--hover-overlay);
+}
+:is(.movement-facets .facet-options, .picker-tabs) button[aria-pressed="true"],
+:is(.movement-facets .facet-options, .picker-tabs) button[aria-pressed="true"]:hover {
+  color: var(--text-primary);
+  background: var(--surface-raised);
+  border-color: var(--line-strong);
 }
 .movement-facets .facet-options .facet-expand {color: var(--muted); background: transparent;}
 .movement-library .movement-result-count {margin: 0 0 12px;}
 .plan-picker {
   box-sizing: border-box; padding: 0; width: min(1000px, 94vw);
   max-height: 90dvh; overflow: auto;
-  border: 1px solid #454740; border-radius: 16px;
-  background: #232423; color: #f1f4ec;
+  border: 1px solid var(--line-strong); border-radius: 16px;
+  background: var(--surface); color: var(--text-primary);
 }
 .plan-picker::backdrop {background: #000a;}
 .plan-picker-body {display: flex; flex-direction: column; min-height: 0; max-height: calc(90dvh - 2px);}
 .plan-picker-body > header, .plan-picker-body > footer {
   flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 16px 20px; border-bottom: 1px solid var(--line); background: #242524;
+  padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--surface);
 }
 .plan-picker h2 {margin: 0; font-size: 21px;}
 .plan-picker header p, .picker-count {margin: 4px 0 0; font-size: 12px; color: var(--muted);}
@@ -740,7 +741,20 @@
 .picker-filters .movement-facets {padding: 0; margin: 0; background: transparent; border: 0; gap: 16px;}
 .picker-filters legend {float: none; width: auto; margin-bottom: 4px;}
 .picker-catalog {display: flex; flex-direction: column; gap: 10px; min-width: 0; min-height: 0; padding: 16px;}
-.picker-catalog .library-search {flex: none; width: 100%; min-height: 38px;}
+.picker-catalog .library-search {
+  flex: none;
+  width: min(100%, 22rem);
+  height: 38px;
+  padding: 0 12px;
+  gap: 8px;
+  border-radius: var(--radius-control);
+}
+.picker-catalog label.library-search input {
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  font-size: 14px;
+}
 .picker-tabs {display: flex; gap: 4px;}
 .plan-picker-scroll {
   display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
@@ -752,10 +766,10 @@
 .plan-picker .plan-picker-item {
   flex: 1; width: 100%; min-height: 74px; display: flex; align-items: center; gap: 10px;
   padding: 8px; text-align: left; border: 1px solid var(--line); border-radius: 10px;
-  color: #f1f4ec; background: #303230; justify-content: flex-start;
+  color: var(--text-primary); background: var(--surface-raised); justify-content: flex-start;
 }
-.plan-picker .plan-picker-item:hover:not(:disabled) {background: #3c4039; border-color: #8b9976;}
-.plan-picker .plan-picker-item[aria-pressed="true"] {background: #303829; border-color: #879d65;}
+.plan-picker .plan-picker-item:hover:not(:disabled) {background: var(--surface-hover); border-color: var(--line-strong);}
+.plan-picker .plan-picker-item[aria-pressed="true"] {background: var(--accent-soft); border-color: var(--accent-line);}
 .plan-picker-item img {flex: none; width: 55px; height: 51px; object-fit: cover; border-radius: 5px;}
 .plan-picker-item > svg {flex: none; margin-left: auto; color: var(--accent);}
 .plan-picker-item span, .plan-movement-button span {min-width: 0; display: grid; gap: 3px;}
@@ -764,9 +778,22 @@
 .plan-movement-button {display: flex; align-items: center; gap: 10px;}
 .shortcut-order {display: flex; justify-content: flex-end; gap: 4px; margin: 2px 0 0;}
 .shortcut-order button {min-height: 26px; padding: 3px 8px;}
-.plan-picker-body > footer {border-top: 1px solid var(--line); border-bottom: 0;}
-.plan-picker-body .save-shortcuts {color: #242a1b; background: var(--accent);}
-.exercise-dialog .shortcut-plan-link {margin-top: 10px; width: 100%; background: transparent; border: 0; color: var(--muted);}
+.plan-picker-body > footer {
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+  color: var(--text-primary);
+  font-size: 15px;
+  letter-spacing: normal;
+}
+.plan-picker-body > footer button {
+  min-height: 44px;
+  font-weight: 500;
+}
+.plan-picker-body .save-shortcuts {
+  min-width: 88px;
+  color: var(--primary-ink);
+  background: var(--primary-fill);
+}
 @media (max-width: 750px) {
   .picker-layout {grid-template-columns: minmax(0,1fr); overflow: auto;}
   .picker-filters {border-right: 0; border-bottom: 1px solid var(--line); overflow: visible;}
