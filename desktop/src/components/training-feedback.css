@@ -1,0 +1,947 @@
+/* The training card explains every count; device controls share one reachable dock. */
+.exercise-guide-section {
+  margin: 0;
+}
+.exercise-guide {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.exercise-guide-diagram {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 45px;
+  color: var(--accent);
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.guide-equipment {
+  opacity: 0.6;
+}
+.guide-joint {
+  fill: currentColor;
+  stroke: none;
+}
+.exercise-guide-copy {
+  min-width: 0;
+  line-height: 1.5;
+}
+.exercise-guide strong {
+  display: block;
+  font-size: 13px;
+}
+.exercise-guide small {
+  display: block;
+  color: #bdbdbd;
+  font-size: 12px;
+}
+.position-checks {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  font-size: 10px;
+  color: #bdbdbd;
+}
+.position-checks li.passed {
+  color: var(--accent);
+}
+.pushup-camera-guide {
+  margin-top: 10px;
+}
+.camera-view-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+.camera-view {
+  min-width: 0;
+  text-align: center;
+  padding: 4px;
+  border: 1px solid #ffffff18;
+  border-radius: 9px;
+  color: #bdbdbd;
+  font-size: 10px;
+}
+.camera-view.active {
+  color: var(--accent);
+  border-color: #d0ff7160;
+  background: #d0ff710c;
+}
+.camera-view svg {
+  display: block;
+  width: 100%;
+  height: 38px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.camera-view-body {
+  opacity: 0.65;
+}
+.camera-view-legend {
+  display: block;
+  color: #999;
+  font-size: 9px;
+  margin-top: 4px;
+}
+.camera-view-status {
+  margin-top: 7px;
+  line-height: 1.5;
+}
+.camera-view-status strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 550;
+}
+.camera-view-status small {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  color: #bdbdbd;
+}
+.exercise-hud {
+  top: 104px;
+  left: 28px;
+  width: 266px;
+  padding: 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-panel);
+  background: #262626ed;
+  backdrop-filter: blur(18px);
+  text-shadow: none;
+  max-height: calc(100dvh - 144px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.exercise-hud:is(:hover, :focus-within) {
+  border-color: #ffffff16;
+}
+.exercise-label {
+  display: block;
+  color: #bdbdbd;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.exercise-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+}
+.exercise-trigger:hover {
+  color: var(--accent);
+  background: #ffffff08;
+}
+.exercise-trigger svg {
+  flex-shrink: 0;
+  color: #bdbdbd;
+}
+.exercise-hud .rep-ring {
+  width: 152px;
+  height: 152px;
+  margin: 16px auto;
+}
+.exercise-hud .rep-ring strong {
+  font-size: 66px;
+}
+.exercise-hud .rep-ring span {
+  font-size: 14px;
+}
+.angle-feedback {
+  border-top: 1px solid #ffffff14;
+  padding-top: 14px;
+}
+.motion-details {
+  padding: 0;
+  margin-top: 14px;
+  border-top: 1px solid #ffffff18;
+  font-size: 12px;
+}
+.motion-details > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 0 0;
+  color: #c7c7c7;
+  cursor: pointer;
+  list-style: none;
+}
+.motion-details > summary::-webkit-details-marker {
+  display: none;
+}
+.motion-details > summary > svg {
+  flex-shrink: 0;
+}
+.motion-details[open] > summary > svg {
+  transform: rotate(180deg);
+}
+.motion-angle {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-left: auto;
+  font-size: 11px;
+}
+.motion-angle strong {
+  color: var(--accent);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.motion-detail-content {
+  padding-top: 10px;
+}
+.tracking-side {
+  color: #bdbdbd;
+  font-size: 12px;
+}
+.angle-chart {
+  display: block;
+  width: 100%;
+  height: 75px;
+  overflow: visible;
+  margin: 8px 0 2px;
+}
+.angle-chart text {
+  fill: #bcbcbc;
+  font-size: 12px;
+}
+.angle-reference {
+  stroke: #b9beab66;
+  stroke-dasharray: 4 5;
+}
+.angle-reference.depth {
+  stroke: #8ac6e766;
+}
+.angle-trace {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.motion-stages {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  font-size: 10px;
+  color: #a5a5a5;
+}
+.motion-stages span {
+  padding: 3px 5px;
+  border-radius: 5px;
+}
+.motion-stages .current {
+  background: #d0ff7120;
+  color: var(--accent);
+}
+.counting-status {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #ffffff18;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.counting-status strong {
+  font-weight: 550;
+  color: #ededed;
+}
+.counting-status p {
+  margin: 4px 0 0;
+  color: #bcbcbc;
+}
+.counting-status.needs-position strong {
+  color: #ffc583;
+}
+.last-rep {
+  display: block;
+  margin-top: 8px;
+  color: #b8d495;
+  font-size: 11px;
+}
+.program-caption {
+  margin: 12px 0 0;
+}
+.session-hud {
+  top: 104px;
+  right: 28px;
+  gap: 10px;
+}
+.session-chip,
+.stage-tools {
+  width: 200px;
+  height: 54px;
+  flex-shrink: 0;
+  align-items: center;
+  background: #262626e8;
+  border: 1px solid #ffffff12;
+  border-radius: var(--radius-panel);
+}
+.session-chip {
+  justify-content: center;
+  gap: 10px;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+.session-chip svg {
+  flex-shrink: 0;
+}
+.stage-tools {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 5px;
+}
+.stage-tools button {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  color: #ccc;
+}
+.stage-tools button:hover {
+  background: #ffffff12;
+  color: white;
+}
+.stage-bottom {
+  left: auto;
+  right: max(28px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  transform: none;
+  width: 360px;
+  max-width: calc(100% - 40px);
+  max-height: calc(100dvh - 310px);
+  align-items: stretch;
+  gap: 8px;
+}
+.call-dock {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
+  padding: 10px;
+  gap: 8px;
+  border-radius: var(--radius-panel);
+  background: #262626ed;
+  box-shadow: 0 8px 28px #0002;
+}
+.call-dock .dock-device {
+  width: 48px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-control);
+  background: var(--surface-raised);
+  border: 1px solid #ffffff12;
+  color: #c7c7c7;
+  font-size: 12px;
+}
+.call-dock .dock-device.is-on {
+  color: #eee;
+}
+.call-dock .dock-device.is-on svg {
+  color: var(--accent);
+}
+.call-dock .dock-device:hover {
+  background: #424242;
+}
+.call-dock .training-action {
+  min-height: 48px;
+  min-width: 0;
+  border-radius: var(--radius-control);
+  font-size: 16px;
+}
+.dock-meta {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 6px 8px;
+  border-top: 1px solid #ffffff12;
+  padding-top: 6px;
+}
+.call-dock .finish-action {
+  min-width: 0;
+  min-height: 40px;
+  padding: 6px 8px;
+  background: #ffffff06;
+  border: 1px solid #ffffff12;
+  border-radius: 12px;
+  font-size: 13px;
+  gap: 4px;
+}
+.call-dock .finish-action svg {
+  width: 15px;
+  height: 15px;
+}
+.call-dock .save-action {
+  color: var(--text-primary);
+}
+.call-dock .only-action {
+  grid-column: 1 / -1;
+}
+.call-dock .voice-status {
+  grid-column: 1 / -1;
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  gap: 4px 6px;
+  font-size: 12px;
+  min-height: 36px;
+  padding: 2px 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+.call-dock .voice-status > span:last-of-type {
+  min-width: 0;
+  flex: 1;
+}
+.voice-status button {
+  width: auto;
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 4px 9px;
+  font-size: 12px;
+  gap: 5px;
+  border-radius: 12px;
+  background: #ffffff0e;
+}
+.coach-subtitle {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex-shrink: 1;
+  width: 100%;
+  max-width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-panel);
+  background: #262626ed;
+  font-size: 14px;
+  margin: 0;
+}
+.subtitle-heading {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 6px;
+}
+.coach-subtitle.expanded .subtitle-heading svg {
+  transform: rotate(180deg);
+}
+.subtitle-heading > span {
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.subtitle-heading button {
+  min-height: 36px;
+  padding: 4px 7px;
+  border: 0;
+  background: transparent;
+  color: #bdbdbd;
+  font-size: 12px;
+  gap: 4px;
+}
+.coach-markdown {
+  min-height: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+.coach-subtitle.expanded .coach-markdown {
+  display: block;
+  -webkit-line-clamp: unset;
+  max-height: min(30dvh, 300px, max(60px, calc(100dvh - 380px)));
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+}
+.coach-subtitle .heard-transcript {
+  flex-shrink: 0;
+  max-height: 3.4em;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.coach-markdown p {
+  max-height: none;
+  overflow: visible;
+  margin: 0 0 8px;
+}
+.coach-markdown > :last-child {
+  margin-bottom: 0;
+}
+.coach-markdown strong {
+  color: #f7f7f5;
+  font-weight: 650;
+}
+.coach-markdown ul,
+.coach-markdown ol {
+  padding-left: 22px;
+  margin: 6px 0;
+}
+.coach-markdown li {
+  padding-left: 3px;
+  margin: 4px 0;
+}
+.coach-markdown li::marker {
+  color: var(--accent);
+}
+.coach-markdown li p {
+  margin-bottom: 2px;
+}
+.coach-markdown h1,
+.coach-markdown h2,
+.coach-markdown h3 {
+  font-size: 16px;
+  margin: 10px 0 6px;
+}
+.coach-markdown blockquote {
+  border-left: 2px solid var(--accent);
+  margin: 8px 0;
+  padding-left: 12px;
+  color: #ccc;
+}
+.coach-markdown code {
+  font-size: 0.9em;
+  background: #ffffff0e;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.coach-markdown pre {
+  overflow-x: auto;
+}
+.coach-markdown table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+.coach-markdown th,
+.coach-markdown td {
+  padding: 6px 9px;
+  border-bottom: 1px solid #ffffff20;
+  text-align: left;
+}
+.training-dialog.exercise-dialog {
+  width: min(540px, calc(100vw - 32px));
+  padding: 26px;
+}
+.exercise-help,
+.camera-diagnostic {
+  color: #bdbdbd;
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 12px 0 18px;
+}
+.exercise-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.exercise-options button {
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 6px;
+  border-radius: 16px;
+  min-height: 78px;
+  padding: 14px;
+  background: #303030;
+  border: 1px solid #ffffff14;
+  text-align: left;
+}
+.exercise-options button > span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 550;
+}
+.exercise-options small {
+  font-size: 11px;
+  color: #b6b6b6;
+}
+.exercise-options button.selected {
+  border-color: #d0ff7170;
+  background: #d0ff7110;
+  color: var(--accent);
+}
+.exercise-options button:hover:not(:disabled) {
+  background: #3d3d3d;
+}
+@media (max-height: 760px) and (min-width: 901px) {
+  .exercise-hud {
+    top: 104px;
+    padding: 16px;
+    width: 244px;
+  }
+  .exercise-trigger {
+    font-size: 24px;
+  }
+  .exercise-hud .rep-ring {
+    width: 132px;
+    height: 132px;
+    margin: 10px auto;
+  }
+  .exercise-hud .rep-ring strong {
+    font-size: 56px;
+  }
+  .angle-chart {
+    height: 59px;
+  }
+  .counting-status {
+    margin-top: 9px;
+  }
+  .session-hud {
+    top: 104px;
+  }
+  .stage-bottom {
+    bottom: max(18px, env(safe-area-inset-bottom));
+  }
+}
+@media (max-width: 1050px) and (min-width: 601px) {
+  .exercise-hud {
+    width: 224px;
+    left: 20px;
+  }
+  .exercise-trigger {
+    font-size: 24px;
+  }
+  .session-hud {
+    right: 20px;
+  }
+  .stage-bottom {
+    right: max(20px, env(safe-area-inset-right));
+    width: min(340px, calc(100vw - 280px));
+  }
+}
+@media (max-width: 900px) and (min-width: 601px) {
+  .exercise-hud,
+  .session-hud {
+    top: 146px;
+  }
+  .stage-bottom {
+    max-height: calc(100dvh - 344px);
+  }
+}
+@media (max-width: 600px) {
+  .session-hud {
+    top: 116px;
+    left: 16px;
+    right: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .session-chip,
+  .stage-tools {
+    width: calc((100% - 10px) / 2);
+    height: 44px;
+    border-radius: 12px;
+  }
+  .session-chip {
+    gap: 8px;
+    padding: 0 10px;
+  }
+  .tracking-chip {
+    display: none;
+  }
+  .stage-tools {
+    padding: 2px;
+    gap: 3px;
+  }
+  .stage-tools button {
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+  }
+  .stage-tools .camera-view-trigger {
+    min-width: 0;
+    padding: 0 5px;
+    gap: 4px;
+    font-size: 12px;
+  }
+  .exercise-hud {
+    top: 162px;
+    left: 16px;
+    width: calc(100% - 32px);
+    padding: 14px;
+    border-radius: var(--radius-panel);
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 4px 16px;
+    max-height: calc(100dvh - 410px);
+    min-height: 180px;
+  }
+  .exercise-label {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+    font-size: 10px;
+  }
+  .exercise-trigger {
+    grid-column: 1 / -1;
+    font-size: 23px;
+    min-height: 36px;
+  }
+  .exercise-hud .rep-ring {
+    width: 90px;
+    height: 90px;
+    margin: 10px 0;
+  }
+  .exercise-hud .rep-ring strong {
+    font-size: 38px;
+  }
+  .exercise-hud .rep-ring span {
+    font-size: 11px;
+  }
+  .angle-feedback {
+    border: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .angle-chart {
+    height: 48px;
+    margin: 4px 0 0;
+  }
+  .motion-stages {
+    font-size: 9px;
+    gap: 0;
+  }
+  .motion-stages span {
+    padding: 1px 3px;
+  }
+  .counting-status {
+    margin-top: 10px;
+    padding-top: 10px;
+    font-size: 12px;
+  }
+  .counting-status p {
+    margin-top: 1px;
+  }
+  .last-rep {
+    font-size: 10px;
+    margin-top: 4px;
+  }
+  .camera-welcome {
+    inset: auto;
+  }
+  .camera-symbol {
+    display: none;
+  }
+  .camera-welcome h1 {
+    font-size: 22px;
+  }
+  .camera-welcome > p {
+    margin: 6px 0 12px;
+  }
+  .stage-bottom {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: 320px;
+    max-width: calc(100% - 24px);
+    gap: 6px;
+  }
+  .call-dock {
+    width: 100%;
+    padding: 8px;
+    gap: 6px;
+    border-radius: var(--radius-panel);
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+  }
+  .call-dock .dock-device {
+    width: 44px;
+    min-height: 44px;
+    border-radius: var(--radius-control);
+  }
+  .call-dock .dock-device svg {
+    width: 19px;
+    height: 19px;
+  }
+  .call-dock .training-action {
+    min-width: 0;
+    min-height: 44px;
+    border-radius: var(--radius-control);
+    font-size: 13px;
+    padding: 8px;
+  }
+  .coach-subtitle {
+    padding: 10px 13px;
+    font-size: 12px;
+    border-radius: 17px;
+  }
+  .coach-subtitle.expanded .coach-markdown {
+    max-height: min(27dvh, max(60px, calc(100dvh - 440px)));
+  }
+  .exercise-options button > span {
+    font-size: 15px;
+  }
+  .session-overlay {
+    top: 57%;
+    padding: 20px;
+  }
+  .motion-details > summary {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .motion-angle {
+    font-size: 10px;
+  }
+  .camera-idle {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 162px 16px 16px;
+  }
+  .camera-idle .exercise-hud {
+    position: relative;
+    inset: auto;
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 0;
+    max-height: none;
+  }
+  .camera-idle .camera-welcome {
+    position: relative;
+    inset: auto;
+    flex: 1 0 160px;
+    width: 100%;
+    min-height: 160px;
+    margin: 16px 0;
+    padding: 24px 12px;
+  }
+  .camera-idle .stage-bottom {
+    position: relative;
+    inset: auto;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+  }
+  .camera-live {
+    display: flex;
+    flex-direction: column;
+    padding: 162px 16px 16px;
+  }
+  .camera-live .exercise-hud {
+    position: relative;
+    inset: auto;
+    flex: 0 1 auto;
+    width: 100%;
+    min-height: 144px;
+    max-height: min(36dvh, calc(100dvh - 440px));
+  }
+  .camera-live .stage-bottom {
+    position: relative;
+    inset: auto;
+    flex: 1 1 0;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 100%;
+    min-height: 230px;
+    max-height: none;
+    margin-top: 12px;
+  }
+  .camera-live .coach-subtitle .heard-transcript {
+    white-space: nowrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-value,
+  .stage-hud,
+  .voice-wave i {
+    transition: none;
+  }
+}
+
+/* Consistent labels make every camera tool explicit, including framing. */
+.session-hud {
+  width: 360px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+.session-hud .session-chip {
+  width: auto;
+}
+.session-hud .tracking-chip {
+  max-width: 170px;
+}
+.stage-tools {
+  grid-column: 1 / -1;
+  width: 100%;
+  justify-content: space-between;
+}
+.stage-tools > button,
+.stage-tools .camera-view-trigger {
+  width: auto;
+  min-width: 0;
+  padding: 0 10px;
+  gap: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  border-radius: var(--radius-control);
+}
+@media (max-width: 1050px) and (min-width: 601px) {
+  .session-hud {
+    width: 340px;
+  }
+  .stage-tools > button,
+  .stage-tools .camera-view-trigger {
+    padding: 0 8px;
+  }
+}
+@media (max-width: 600px) {
+  .session-hud {
+    width: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .session-hud .session-chip {
+    width: 100%;
+    height: 36px;
+  }
+  .stage-tools {
+    width: 100%;
+  }
+  .stage-tools > button,
+  .stage-tools .camera-view-trigger {
+    padding: 0 10px;
+  }
+  .camera-idle,
+  .camera-live {
+    padding-top: 208px;
+  }
+  .exercise-hud {
+    top: 208px;
+  }
+}

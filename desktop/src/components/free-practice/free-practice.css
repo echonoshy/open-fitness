@@ -1,0 +1,1725 @@
+.app .free-practice {
+  color-scheme: dark;
+  --bg: #1e1e1e;
+  --surface: #262626;
+  --surface-strong: #303030;
+  --text: #ededed;
+  --muted: #a4a49e;
+  --line: #ffffff15;
+  --accent: #d2ed9e;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+}
+.app .free-practice * {
+  box-sizing: border-box;
+}
+.app .free-practice {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.app .free-practice button,
+.app .free-practice input,
+.app .free-practice select {
+  font: inherit;
+}
+.app .free-practice button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: inherit;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 9px;
+  padding: 0;
+  min-height: 0;
+  transition:
+    background 0.16s,
+    border-color 0.16s,
+    color 0.16s;
+}
+.app .free-practice button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+.app .free-practice button:hover:not(:disabled) {
+  background: #ffffff09;
+}
+.app .free-practice button:focus-visible,
+.app .free-practice input:focus-visible,
+.app .free-practice select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+.app .free-practice button svg {
+  flex-shrink: 0;
+}
+.app .free-practice h1,
+.app .free-practice h2,
+.app .free-practice h3,
+.app .free-practice p {
+  margin: 0;
+}
+.app .free-practice h1,
+.app .free-practice h2,
+.app .free-practice h3 {
+  letter-spacing: -0.025em;
+}
+.app .free-practice h1 {
+  font-size: clamp(30px, 3.2vw, 46px);
+  line-height: 1.35;
+  font-weight: 630;
+}
+.app .free-practice h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+.app .free-practice h3 {
+  font-size: 16px;
+  font-weight: 570;
+}
+.app .free-practice img,
+.app .free-practice video {
+  display: block;
+  width: 100%;
+}
+.app .free-practice input,
+.app .free-practice select {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.app .free-practice select {
+  padding: 9px 28px 9px 12px;
+}
+.app .free-practice .primary,
+.app .free-practice .secondary {
+  min-height: 44px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 560;
+  white-space: nowrap;
+}
+.app .free-practice .primary {
+  color: #202619;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.app .free-practice .primary:hover:not(:disabled) {
+  background: #dff7b5;
+  border-color: #dff7b5;
+}
+.app .free-practice .secondary {
+  background: var(--surface);
+  border-color: #ffffff21;
+}
+.app .free-practice .secondary:hover:not(:disabled) {
+  background: #333;
+  border-color: #ffffff40;
+}
+.app .free-practice .text-button {
+  min-height: 40px;
+  padding: 6px 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.app .free-practice .text-button:hover:not(:disabled) {
+  color: var(--text);
+}
+.app .free-practice .icon-button {
+  width: 38px;
+  height: 38px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.app .free-practice .icon-button svg {
+  width: 20px;
+  height: 20px;
+}
+.app .free-practice .eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  color: var(--accent);
+  line-height: 1.5;
+}
+.app .free-practice .muted {
+  color: var(--muted);
+}
+.app .free-practice .accent {
+  color: var(--accent);
+}
+.app .free-practice .separator {
+  display: inline-block;
+  margin: 0 13px;
+  color: #62625e;
+}
+.app .free-practice .rotated {
+  transform: rotate(180deg);
+}
+.app .free-practice .app-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 78px;
+  padding: 0 40px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.app .free-practice .wordmark {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  white-space: nowrap;
+  line-height: 1;
+}
+.app .free-practice .wordmark span {
+  color: #b7b7b0;
+  font-size: 20px;
+  font-weight: 350;
+  letter-spacing: -1px;
+}
+.app .free-practice .app-header nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 9px;
+}
+.app .free-practice .app-header nav button {
+  padding: 10px 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.app .free-practice .app-header nav button.active {
+  color: var(--accent);
+  background: #d2ed9e0b;
+}
+.app .free-practice .header-note {
+  color: #85857f;
+  font-size: 12px;
+}
+.app .free-practice .page-container {
+  max-width: 1392px;
+  padding: 0 48px;
+  margin: 0 auto;
+}
+.app .free-practice .welcome {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  align-items: center;
+  padding: 58px 0 52px;
+}
+.app .free-practice .welcome .eyebrow {
+  margin-bottom: 15px;
+}
+.app .free-practice .welcome h1 span {
+  color: var(--accent);
+}
+.app .free-practice .welcome h1 + p {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 15px;
+}
+.app .free-practice .welcome-note {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  color: #d4d5ce;
+  line-height: 1.9;
+  padding: 12px 0 12px 28px;
+  border-left: 1px solid #ffffff20;
+  font-size: 14px;
+}
+.app .free-practice .welcome-note svg {
+  color: var(--accent);
+}
+.app .free-practice .welcome-note small {
+  color: #93958c;
+  font-size: 12px;
+}
+.app .free-practice .section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-end;
+  padding-bottom: 25px;
+}
+.app .free-practice .section-heading h2 span {
+  color: #7c7e76;
+  font-size: 15px;
+  font-weight: 400;
+  margin-left: 10px;
+}
+.app .free-practice .section-heading p {
+  color: var(--muted);
+  margin-top: 6px;
+  font-size: 13px;
+}
+.app .free-practice .section-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.app .free-practice .movement-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px 20px;
+}
+.app .free-practice .movement-card {
+  background: var(--surface);
+  border: 1px solid #ffffff0d;
+  border-radius: 13px;
+  min-width: 0;
+  overflow: hidden;
+}
+.app .free-practice .movement-card:hover {
+  border-color: #ffffff30;
+}
+.app .free-practice .card-cover {
+  display: block;
+  position: relative;
+  width: 100%;
+  border-radius: 0;
+  background: #eceee9;
+  overflow: hidden;
+  aspect-ratio: 1.65;
+}
+.app .free-practice .card-cover img {
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.25s;
+}
+.app .free-practice .card-cover:hover img {
+  transform: scale(1.025);
+}
+.app .free-practice .card-cover:focus-visible {
+  outline-offset: -4px;
+}
+.app .free-practice .cover-play {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  background: #242822cc;
+  color: #f5f7ed;
+}
+.app .free-practice .card-body {
+  padding: 18px 16px 14px;
+}
+.app .free-practice .card-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.app .free-practice .card-title h3 {
+  font-size: 15px;
+  line-height: 1.6;
+}
+.app .free-practice .card-title > span {
+  flex-shrink: 0;
+  color: #92948c;
+  font-size: 11px;
+  line-height: 2;
+}
+.app .free-practice .card-body > p {
+  margin-top: 4px;
+  color: #999b92;
+  font-size: 12px;
+  min-height: 20px;
+}
+.app .free-practice .card-bottom {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+.app .free-practice .equipment-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #a9aba2;
+  min-width: 0;
+}
+.app .free-practice .equipment-label svg {
+  flex-shrink: 0;
+}
+.app .free-practice .card-start,
+.app .free-practice .add-button,
+.app .free-practice .remove-button {
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--accent);
+  background: #d2ed9e0c;
+  border-color: #d2ed9e24;
+  border-radius: 7px;
+}
+.app .free-practice .card-start:hover,
+.app .free-practice .add-button:hover {
+  background: #d2ed9e20 !important;
+}
+.app .free-practice .add-button.is-added {
+  color: #a4a995;
+  background: transparent;
+  border-color: transparent;
+  opacity: 1;
+}
+.app .free-practice .remove-button {
+  color: #e3b4aa;
+  background: #e3b4aa08;
+  border-color: #e3b4aa25;
+}
+.app .free-practice .home-footer {
+  margin: 36px 0 24px;
+  padding: 21px 0 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #80847a;
+  font-size: 13px;
+}
+.app .free-practice .home-footer .text-button {
+  color: #b3b9a7;
+}
+.app .free-practice .last-session {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding-top: 25px;
+  margin-top: 32px;
+}
+.app .free-practice .last-session h3 {
+  margin-top: 8px;
+  font-size: 14px;
+}
+.app .free-practice .library-page {
+  padding-top: 22px;
+  padding-bottom: 20px;
+}
+.app .free-practice .back-link {
+  margin-left: -8px;
+}
+.app .free-practice .library-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  padding: 20px 0 30px;
+}
+.app .free-practice .library-heading .eyebrow {
+  margin-bottom: 11px;
+}
+.app .free-practice .library-heading h1 {
+  font-size: 36px;
+}
+.app .free-practice .library-heading h1 span {
+  color: #82867a;
+  font-size: 18px;
+  font-weight: 400;
+  margin-left: 16px;
+  letter-spacing: -0.02em;
+}
+.app .free-practice .library-heading p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 12px;
+}
+.app .free-practice .search-field {
+  min-height: 54px;
+  border-radius: 10px;
+  display: flex;
+  gap: 12px;
+  padding: 0 16px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid #ffffff20;
+}
+.app .free-practice .search-field > svg {
+  color: #92958b;
+  flex-shrink: 0;
+}
+.app .free-practice .search-field input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  padding: 15px 0;
+  font-size: 14px;
+}
+.app .free-practice .search-field:focus-within {
+  border-color: var(--focus);
+}
+.app .free-practice .search-field input::placeholder {
+  color: #82867a;
+}
+.app .free-practice .filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.app .free-practice .equipment-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.app .free-practice .equipment-filters button {
+  padding: 7px 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.app .free-practice .equipment-filters button.selected {
+  background: var(--accent);
+  color: #222a19;
+}
+.app .free-practice .select-filters {
+  display: flex;
+  gap: 10px;
+}
+.app .free-practice .select-filters select {
+  font-size: 12px;
+}
+.app .free-practice .results-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #a2a69b;
+  font-size: 12px;
+  min-height: 58px;
+}
+.app .free-practice .results-meta .text-button {
+  font-size: 12px;
+}
+.app .free-practice .results-hint {
+  margin-left: auto;
+  color: #85897f;
+}
+.app .free-practice .load-more {
+  display: flex;
+  margin: 32px auto;
+}
+.app .free-practice .load-more span {
+  margin-left: 10px;
+  color: #999e90;
+  font-size: 12px;
+}
+.app .free-practice .library-footer {
+  text-align: center;
+  color: #73796b;
+  font-size: 11px;
+  padding: 30px 0 12px;
+}
+.app .free-practice .empty-state,
+.app .free-practice .loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 14px;
+}
+.app .free-practice .empty-state {
+  background: #ffffff02;
+  border: 1px dashed #ffffff25;
+  border-radius: 12px;
+}
+.app .free-practice .empty-state h3 {
+  color: var(--text);
+  font-size: 20px;
+}
+.app .free-practice .empty-state p {
+  font-size: 14px;
+}
+.app .free-practice .empty-state .primary,
+.app .free-practice .empty-state .secondary {
+  margin-top: 8px;
+}
+.app .free-practice .empty-state.small {
+  border: 0;
+  padding: 30px 10px;
+}
+.app .free-practice .loading-state {
+  padding-top: 150px;
+}
+.app .free-practice .loading-state h1 {
+  font-size: 26px;
+}
+.app .free-practice .poster-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  color: #535e45;
+  background: #e8eddf;
+  text-align: center;
+}
+.app .free-practice .session-header-label {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #aeb4a4;
+}
+.app .free-practice .status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.app .free-practice .practice-page {
+  max-width: 1440px;
+  padding: 28px 48px 30px;
+  margin: 0 auto;
+}
+.app .free-practice .practice-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.app .free-practice .practice-heading h1 {
+  font-size: 30px;
+  margin-top: 8px;
+}
+.app .free-practice .practice-heading .muted {
+  margin-top: 8px;
+  font-size: 13px;
+}
+.app .free-practice .practice-clock {
+  text-align: right;
+}
+.app .free-practice .practice-clock span {
+  display: block;
+  color: #9da393;
+  font-size: 12px;
+}
+.app .free-practice .practice-clock strong {
+  display: block;
+  font-weight: 450;
+  font-size: 37px;
+  letter-spacing: -1.5px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+.app .free-practice .practice-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 276px;
+  gap: 32px;
+  align-items: start;
+}
+.app .free-practice .video-stage {
+  position: relative;
+  border-radius: 14px;
+  background: #eeefeb;
+  overflow: hidden;
+  height: clamp(320px, 48vh, 610px);
+}
+.app .free-practice .video-stage > video,
+.app .free-practice .video-stage > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.app .free-practice .video-label {
+  position: absolute;
+  z-index: 2;
+  left: 18px;
+  top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #4f5847;
+  background: #ffffffd9;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.app .free-practice .video-speed {
+  position: absolute;
+  z-index: 2;
+  bottom: 15px;
+  right: 15px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #ffffffeb;
+  color: #525a4b;
+  padding: 3px 5px 3px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+}
+.app .free-practice .video-speed select {
+  background: transparent;
+  color: #303a25;
+  padding: 4px 6px;
+  border: 0;
+  font-size: 12px;
+}
+.app .free-practice .video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  background: #1b211740;
+  color: #fff;
+  backdrop-filter: blur(3px);
+}
+.app .free-practice .video-resume {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #242d1a;
+  padding-left: 4px;
+}
+.app .free-practice .video-resume:hover {
+  background: #e2f6c1 !important;
+}
+.app .free-practice .video-overlay > span {
+  padding: 5px 11px;
+  border-radius: 6px;
+  background: #20251d99;
+  font-size: 13px;
+}
+.app .free-practice .video-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #505b46;
+  background: #eef0eac9;
+}
+.app .free-practice .practice-tips {
+  padding: 8px 6px 0 0;
+  max-height: clamp(320px, 48vh, 610px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff25 transparent;
+}
+.app .free-practice .practice-tips > .eyebrow {
+  color: #969f88;
+  font-size: 11px;
+}
+.app .free-practice .practice-tips h2 {
+  font-size: 21px;
+  margin-top: 8px;
+}
+.app .free-practice .practice-tips ol {
+  padding: 0;
+  margin: 19px 0 9px;
+  list-style: none;
+}
+.app .free-practice .practice-tips li {
+  display: flex;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.app .free-practice .practice-tips li > span {
+  color: #7f8970;
+  font-size: 12px;
+  padding-top: 2px;
+}
+.app .free-practice .practice-tips li p {
+  color: #c5c9bc;
+  font-size: 13px;
+  line-height: 1.9;
+}
+.app .free-practice .practice-tips .text-button {
+  padding-left: 0;
+  font-size: 12px;
+}
+.app .free-practice .practice-note {
+  margin-top: 25px;
+}
+.app .free-practice .practice-note span {
+  color: #adb6a0;
+  font-size: 13px;
+}
+.app .free-practice .practice-note p {
+  color: #818a75;
+  font-size: 12px;
+  margin-top: 6px;
+  line-height: 1.8;
+}
+.app .free-practice .practice-controls {
+  position: sticky;
+  z-index: 4;
+  bottom: 0;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  padding: 18px 0 12px;
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.app .free-practice .current-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #99a28c;
+  font-size: 12px;
+}
+.app .free-practice .current-time b {
+  font-variant-numeric: tabular-nums;
+  font-weight: 450;
+  color: #c9d1be;
+  margin-left: 8px;
+}
+.app .free-practice .control-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.app .free-practice .play-control {
+  min-width: 150px;
+  min-height: 50px;
+}
+.app .free-practice .finish {
+  margin-left: 6px;
+}
+.app .free-practice .control-footnote {
+  color: #768069;
+  font-size: 11px;
+}
+.app .free-practice .media-message {
+  margin-top: 12px;
+  color: #b4bf9f;
+  text-align: center;
+  font-size: 13px;
+}
+.app .free-practice .modal {
+  max-width: calc(100vw - 32px);
+  width: 600px;
+  max-height: min(88vh, 900px);
+  overflow: auto;
+  border: 1px solid #ffffff25;
+  border-radius: 16px;
+  color: var(--text);
+  background: #242424;
+  padding: 0;
+  box-shadow: 0 24px 100px #0008;
+}
+.app .free-practice .modal::backdrop {
+  background: #10110fd4;
+  backdrop-filter: blur(6px);
+}
+.app .free-practice .modal-wide {
+  width: 1050px;
+}
+.app .free-practice .modal-heading {
+  position: sticky;
+  z-index: 3;
+  top: 0;
+  background: #242424;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 23px 25px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.app .free-practice .modal-heading h2 {
+  font-size: 21px;
+}
+.app .free-practice .modal-heading p {
+  color: #9ca390;
+  font-size: 12px;
+  margin-top: 6px;
+}
+.app .free-practice .modal-heading .icon-button {
+  margin: -5px -8px 0 0;
+}
+.app .free-practice .modal-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  background: #242424;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  border-top: 1px solid var(--line);
+  padding: 18px 25px;
+}
+.app .free-practice .modal-footer .muted {
+  font-size: 12px;
+}
+.app .free-practice .detail-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 28px;
+  padding: 25px;
+}
+.app .free-practice .detail-media {
+  background: #e9ebe5;
+  border-radius: 10px;
+  overflow: hidden;
+  align-self: start;
+  position: relative;
+}
+.app .free-practice .detail-media video {
+  aspect-ratio: 1.4;
+  object-fit: contain;
+}
+.app .free-practice .detail-media .secondary {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.app .free-practice .detail-copy > p {
+  font-size: 13px;
+  color: #b7bcad;
+  margin: 12px 0 22px;
+  line-height: 1.9;
+}
+.app .free-practice .detail-copy h3 {
+  margin-bottom: 10px;
+}
+.app .free-practice .detail-copy ol {
+  margin: 0;
+  padding-left: 21px;
+}
+.app .free-practice .detail-copy li {
+  padding: 5px 0 7px 6px;
+  font-size: 12px;
+  color: #a4ab99;
+  line-height: 1.85;
+}
+.app .free-practice .picker-body {
+  padding: 20px 25px 16px;
+}
+.app .free-practice .picker-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.app .free-practice .picker-tabs button {
+  padding: 7px 11px;
+  font-size: 13px;
+  color: #a6ad9b;
+}
+.app .free-practice .picker-tabs button[aria-pressed="true"] {
+  color: var(--accent);
+  background: #d2ed9e0d;
+}
+.app .free-practice .picker-tabs span {
+  font-size: 11px;
+  color: #859374;
+}
+.app .free-practice .compact {
+  min-height: 44px;
+}
+.app .free-practice .compact input {
+  padding: 10px 0;
+  font-size: 13px;
+}
+.app .free-practice .picker-list {
+  display: grid;
+  gap: 0;
+  margin-top: 14px;
+}
+.app .free-practice .picker-item {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 12px 8px;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+.app .free-practice .picker-poster {
+  width: 85px;
+  aspect-ratio: 1.6;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: #e9ebe6;
+  overflow: hidden;
+}
+.app .free-practice .picker-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.app .free-practice .picker-item > div:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.app .free-practice .picker-item strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+}
+.app .free-practice .picker-item small {
+  display: block;
+  font-size: 11px;
+  color: #939c85;
+  margin-top: 5px;
+}
+.app .free-practice .picker-item > svg {
+  color: #a5ad97;
+}
+.app .free-practice .current-tag {
+  font-size: 11px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.app .free-practice .picker-more {
+  justify-self: center;
+  margin-top: 12px;
+}
+.app .free-practice .summary-body {
+  padding: 30px 25px;
+  text-align: center;
+}
+.app .free-practice .summary-body > svg {
+  color: var(--accent);
+  margin: 0 auto 16px;
+}
+.app .free-practice .summary-body > p {
+  color: #b5beaa;
+}
+.app .free-practice .summary-stats {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin: 30px 0;
+}
+.app .free-practice .summary-stats strong {
+  font-size: 36px;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+  display: block;
+  line-height: 1.3;
+}
+.app .free-practice .summary-stats span {
+  color: #9ca78e;
+  font-size: 12px;
+}
+.app .free-practice .summary-movements {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.app .free-practice .summary-movements span {
+  font-size: 12px;
+  color: #c1ccb1;
+  background: #d2ed9e0b;
+  padding: 5px 12px;
+  border-radius: 6px;
+}
+.app .free-practice .summary-body > small {
+  color: #828d75;
+  font-size: 11px;
+}
+.app .free-practice .toast {
+  pointer-events: none;
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: 25px;
+  transform: translate(-50%, 12px);
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 32px);
+  background: #d2ed9e;
+  color: #27371b;
+  border-radius: 9px;
+  padding: 12px 18px;
+  font-size: 13px;
+  box-shadow: 0 5px 24px #0003;
+}
+.app .free-practice .toast.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.app .free-practice .toast svg {
+  flex-shrink: 0;
+}
+.app .free-practice .spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (min-width: 1500px) {
+  .app .free-practice .welcome {
+    padding-top: 75px;
+    padding-bottom: 64px;
+  }
+  .app .free-practice .home-grid .card-cover {
+    aspect-ratio: 1.45;
+  }
+}
+@media (max-width: 1150px) {
+  .app .free-practice .movement-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .app .free-practice .home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .app .free-practice .home-grid .card-cover {
+    aspect-ratio: 2;
+  }
+  .app .free-practice .practice-layout {
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 24px;
+  }
+  .app .free-practice .control-footnote {
+    display: none;
+  }
+  .app .free-practice .practice-page {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+}
+@media (max-width: 800px) {
+  .app .free-practice .app-header {
+    padding: 0 24px;
+    height: 70px;
+  }
+  .app .free-practice .header-note {
+    display: none;
+  }
+  .app .free-practice .app-header nav {
+    position: static;
+    transform: none;
+  }
+  .app .free-practice .page-container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .app .free-practice .welcome {
+    padding: 38px 0;
+  }
+  .app .free-practice .welcome-note {
+    display: none;
+  }
+  .app .free-practice .movement-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 16px;
+  }
+  .app .free-practice .library-heading {
+    align-items: flex-start;
+  }
+  .app .free-practice .library-heading > .secondary {
+    font-size: 12px;
+    padding: 9px 12px;
+  }
+  .app .free-practice .practice-layout {
+    grid-template-columns: 1fr;
+  }
+  .app .free-practice .video-stage {
+    height: 47vh;
+    min-height: 300px;
+  }
+  .app .free-practice .practice-tips {
+    padding-top: 0;
+    max-height: none;
+    overflow: visible;
+  }
+  .app .free-practice .practice-tips ol {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 10px;
+  }
+  .app .free-practice .practice-tips li {
+    border: 0;
+    padding: 10px 0;
+  }
+  .app .free-practice .practice-tips .practice-note {
+    display: none;
+  }
+  .app .free-practice .practice-controls {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg);
+    padding: 16px 0;
+    margin-top: 16px;
+  }
+  .app .free-practice .detail-layout {
+    grid-template-columns: 1fr;
+  }
+  .app .free-practice .detail-media video {
+    aspect-ratio: 1.8;
+    max-height: 42vh;
+  }
+}
+@media (max-width: 560px) {
+  .app .free-practice .app-header {
+    padding: 0 18px;
+    height: 64px;
+  }
+  .app .free-practice .wordmark {
+    font-size: 22px;
+  }
+  .app .free-practice .wordmark span {
+    font-size: 17px;
+  }
+  .app .free-practice .app-header nav button {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .app .free-practice .page-container {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .app .free-practice .welcome {
+    padding: 32px 0 30px;
+  }
+  .app .free-practice .welcome h1 {
+    font-size: 30px;
+  }
+  .app .free-practice .welcome h1 + p {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .app .free-practice .section-heading {
+    align-items: center;
+    padding-bottom: 20px;
+  }
+  .app .free-practice .section-heading h2 {
+    font-size: 20px;
+  }
+  .app .free-practice .section-heading p {
+    display: none;
+  }
+  .app .free-practice .section-actions {
+    gap: 4px;
+  }
+  .app .free-practice .section-actions .primary {
+    min-height: 38px;
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+  .app .free-practice .section-actions .text-button {
+    font-size: 12px;
+  }
+  .app .free-practice .movement-grid {
+    gap: 14px 12px;
+  }
+  .app .free-practice .card-cover,
+  .app .free-practice .home-grid .card-cover {
+    aspect-ratio: 1.25;
+  }
+  .app .free-practice .cover-play {
+    width: 27px;
+    height: 27px;
+    bottom: 8px;
+    right: 8px;
+  }
+  .app .free-practice .cover-play svg {
+    width: 13px;
+  }
+  .app .free-practice .card-body {
+    padding: 12px 11px;
+  }
+  .app .free-practice .card-title {
+    display: block;
+  }
+  .app .free-practice .card-title h3 {
+    font-size: 13px;
+  }
+  .app .free-practice .card-title > span {
+    display: none;
+  }
+  .app .free-practice .card-body > p {
+    font-size: 11px;
+  }
+  .app .free-practice .card-bottom {
+    margin-top: 14px;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .app .free-practice .equipment-label {
+    font-size: 10px;
+    width: 100%;
+  }
+  .app .free-practice .card-start,
+  .app .free-practice .add-button,
+  .app .free-practice .remove-button {
+    width: 100%;
+    font-size: 12px;
+  }
+  .app .free-practice .home-footer {
+    align-items: flex-start;
+    margin-top: 24px;
+    font-size: 11px;
+    gap: 10px;
+  }
+  .app .free-practice .home-footer .text-button {
+    font-size: 11px;
+    padding: 0;
+    min-height: 24px;
+  }
+  .app .free-practice .library-heading {
+    display: block;
+    padding: 12px 0 20px;
+  }
+  .app .free-practice .library-heading h1 {
+    font-size: 30px;
+  }
+  .app .free-practice .library-heading p:not(.eyebrow) {
+    font-size: 12px;
+  }
+  .app .free-practice .library-heading > .secondary {
+    margin-top: 18px;
+  }
+  .app .free-practice .filter-bar {
+    gap: 14px;
+  }
+  .app .free-practice .equipment-filters {
+    gap: 2px;
+  }
+  .app .free-practice .equipment-filters button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .app .free-practice .results-hint {
+    font-size: 10px;
+  }
+  .app .free-practice .session-header-label {
+    font-size: 11px;
+  }
+  .app .free-practice .session-header-label .separator {
+    margin: 0 6px;
+  }
+  .app .free-practice .practice-page {
+    padding: 22px 18px;
+  }
+  .app .free-practice .practice-heading {
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .app .free-practice .practice-heading h1 {
+    font-size: 25px;
+  }
+  .app .free-practice .practice-heading .muted {
+    font-size: 11px;
+  }
+  .app .free-practice .practice-clock strong {
+    font-size: 28px;
+  }
+  .app .free-practice .practice-clock span {
+    font-size: 10px;
+  }
+  .app .free-practice .video-stage {
+    height: 38vh;
+    min-height: 260px;
+    border-radius: 10px;
+  }
+  .app .free-practice .video-label {
+    left: 10px;
+    top: 10px;
+    font-size: 10px;
+  }
+  .app .free-practice .practice-tips h2 {
+    font-size: 18px;
+  }
+  .app .free-practice .practice-tips ol {
+    display: block;
+    margin-bottom: 0;
+  }
+  .app .free-practice .practice-tips li {
+    padding: 8px 0;
+    gap: 12px;
+  }
+  .app .free-practice .practice-tips li p {
+    font-size: 12px;
+  }
+  .app .free-practice .practice-controls {
+    justify-content: center;
+  }
+  .app .free-practice .current-time {
+    display: none;
+  }
+  .app .free-practice .control-buttons {
+    gap: 8px;
+    width: 100%;
+  }
+  .app .free-practice .control-buttons .primary,
+  .app .free-practice .control-buttons .secondary {
+    font-size: 12px;
+    min-height: 44px;
+    padding: 10px 12px;
+  }
+  .app .free-practice .play-control {
+    min-width: 0;
+    flex: 1;
+  }
+  .app .free-practice .finish {
+    font-size: 12px;
+    padding: 6px 0;
+    margin-left: 2px;
+  }
+  .app .free-practice .modal {
+    border-radius: 12px;
+    max-height: 90vh;
+    max-width: calc(100vw - 20px);
+  }
+  .app .free-practice .modal-heading {
+    padding: 18px;
+  }
+  .app .free-practice .modal-heading h2 {
+    font-size: 18px;
+  }
+  .app .free-practice .modal-heading p {
+    font-size: 11px;
+  }
+  .app .free-practice .modal-footer {
+    padding: 14px 18px;
+    gap: 10px;
+  }
+  .app .free-practice .modal-footer button {
+    font-size: 12px;
+    padding: 9px 12px;
+  }
+  .app .free-practice .detail-layout {
+    padding: 18px;
+    gap: 20px;
+  }
+  .app .free-practice .picker-body {
+    padding: 16px 14px;
+  }
+  .app .free-practice .picker-item {
+    gap: 10px;
+    padding: 10px 4px;
+  }
+  .app .free-practice .picker-poster {
+    width: 62px;
+  }
+  .app .free-practice .picker-item strong {
+    font-size: 12px;
+  }
+  .app .free-practice .picker-item small {
+    font-size: 10px;
+  }
+  .app .free-practice .current-tag {
+    font-size: 10px;
+  }
+  .app .free-practice .toast {
+    width: max-content;
+    font-size: 12px;
+    bottom: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app .free-practice *,
+  .app .free-practice *::before,
+  .app .free-practice *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optional camera comparison and hands-free practice controls. */
+.app .free-practice .device-tools {
+  margin: -4px 0 22px;
+}
+.app .free-practice .device-tool-buttons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.app .free-practice .device-tool-buttons .secondary {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.app .free-practice .device-enabled {
+  border-color: #71895b !important;
+  color: #d2ed9e !important;
+  background: #2a3324 !important;
+}
+.app .free-practice .device-tools select,
+.app .free-practice .camera-toolbar select {
+  min-width: 0;
+  max-width: 240px;
+  background: #252924;
+  border: 1px solid #42483f;
+  border-radius: 7px;
+  color: #e0e5d8;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 12px;
+}
+.app .free-practice .practice-voice-status {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  margin-top: 13px;
+  color: #a8afa0;
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.app .free-practice .practice-voice-status-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+.app .free-practice .practice-voice-status strong {
+  font-weight: 500;
+}
+.app .free-practice .voice-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #a8afa0;
+}
+.app .free-practice .practice-voice-status.is-listening strong {
+  color: #d2ed9e;
+}
+.app .free-practice .practice-voice-status.is-listening .voice-indicator {
+  background: #d2ed9e;
+}
+.app .free-practice .heard-text {
+  color: #e2e6da;
+}
+.app .free-practice .device-privacy {
+  margin-top: 6px;
+  color: #858d7e;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.app .free-practice .device-error {
+  margin-top: 10px;
+  color: #f2c8a5;
+  font-size: 13px;
+}
+.app .free-practice .practice-visuals {
+  min-width: 0;
+}
+.app .free-practice .with-camera {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+}
+.app .free-practice .with-camera .practice-visuals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.app .free-practice .with-camera .practice-tips {
+  max-height: none;
+  display: block;
+  padding: 0;
+}
+.app .free-practice .with-camera .practice-tips > .eyebrow,
+.app .free-practice .with-camera .practice-note {
+  display: none;
+}
+.app .free-practice .with-camera .practice-tips h2 {
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+.app .free-practice .with-camera .practice-tips ol {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.app .free-practice .with-camera .practice-tips li {
+  margin: 0;
+}
+.app .free-practice .camera-panel {
+  border: 1px solid #42483f;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #161b16;
+}
+.app .free-practice .camera-stage {
+  position: relative;
+  height: clamp(320px, 48vh, 610px);
+  overflow: hidden;
+}
+.app .free-practice .camera-stage video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.app .free-practice .camera-stage video.mirrored {
+  transform: scaleX(-1);
+}
+.app .free-practice .camera-label {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  background: #1c241cdd;
+  color: #d2ed9e;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.app .free-practice .camera-hint {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  color: #eceee8;
+  padding: 5px 10px;
+  background: #161b16bb;
+  border-radius: 5px;
+}
+.app .free-practice .camera-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+}
+.app .free-practice .camera-toolbar select {
+  width: 100%;
+  max-width: 350px;
+}
+.app .free-practice .camera-toolbar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  font-size: 12px;
+  color: #c2caba;
+}
+.app .free-practice .camera-toolbar input {
+  accent-color: #d2ed9e;
+}
+.app .free-practice .camera-loading {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #b9c8a9;
+  font-size: 14px;
+}
+.app .free-practice .camera-loading span {
+  color: #89997b;
+  font-size: 12px;
+}
+.app .free-practice .camera-retry {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.app .free-practice .picker-voice {
+  margin-bottom: 15px;
+  padding: 10px 12px;
+  background: #293022;
+  border-radius: 8px;
+}
+.app .free-practice .picker-voice .practice-voice-status {
+  margin: 0;
+}
+.app .free-practice .picker-voice > button {
+  margin-top: 8px;
+  font-size: 11px;
+}
+.app .free-practice .picker-poster {
+  position: relative;
+}
+.app .free-practice .picker-number {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  border-radius: 4px;
+  background: #252d22e8;
+  color: #d2ed9e;
+  padding: 2px 5px;
+  font-size: 11px;
+}
+@media (max-width: 800px) {
+  .app .free-practice .with-camera .practice-visuals {
+    gap: 10px;
+  }
+  .app .free-practice .with-camera .video-stage,
+  .app .free-practice .camera-stage {
+    height: 310px;
+  }
+  .app .free-practice .with-camera .practice-tips ol {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+@media (max-width: 560px) {
+  .app .free-practice .device-tools {
+    margin-bottom: 16px;
+  }
+  .app .free-practice .device-tool-buttons {
+    gap: 8px;
+  }
+  .app .free-practice .device-tool-buttons .secondary {
+    font-size: 12px;
+    padding: 9px 10px;
+  }
+  .app .free-practice .device-tool-buttons select {
+    max-width: 100%;
+  }
+  .app .free-practice .with-camera .practice-visuals {
+    grid-template-columns: 1fr;
+  }
+  .app .free-practice .with-camera .video-stage,
+  .app .free-practice .camera-stage {
+    height: 320px;
+  }
+  .app .free-practice .device-privacy {
+    max-width: 320px;
+  }
+  .app .free-practice .practice-voice-status {
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,24 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>open-fitness · 背景虚化验证</title>
+<style>
+*{box-sizing:border-box} body{margin:0;padding:28px;background:#171a16;color:#eef2e7;font:15px -apple-system,BlinkMacSystemFont,sans-serif}
+h1{font-size:24px;letter-spacing:-.5px;margin:8px 0} p{color:#b9c3af;line-height:1.6} .eyebrow{color:#c9ed89;font-size:12px;letter-spacing:2px}
+.controls{display:flex;gap:10px;align-items:center;margin:22px 0;flex-wrap:wrap} button,select{background:#30372b;color:#edf3e4;border:1px solid #56624b;border-radius:8px;padding:10px 16px;font:inherit;cursor:pointer}button:hover{background:#46533b}button:disabled{opacity:.45;cursor:wait}
+.views{display:grid;grid-template-columns:1fr 1fr;gap:20px}figure{margin:0}figcaption{display:flex;justify-content:space-between;margin:0 0 10px;font-size:14px}.viewport{aspect-ratio:16/9;overflow:hidden;background:#080a08;border-radius:10px;position:relative}.frame{position:absolute;inset:0;transform:scaleX(-1)}canvas{position:absolute;width:100%;height:100%;inset:0;object-fit:contain}.source-video{position:absolute;width:2px;height:2px;opacity:.01;pointer-events:none}
+pre{background:#20251c;border-radius:10px;white-space:pre-wrap;line-height:1.65;padding:18px;font-size:13px}#status{color:#c9ed89}footer{font-size:12px;color:#9da892;margin-top:18px}@media(max-width:900px){.views{grid-template-columns:1fr}}
+</style>
+<div class="eyebrow">open-fitness / LOCAL EXPERIMENT</div><h1>背景虚化 · 原图对照</h1>
+<p>同一个 Full 模型，原始画面识别动作；右侧只处理显示。独立验证窗口，训练记录不会保存到日常应用。</p>
+<div class="controls">
+<select id="sample" aria-label="动作样本"><option value="pushup">俯卧撑</option><option value="squat">深蹲</option></select>
+<button id="play">播放对照</button><button id="camera">摄像头对照</button><button id="stop">停止</button>
+<button id="lock">固定当前取景</button><button id="auto">恢复自动取景</button><button id="full">恢复全身</button>
+<span id="status">正在加载验证环境</span></div>
+<div class="views">
+<figure><figcaption><span>原始画面</span><span>同帧对照</span></figcaption><div class="viewport"><div class="frame"><canvas id="original" width="1280" height="720"></canvas><canvas id="bones-original" width="1280" height="720"></canvas></div></div></figure>
+<figure><figcaption><span>背景虚化</span><span>Full 人体蒙版 · 本机处理</span></figcaption><div class="viewport"><div class="frame"><canvas id="blurred" width="1280" height="720"></canvas><canvas id="bones-blurred" width="1280" height="720"></canvas></div></div></figure>
+</div>
+<pre id="metrics">等待测试。离线帧对照、实时视频性能与摄像头性能分别记录。</pre>
+<footer>左右画面共用相同取景变换。人体轮廓与图像保持同帧；无人体时只显示模糊底图。此版本用于验证，尚未接入正式训练界面。</footer>
+<script src="view.js"></script></html>

@@ -1,0 +1,85 @@
+{
+  "name": "open-fitness",
+  "version": "0.3.48",
+  "private": true,
+  "description": "Camera and voice fitness coach for macOS",
+  "author": "open-fitness contributors",
+  "type": "module",
+  "main": "dist-electron/main.cjs",
+  "scripts": {
+    "dev": "node scripts/assets.mjs && npm run electron:build && concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5178 && electron . --dev\"",
+    "web": "vite --host 127.0.0.1",
+    "electron:build": "node scripts/build-electron.mjs",
+    "build": "tsc --noEmit && npm run narration:check && node scripts/assets.mjs && vite build && npm run electron:build",
+    "start": "electron .",
+    "test": "tsx --test tests/*.test.ts",
+    "verify:services": "tsx scripts/verify-services.ts",
+    "verify:vad": "tsx scripts/verify-barge-in.ts",
+    "voices:register": "tsx scripts/register-approved-voices.ts",
+    "icon": "node scripts/icon.mjs",
+    "package": "node scripts/package-macos.mjs personal",
+    "package:private": "npm run package",
+    "package:public": "node scripts/package-macos.mjs public",
+    "postinstall": "node scripts/assets.mjs",
+    "format": "prettier --write src electron web tests scripts vite.config.ts",
+    "serve:web": "node dist-web/server.mjs",
+    "sign:internal": "node scripts/sign-internal.mjs",
+    "narration:generate": "tsx scripts/generate-exercise-narration.ts",
+    "narration:check": "tsx scripts/check-exercise-narration.ts"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "1.1.1",
+    "@ricky0123/vad-web": "0.0.31",
+    "lucide-react": "^0.468.0",
+    "onnxruntime-web": "1.30.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "sql.js": "^1.15.1",
+    "ws": "^8.22.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/sql.js": "^1.4.11",
+    "@types/ws": "^8.18.2",
+    "@vitejs/plugin-react": "^6.0.0",
+    "concurrently": "^9.0.0",
+    "electron": "45.0.0",
+    "electron-builder": "^26.0.0",
+    "esbuild": "^0.28.0",
+    "prettier": "^3.9.10",
+    "tsx": "^4.0.0",
+    "typescript": "^5.9.0",
+    "vite": "8.3.5",
+    "wait-on": "^8.0.0"
+  },
+  "build": {
+    "appId": "io.github.echonoshy.open-fitness",
+    "productName": "open-fitness",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "mac": {
+      "category": "public.app-category.healthcare-fitness",
+      "identity": null,
+      "extendInfo": {
+        "NSCameraUsageDescription": "open-fitness 使用摄像头在本机分析训练动作。",
+        "NSMicrophoneUsageDescription": "open-fitness 使用麦克风接收训练口令并与教练对话。"
+      },
+      "icon": "build/icon.icns"
+    },
+    "electronDist": "node_modules/electron/dist"
+  },
+  "license": "PolyForm-Noncommercial-1.0.0"
+}

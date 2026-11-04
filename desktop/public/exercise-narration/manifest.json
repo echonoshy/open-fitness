@@ -1,0 +1,869 @@
+{
+  "version": 1,
+  "clips": {
+    "viaim-coach-male-n6-approved-v1/squat": {
+      "segments": [
+        "深蹲记住这三点。",
+        "双脚站稳，重心保持在全脚掌。",
+        "屈髋屈膝下蹲，膝盖朝向脚尖。",
+        "保持躯干稳定，有控制地站起。"
+      ],
+      "fingerprint": "baa06aee9c0e386745f3454c031cbc0f459385fb0ea3e01988a08c57ae254682",
+      "sha256": "b657df105add0d8cf9379af20088402d6461bb798f25338cbd439dc574c98f0e",
+      "sampleRate": 24000,
+      "seconds": 12.64
+    },
+    "viaim-coach-male-n6-approved-v1/pushup": {
+      "segments": [
+        "俯卧撑记住这三点。",
+        "双手撑稳，头、躯干与腿保持一线。",
+        "屈肘缓慢下放，避免塌腰或抬臀。",
+        "推地撑起，全程保持身体稳定。"
+      ],
+      "fingerprint": "a7f88469f9ea137d698df68ee9794b208e232a62246d671127c17c10d7add6ff",
+      "sha256": "a1812fc2b66a296d2378aab99e77147254cbbbd663f9ec03440b768ba03f36c0",
+      "sampleRate": 24000,
+      "seconds": 13.28
+    },
+    "viaim-coach-male-n6-approved-v1/bench": {
+      "segments": [
+        "卧推记住这三点。",
+        "背部稳靠卧推凳，双脚踩实地面。",
+        "手腕保持稳定，缓慢下放杠铃。",
+        "平稳推起，避免借胸部反弹。"
+      ],
+      "fingerprint": "d28b95525028cbe024a30ba9abfcf3b0bea45b56db5a0973b7a067f48b4916fb",
+      "sha256": "6cd5263bc4909ef2fbad7e8dbc93db2e15557b60ec02a50c75b72c33b3a29927",
+      "sampleRate": 24000,
+      "seconds": 11.2
+    },
+    "viaim-coach-male-n6-approved-v1/deadlift": {
+      "segments": [
+        "硬拉记住这三点。",
+        "收紧躯干，先让髋部向后移动。",
+        "背部保持自然，重量贴近身体。",
+        "平稳站起，避免猛拉或过度后仰。"
+      ],
+      "fingerprint": "90bbf922544e6fb3b2e4a9415f1327c34e316579925ceb73c195234098079e65",
+      "sha256": "2de793049054fa16e6f1ef5b200e52d1a93a80e5633d6ae25d4ddafd8aa83eaa",
+      "sampleRate": 24000,
+      "seconds": 11.84
+    },
+    "viaim-coach-male-n6-approved-v1/lunge": {
+      "segments": [
+        "弓步蹲记住这三点。",
+        "向前迈步，前脚踩稳再下蹲。",
+        "前膝朝向脚尖，躯干保持稳定。",
+        "前脚发力回位，再换另一侧。"
+      ],
+      "fingerprint": "d5fcaa26f8c8d6e69a9478f69840e48591f053aae13b0afdfc219f75e6794867",
+      "sha256": "c708a978fe580da43773b6f8e33b4ad5cc348102dafac9725d6473bc7b224abb",
+      "sampleRate": 24000,
+      "seconds": 12.48
+    },
+    "viaim-coach-male-n6-approved-v1/shoulder_press": {
+      "segments": [
+        "肩上推举记住这三点。",
+        "双脚站稳，哑铃从肩部附近起始。",
+        "收紧躯干，避免挺腰借力。",
+        "平稳举过头顶，再控制下放。"
+      ],
+      "fingerprint": "16c239cea5451f1cb575eb79595a86521a93eb8b61dba9b4cda1209fbd6251dd",
+      "sha256": "b52fd173e24196fe54c0d8b575754bc8a4cd97789c4ab1c485fc223350577c72",
+      "sampleRate": 24000,
+      "seconds": 12
+    },
+    "viaim-coach-male-n6-approved-v1/pullup": {
+      "segments": [
+        "引体向上记住这三点。",
+        "握稳单杠，保持肩部与躯干稳定。",
+        "有控制地向上拉，避免甩腿摆荡。",
+        "缓慢下放，避免突然松力下坠。"
+      ],
+      "fingerprint": "faa3effbe0f6e0350fb10be606bf06e268750d32dc66eac116e10b4d0fb8525b",
+      "sha256": "8aef651ea982ddada9da620fec46b31ce87cfc9f46a633d328b83c3c813f4bd8",
+      "sampleRate": 24000,
+      "seconds": 11.84
+    },
+    "viaim-coach-male-n6-approved-v1/curl": {
+      "segments": [
+        "二头弯举记住这三点。",
+        "上臂靠近身体，手腕保持自然。",
+        "屈肘举起哑铃，避免身体摆动。",
+        "缓慢下放，全程控制重量。"
+      ],
+      "fingerprint": "d424eace59807461285eeacdfbe52555d0972a49df365658c6b88eab2eac4e65",
+      "sha256": "ab9e695ddd9ce6dcea20a39dbd88e01bab16ccf493c60a4b1186aa4136c38683",
+      "sampleRate": 24000,
+      "seconds": 11.36
+    },
+    "viaim-coach-male-p4-approved-v1/squat": {
+      "segments": [
+        "深蹲记住这三点。",
+        "双脚站稳，重心保持在全脚掌。",
+        "屈髋屈膝下蹲，膝盖朝向脚尖。",
+        "保持躯干稳定，有控制地站起。"
+      ],
+      "fingerprint": "3d78db2e2a5cb8ac5694c2878119f4096ffe5d0f877ef9bbda35216d37e3786c",
+      "sha256": "e607add7dc2470c691e656a7acec77554429dfbd9f5ec863f4cfed4e449adcbe",
+      "sampleRate": 24000,
+      "seconds": 12.384041666666667
+    },
+    "viaim-coach-male-n6-approved-v1/plank": {
+      "segments": [
+        "平板支撑记住这三点。",
+        "前臂撑地，肘部位于肩部下方。",
+        "头、躯干与腿保持一线。",
+        "保持呼吸，避免塌腰或抬臀。"
+      ],
+      "fingerprint": "08461be32cc1f2c639fa35ecb751d2f0d3a2a5d15b0e581f92f17efe2ddafcc1",
+      "sha256": "4e2d5e2a94cc55e1e75250e8592de92a67dba269df88ecd16d019f64f2ec33a9",
+      "sampleRate": 24000,
+      "seconds": 11.52
+    },
+    "viaim-coach-male-p4-approved-v1/pushup": {
+      "segments": [
+        "俯卧撑记住这三点。",
+        "双手撑稳，头、躯干与腿保持一线。",
+        "屈肘缓慢下放，避免塌腰或抬臀。",
+        "推地撑起，全程保持身体稳定。"
+      ],
+      "fingerprint": "06c1b2ac29e2b94b4e8bafd51cb607ab093976f5e4e711b84541487c1bf4b20a",
+      "sha256": "d4a609ce4a07f3f7edee4454aedcabb69ef11994f89fa0feefc2059dc73d8fb9",
+      "sampleRate": 24000,
+      "seconds": 12.573
+    },
+    "viaim-coach-male-p4-approved-v1/bench": {
+      "segments": [
+        "卧推记住这三点。",
+        "背部稳靠卧推凳，双脚踩实地面。",
+        "手腕保持稳定，缓慢下放杠铃。",
+        "平稳推起，避免借胸部反弹。"
+      ],
+      "fingerprint": "0c28843d7e1dc364e64e4135ea987e9739cfd42da954ada6489aea3fa6320a60",
+      "sha256": "f67499de589ea1bee661e5d0f633fce4bb684766b3057a75958a38d3abeb0c04",
+      "sampleRate": 24000,
+      "seconds": 12.761958333333334
+    },
+    "viaim-coach-male-p4-approved-v1/deadlift": {
+      "segments": [
+        "硬拉记住这三点。",
+        "收紧躯干，先让髋部向后移动。",
+        "背部保持自然，重量贴近身体。",
+        "平稳站起，避免猛拉或过度后仰。"
+      ],
+      "fingerprint": "37b686805f2d09467c918d5a93f74d2b5a75fb2401da8528c688a687abc01e39",
+      "sha256": "71f223a4852cf70cdbf8b1c764c1f905c348434b045be3569b3100fa36303a58",
+      "sampleRate": 24000,
+      "seconds": 12.195083333333333
+    },
+    "viaim-coach-male-p4-approved-v1/lunge": {
+      "segments": [
+        "弓步蹲记住这三点。",
+        "向前迈步，前脚踩稳再下蹲。",
+        "前膝朝向脚尖，躯干保持稳定。",
+        "前脚发力回位，再换另一侧。"
+      ],
+      "fingerprint": "2b974c9d80b021a4339b6a3f1e377d1b5665008e30878de1093eaa1750cc9e3c",
+      "sha256": "dfaa490a1712ab34222219e663537242b95c3980c1d86e09abf8f5a150daa4a6",
+      "sampleRate": 24000,
+      "seconds": 12.006125
+    },
+    "viaim-coach-male-p4-approved-v1/curl": {
+      "segments": [
+        "二头弯举记住这三点。",
+        "上臂靠近身体，手腕保持自然。",
+        "屈肘举起哑铃，避免身体摆动。",
+        "缓慢下放，全程控制重量。"
+      ],
+      "fingerprint": "b050c5efbf7fe06dd9178d2e3e38f6f66aee3215f2940c0854d521133d74ce0e",
+      "sha256": "be888b6702a131b3997217c9bebcf9a93119444620a9f5b4718e797994ab89cb",
+      "sampleRate": 24000,
+      "seconds": 11.439291666666668
+    },
+    "viaim-coach-male-p4-approved-v1/shoulder_press": {
+      "segments": [
+        "肩上推举记住这三点。",
+        "双脚站稳，哑铃从肩部附近起始。",
+        "收紧躯干，避免挺腰借力。",
+        "平稳举过头顶，再控制下放。"
+      ],
+      "fingerprint": "2c36e4ef613f5f96c6afe760da6afff95afcd7832ee93320e315a7609698b4af",
+      "sha256": "4ca68a325b72f522cc40fc4b6df97647e01131cba026cbe4980332fc0156e311",
+      "sampleRate": 24000,
+      "seconds": 11.250333333333334
+    },
+    "viaim-coach-male-p4-approved-v1/pullup": {
+      "segments": [
+        "引体向上记住这三点。",
+        "握稳单杠，保持肩部与躯干稳定。",
+        "有控制地向上拉，避免甩腿摆荡。",
+        "缓慢下放，避免突然松力下坠。"
+      ],
+      "fingerprint": "26f48d319555726a1f0e95b75a35a29ad63696a7e93ec8597d25a6e6beeeffde",
+      "sha256": "cdfc0af0e62d2f404749ecc4ef3443c5ca188677cee41fec64d593c17813eca3",
+      "sampleRate": 24000,
+      "seconds": 11.817208333333333
+    },
+    "viaim-coach-male-p4-approved-v1/plank": {
+      "segments": [
+        "平板支撑记住这三点。",
+        "前臂撑地，肘部位于肩部下方。",
+        "头、躯干与腿保持一线。",
+        "保持呼吸，避免塌腰或抬臀。"
+      ],
+      "fingerprint": "20381964ed45fbdbe4483828981c297aa09afded47ad62084114c17f737065d5",
+      "sha256": "2f3582bc2f6a3f3e4bc9121bf2ac7119d20aec510ef7d70e001ce42c073b0029",
+      "sampleRate": 24000,
+      "seconds": 11.439291666666668
+    },
+    "viaim-coach-male-p5-approved-v1/squat": {
+      "segments": [
+        "深蹲记住这三点。",
+        "双脚站稳，重心保持在全脚掌。",
+        "屈髋屈膝下蹲，膝盖朝向脚尖。",
+        "保持躯干稳定，有控制地站起。"
+      ],
+      "fingerprint": "0d19f86309d14dac7bccdc53d70dede73d965d1ff2382e8705446ba2ad910701",
+      "sha256": "183d5aac5ce5cb67fdec9844f53c60a1c68de6763db8c4b4b6502a051635c9b1",
+      "sampleRate": 24000,
+      "seconds": 11.769333333333334
+    },
+    "viaim-coach-male-p5-approved-v1/pushup": {
+      "segments": [
+        "俯卧撑记住这三点。",
+        "双手撑稳，头、躯干与腿保持一线。",
+        "屈肘缓慢下放，避免塌腰或抬臀。",
+        "推地撑起，全程保持身体稳定。"
+      ],
+      "fingerprint": "5656eb46af3259e3fd26f6de48518b9f760d848b42d39fae856ff70c36ad1f46",
+      "sha256": "68ba7cf7ea8c3729a2a1c981ada2b1ca6edef7b241dec9c8a60c03f68f62b34d",
+      "sampleRate": 24000,
+      "seconds": 13.874125
+    },
+    "viaim-coach-male-p5-approved-v1/bench": {
+      "segments": [
+        "卧推记住这三点。",
+        "背部稳靠卧推凳，双脚踩实地面。",
+        "手腕保持稳定，缓慢下放杠铃。",
+        "平稳推起，避免借胸部反弹。"
+      ],
+      "fingerprint": "eddc2f2d9094f09308b82be7d497787ba1825c3d0f46079dd8ce8ddd21c59cd6",
+      "sha256": "6284c49081372f84ae4f9d732d9e66441d78649675ae790c4723b2f75c6e4f97",
+      "sampleRate": 24000,
+      "seconds": 11.195333333333334
+    },
+    "viaim-coach-male-p5-approved-v1/deadlift": {
+      "segments": [
+        "硬拉记住这三点。",
+        "收紧躯干，先让髋部向后移动。",
+        "背部保持自然，重量贴近身体。",
+        "平稳站起，避免猛拉或过度后仰。"
+      ],
+      "fingerprint": "d59b8974419f2f52790b21b3b1e88288f0d14f1f125acedbb06b662fd0c138d2",
+      "sha256": "24e26ca9c815a06698a515288676de1c35098f24004eb56d3513f8d9de72c769",
+      "sampleRate": 24000,
+      "seconds": 14.448166666666667
+    },
+    "viaim-coach-male-p5-approved-v1/lunge": {
+      "segments": [
+        "弓步蹲记住这三点。",
+        "向前迈步，前脚踩稳再下蹲。",
+        "前膝朝向脚尖，躯干保持稳定。",
+        "前脚发力回位，再换另一侧。"
+      ],
+      "fingerprint": "0c6c8e7110e2569177313eb552f8ee2dddb5bdfdc33ab481d5abce2a16a83c4d",
+      "sha256": "a622ad79606894ccb1b291d83a7a2a2cdd4bf02aa0957c52e9c6e1818b7ed172",
+      "sampleRate": 24000,
+      "seconds": 13.491458333333334
+    },
+    "viaim-coach-male-p5-approved-v1/shoulder_press": {
+      "segments": [
+        "肩上推举记住这三点。",
+        "双脚站稳，哑铃从肩部附近起始。",
+        "收紧躯干，避免挺腰借力。",
+        "平稳举过头顶，再控制下放。"
+      ],
+      "fingerprint": "d1e2a53c9be814438dd0571c419e5a83195a974b4984206b71cb2d9630cb3be7",
+      "sha256": "95925c12153ae9557eca6a526e958b3ace1b3e733c61d6e2faa339e2e629d31e",
+      "sampleRate": 24000,
+      "seconds": 11.386666666666667
+    },
+    "viaim-coach-male-p5-approved-v1/curl": {
+      "segments": [
+        "二头弯举记住这三点。",
+        "上臂靠近身体，手腕保持自然。",
+        "屈肘举起哑铃，避免身体摆动。",
+        "缓慢下放，全程控制重量。"
+      ],
+      "fingerprint": "94a3f7c81b38856b046faf4ae7da2b8889dca88160adb26625585d061d0e97bb",
+      "sha256": "5c9d9d98e8648a2609fd1cc3cf72fc48457dab27200104a3ba97f4424cc8366e",
+      "sampleRate": 24000,
+      "seconds": 12.343375
+    },
+    "viaim-coach-male-p5-approved-v1/pullup": {
+      "segments": [
+        "引体向上记住这三点。",
+        "握稳单杠，保持肩部与躯干稳定。",
+        "有控制地向上拉，避免甩腿摆荡。",
+        "缓慢下放，避免突然松力下坠。"
+      ],
+      "fingerprint": "8f73733f49f762fa76364206fc517822b6d67bc600c65169ae5480740cffd990",
+      "sha256": "7afc8ee0d0a62857e601aae16f67354a570bfec32232d8bb3301c5220f610243",
+      "sampleRate": 24000,
+      "seconds": 11.386666666666667
+    },
+    "viaim-coach-male-p5-approved-v1/plank": {
+      "segments": [
+        "平板支撑记住这三点。",
+        "前臂撑地，肘部位于肩部下方。",
+        "头、躯干与腿保持一线。",
+        "保持呼吸，避免塌腰或抬臀。"
+      ],
+      "fingerprint": "4a748f6e2e04ef628996e85d4758b2c2e490e3c8f63217ab9ed454212d871079",
+      "sha256": "1d889054263dc1a824e46e0be7be48f46ef30271f6c124d36530aee6fc5a9651",
+      "sampleRate": 24000,
+      "seconds": 11.960708333333333
+    },
+    "viaim-coach-male-p8-approved-v1/squat": {
+      "segments": [
+        "深蹲记住这三点。",
+        "双脚站稳，重心保持在全脚掌。",
+        "屈髋屈膝下蹲，膝盖朝向脚尖。",
+        "保持躯干稳定，有控制地站起。"
+      ],
+      "fingerprint": "1445da2110a9b237f602fe813064f26666ff0a09029bc45bb5a081756bf5cde5",
+      "sha256": "e8dfce26ed3bed6d1569a679a7860119d9b2003724e22aa33e13d66e331a9d9d",
+      "sampleRate": 24000,
+      "seconds": 11.68
+    },
+    "viaim-coach-male-p8-approved-v1/bench": {
+      "segments": [
+        "卧推记住这三点。",
+        "背部稳靠卧推凳，双脚踩实地面。",
+        "手腕保持稳定，缓慢下放杠铃。",
+        "平稳推起，避免借胸部反弹。"
+      ],
+      "fingerprint": "553797153afd301676181dcbd4193bafe64f4e3af333e26fc5c7b5d8b5419cf7",
+      "sha256": "74363677930595f6efe4a8ea837aa93eb3ba3f47645f7e8044162d024f510fc1",
+      "sampleRate": 24000,
+      "seconds": 11.84
+    },
+    "viaim-coach-male-p8-approved-v1/pushup": {
+      "segments": [
+        "俯卧撑记住这三点。",
+        "双手撑稳，头、躯干与腿保持一线。",
+        "屈肘缓慢下放，避免塌腰或抬臀。",
+        "推地撑起，全程保持身体稳定。"
+      ],
+      "fingerprint": "d46ab139bbcb70357dce0e115e79781f2f2bda3d7214e9f56a98fa87fbd58c1d",
+      "sha256": "8d512cbd934a72d30b32e2ed5c408bd2b37183e2d77c0338f07fa9b4b0950062",
+      "sampleRate": 24000,
+      "seconds": 12.64
+    },
+    "viaim-coach-male-p8-approved-v1/deadlift": {
+      "segments": [
+        "硬拉记住这三点。",
+        "收紧躯干，先让髋部向后移动。",
+        "背部保持自然，重量贴近身体。",
+        "平稳站起，避免猛拉或过度后仰。"
+      ],
+      "fingerprint": "d567b296a9dec8924cedc38703738cdf6f05c3fc4bedc6caa3c14c1d5766e1cb",
+      "sha256": "4a0739d0fb7df94dbe2b17d66fc7521c3bce4389c98dd63f0efd68b6456b6991",
+      "sampleRate": 24000,
+      "seconds": 11.68
+    },
+    "viaim-coach-male-p8-approved-v1/lunge": {
+      "segments": [
+        "弓步蹲记住这三点。",
+        "向前迈步，前脚踩稳再下蹲。",
+        "前膝朝向脚尖，躯干保持稳定。",
+        "前脚发力回位，再换另一侧。"
+      ],
+      "fingerprint": "437f402ea447cc9d6e778a2a05a303ff00563b0c451e93004daa2796ae5f1d1c",
+      "sha256": "2dc9d60ff8e18f1a9b7f20cfeb644bfc5af56230f7f8305668a6d3f579656311",
+      "sampleRate": 24000,
+      "seconds": 10.08
+    },
+    "viaim-coach-male-p8-approved-v1/shoulder_press": {
+      "segments": [
+        "肩上推举记住这三点。",
+        "双脚站稳，哑铃从肩部附近起始。",
+        "收紧躯干，避免挺腰借力。",
+        "平稳举过头顶，再控制下放。"
+      ],
+      "fingerprint": "411016dfda82a0b05e06b961ff9980d3cc97ffe1904fab42dc8fc9f91b573525",
+      "sha256": "c4b7dc0978a0b50a44ab1bb4b905ab8142fd6ec3051c9efadcd1ca1e50c84159",
+      "sampleRate": 24000,
+      "seconds": 10.24
+    },
+    "viaim-coach-male-p8-approved-v1/curl": {
+      "segments": [
+        "二头弯举记住这三点。",
+        "上臂靠近身体，手腕保持自然。",
+        "屈肘举起哑铃，避免身体摆动。",
+        "缓慢下放，全程控制重量。"
+      ],
+      "fingerprint": "bf770a61de847e52afc5d7a6303a3b83d42cbd5c270cbd5bbc22f8fac42fc10d",
+      "sha256": "0995761b75ceebae41acdb69fa8564eae343d7a8987616080c34fdbc12d7c009",
+      "sampleRate": 24000,
+      "seconds": 11.04
+    },
+    "viaim-coach-male-p8-approved-v1/pullup": {
+      "segments": [
+        "引体向上记住这三点。",
+        "握稳单杠，保持肩部与躯干稳定。",
+        "有控制地向上拉，避免甩腿摆荡。",
+        "缓慢下放，避免突然松力下坠。"
+      ],
+      "fingerprint": "3d28286b6d02489d30a7867670988c06fd55027d500290ddbf66c5090750977a",
+      "sha256": "41b0b0a912105e5217ba707fa370bbca4097e0c869e9764f7731e30df56021c4",
+      "sampleRate": 24000,
+      "seconds": 11.04
+    },
+    "viaim-coach-male-p8-approved-v1/plank": {
+      "segments": [
+        "平板支撑记住这三点。",
+        "前臂撑地，肘部位于肩部下方。",
+        "头、躯干与腿保持一线。",
+        "保持呼吸，避免塌腰或抬臀。"
+      ],
+      "fingerprint": "632a71c4592502d78fa4b22c1246bfc501710a19d88f532f653bffc268885390",
+      "sha256": "65bc52af86fe15803f04caf6f2df96aded09ad1cc39e7a9e80b942f6556fdede",
+      "sampleRate": 24000,
+      "seconds": 11.68
+    },
+    "viaim-coach-female-w01-approved-v1/squat": {
+      "segments": [
+        "深蹲记住这三点。",
+        "双脚站稳，重心保持在全脚掌。",
+        "屈髋屈膝下蹲，膝盖朝向脚尖。",
+        "保持躯干稳定，有控制地站起。"
+      ],
+      "fingerprint": "2f881e0aee98c8daf9442d343b72f6cbea0c6f5955778e39f5ff87ee67dbb5a3",
+      "sha256": "cc82758392a80afe952d7248e07c5341a847a6a88cf32dc18da8f2b223a452c6",
+      "sampleRate": 24000,
+      "seconds": 11.2
+    },
+    "viaim-coach-female-w01-approved-v1/pushup": {
+      "segments": [
+        "俯卧撑记住这三点。",
+        "双手撑稳，头、躯干与腿保持一线。",
+        "屈肘缓慢下放，避免塌腰或抬臀。",
+        "推地撑起，全程保持身体稳定。"
+      ],
+      "fingerprint": "71dc6e9cef553d62172092b1bcda7dc88444a9e33c5a4ff2448422ef26960eaa",
+      "sha256": "c7ac2295d0847e54244d08b89492cf44b3463036af697e9c96eeed5921de6d86",
+      "sampleRate": 24000,
+      "seconds": 12
+    },
+    "viaim-coach-female-w01-approved-v1/bench": {
+      "segments": [
+        "卧推记住这三点。",
+        "背部稳靠卧推凳，双脚踩实地面。",
+        "手腕保持稳定，缓慢下放杠铃。",
+        "平稳推起，避免借胸部反弹。"
+      ],
+      "fingerprint": "0faedc8f9f9a0c1dd284a203b8a97e82f5fa631596072ec78ab761e472d7e1e7",
+      "sha256": "e2e8dfacbe52d64df7f55afc6afefd07990efa627447bdec91fa250050bbc6b6",
+      "sampleRate": 24000,
+      "seconds": 10.88
+    },
+    "viaim-coach-female-w01-approved-v1/deadlift": {
+      "segments": [
+        "硬拉记住这三点。",
+        "收紧躯干，先让髋部向后移动。",
+        "背部保持自然，重量贴近身体。",
+        "平稳站起，避免猛拉或过度后仰。"
+      ],
+      "fingerprint": "147c6b8680066d4e5fee794b077f0c81851d60a670d89d3a02f3b2e0a2738d6b",
+      "sha256": "da53f086820c61fe38d48e62f75904e93097379376bf1a8bc5cb1f174e13ce13",
+      "sampleRate": 24000,
+      "seconds": 11.2
+    },
+    "viaim-coach-female-w01-approved-v1/lunge": {
+      "segments": [
+        "弓步蹲记住这三点。",
+        "向前迈步，前脚踩稳再下蹲。",
+        "前膝朝向脚尖，躯干保持稳定。",
+        "前脚发力回位，再换另一侧。"
+      ],
+      "fingerprint": "8307141e9c64a264fa6ad66763da55554d3f1db0f105dc1a183e9a21aa1e951d",
+      "sha256": "20da95b93844cd797cedbcca416621fc82d5903f1299447dd10ffbaf82e252c9",
+      "sampleRate": 24000,
+      "seconds": 10.88
+    },
+    "viaim-coach-female-w01-approved-v1/shoulder_press": {
+      "segments": [
+        "肩上推举记住这三点。",
+        "双脚站稳，哑铃从肩部附近起始。",
+        "收紧躯干，避免挺腰借力。",
+        "平稳举过头顶，再控制下放。"
+      ],
+      "fingerprint": "742974bf14f175d47a14bde1b1c1c6a5c9bd3a0dc768c715b7aa6b5c5eef7e73",
+      "sha256": "bc3f8be1a46d9640b22dc1e9f2171cf95674edaae13286d8d181f526b5b61067",
+      "sampleRate": 24000,
+      "seconds": 11.2
+    },
+    "viaim-coach-female-w01-approved-v1/curl": {
+      "segments": [
+        "二头弯举记住这三点。",
+        "上臂靠近身体，手腕保持自然。",
+        "屈肘举起哑铃，避免身体摆动。",
+        "缓慢下放，全程控制重量。"
+      ],
+      "fingerprint": "0349fc2fbbd3431dcfb4673fe909a4475477116f223ba7d2e74f3beffa988fd1",
+      "sha256": "caccc51b1eb8844b80429dd5bb8bc35823cd1f715ae783e36893778593650c25",
+      "sampleRate": 24000,
+      "seconds": 11.68
+    },
+    "viaim-coach-female-w01-approved-v1/pullup": {
+      "segments": [
+        "引体向上记住这三点。",
+        "握稳单杠，保持肩部与躯干稳定。",
+        "有控制地向上拉，避免甩腿摆荡。",
+        "缓慢下放，避免突然松力下坠。"
+      ],
+      "fingerprint": "00770211b87205333c1018caa64d5be7063a596fcbe14b609c1b304a9accc775",
+      "sha256": "beb7c9d32af65dbf3afcde0251c1042407c25af928a790009eb915ee27fbf1cb",
+      "sampleRate": 24000,
+      "seconds": 11.2
+    },
+    "viaim-coach-female-w01-approved-v1/plank": {
+      "segments": [
+        "平板支撑记住这三点。",
+        "前臂撑地，肘部位于肩部下方。",
+        "头、躯干与腿保持一线。",
+        "保持呼吸，避免塌腰或抬臀。"
+      ],
+      "fingerprint": "883dc1b2294a6937e7f9aaa46df6dd532433d87ff0c85daa5e0c1f606a5e5c51",
+      "sha256": "2430ac7bed19e3430139f4934ed1172f4a234eecdb7aa216ddcd5837a018b851",
+      "sampleRate": 24000,
+      "seconds": 10.4
+    },
+    "viaim-coach-female-w04-approved-v1/squat": {
+      "segments": [
+        "深蹲记住这三点。",
+        "双脚站稳，重心保持在全脚掌。",
+        "屈髋屈膝下蹲，膝盖朝向脚尖。",
+        "保持躯干稳定，有控制地站起。"
+      ],
+      "fingerprint": "cbc776c1341475ceea699d836fd54838f9b406f7f548b4a481c927d47cacfa7a",
+      "sha256": "4b6d8b925b6a0a7c6f8676a7b1177dbb918bc76b4c4cfc58a447024ab4b0922c",
+      "sampleRate": 24000,
+      "seconds": 13.12
+    },
+    "viaim-coach-female-w04-approved-v1/pushup": {
+      "segments": [
+        "俯卧撑记住这三点。",
+        "双手撑稳，头、躯干与腿保持一线。",
+        "屈肘缓慢下放，避免塌腰或抬臀。",
+        "推地撑起，全程保持身体稳定。"
+      ],
+      "fingerprint": "f282f8497dcffec7f956b78a8e2798fbf4904a2e85ff98e533dba3ce784f3683",
+      "sha256": "80846a9871f9229576ca4cca12b267b52e413c3d7f223981badfdd4194c916bd",
+      "sampleRate": 24000,
+      "seconds": 12
+    },
+    "viaim-coach-female-w04-approved-v1/bench": {
+      "segments": [
+        "卧推记住这三点。",
+        "背部稳靠卧推凳，双脚踩实地面。",
+        "手腕保持稳定，缓慢下放杠铃。",
+        "平稳推起，避免借胸部反弹。"
+      ],
+      "fingerprint": "d530c27b268930161a01bbbd2bdca49c15f333d0580342c5f832fdc8c29f6913",
+      "sha256": "4e9ecd75ac3321dc01726082fc4cc78f2dfeeeb76c9e7413933bc95db47391f4",
+      "sampleRate": 24000,
+      "seconds": 12.32
+    },
+    "viaim-coach-female-w04-approved-v1/deadlift": {
+      "segments": [
+        "硬拉记住这三点。",
+        "收紧躯干，先让髋部向后移动。",
+        "背部保持自然，重量贴近身体。",
+        "平稳站起，避免猛拉或过度后仰。"
+      ],
+      "fingerprint": "c9f689142815f4fa356c386e4aa2b58fb327b46767962a02132cf5ca1160221f",
+      "sha256": "47dbe78a26c3de7dc08c4d982ae3465072c5ccbf84bcf1595f6d65e5339e94af",
+      "sampleRate": 24000,
+      "seconds": 12.32
+    },
+    "viaim-coach-female-w04-approved-v1/lunge": {
+      "segments": [
+        "弓步蹲记住这三点。",
+        "向前迈步，前脚踩稳再下蹲。",
+        "前膝朝向脚尖，躯干保持稳定。",
+        "前脚发力回位，再换另一侧。"
+      ],
+      "fingerprint": "a7bed8286f6387b36867538a78f84047970315b7944e1e7f170dd15bde09e26e",
+      "sha256": "17227ce50bd732ea21eba03fdbe0545bad8bf800c2a32a355784e132f4269e81",
+      "sampleRate": 24000,
+      "seconds": 11.68
+    },
+    "viaim-coach-female-w04-approved-v1/shoulder_press": {
+      "segments": [
+        "肩上推举记住这三点。",
+        "双脚站稳，哑铃从肩部附近起始。",
+        "收紧躯干，避免挺腰借力。",
+        "平稳举过头顶，再控制下放。"
+      ],
+      "fingerprint": "1da8ca1f2f8d045db57303c7bdf269555c01c629bd03b4144f3122252b8a00ec",
+      "sha256": "c4e52f51d54c1b0016217bc116f168d822bab678c7ca452973970016ec06c9f2",
+      "sampleRate": 24000,
+      "seconds": 12.32
+    },
+    "viaim-coach-female-w04-approved-v1/curl": {
+      "segments": [
+        "二头弯举记住这三点。",
+        "上臂靠近身体，手腕保持自然。",
+        "屈肘举起哑铃，避免身体摆动。",
+        "缓慢下放，全程控制重量。"
+      ],
+      "fingerprint": "a26f3750f208b50a754143f4d2b34cc2edbec23130fb1ca8d2e8ed786bdea6ba",
+      "sha256": "5e9b6dd16066c917d7f4ec96876463a68147f0cc8e3639c0aeeace5730275442",
+      "sampleRate": 24000,
+      "seconds": 12
+    },
+    "viaim-coach-female-w04-approved-v1/pullup": {
+      "segments": [
+        "引体向上记住这三点。",
+        "握稳单杠，保持肩部与躯干稳定。",
+        "有控制地向上拉，避免甩腿摆荡。",
+        "缓慢下放，避免突然松力下坠。"
+      ],
+      "fingerprint": "d51fccc13d30e5f3c7bba759a98bdcbe96f19b19e436bbd9cf9d90e0241c04cf",
+      "sha256": "0e03e6c997d6570f21557dae1068f3d26312d28191794958023815d7a12a4341",
+      "sampleRate": 24000,
+      "seconds": 12.48
+    },
+    "viaim-coach-female-w04-approved-v1/plank": {
+      "segments": [
+        "平板支撑记住这三点。",
+        "前臂撑地，肘部位于肩部下方。",
+        "头、躯干与腿保持一线。",
+        "保持呼吸，避免塌腰或抬臀。"
+      ],
+      "fingerprint": "243642e8f104b3054424ed40e35d7127e6b24cb8b90e0b39899b6a21033e7e61",
+      "sha256": "3a82293a3698e9d1e285a2eef1ea52472dab320f58d7ee21d3db25a63233a3e4",
+      "sampleRate": 24000,
+      "seconds": 12.16
+    },
+    "viaim-coach-female-w13-approved-v1/squat": {
+      "segments": [
+        "深蹲记住这三点。",
+        "双脚站稳，重心保持在全脚掌。",
+        "屈髋屈膝下蹲，膝盖朝向脚尖。",
+        "保持躯干稳定，有控制地站起。"
+      ],
+      "fingerprint": "86c9e732d9f09efaae78ddd06fbebf4a2a2936eefaec16dd8327d264e9158e64",
+      "sha256": "a1c68b97c34885f3d021f266056628209cdb74ab35f537c9752254df02be181c",
+      "sampleRate": 24000,
+      "seconds": 11.68
+    },
+    "viaim-coach-female-w13-approved-v1/pushup": {
+      "segments": [
+        "俯卧撑记住这三点。",
+        "双手撑稳，头、躯干与腿保持一线。",
+        "屈肘缓慢下放，避免塌腰或抬臀。",
+        "推地撑起，全程保持身体稳定。"
+      ],
+      "fingerprint": "32ef875eef5a90cda69796d084dd5367da7a226433bb5e8b9278ef1d37e95162",
+      "sha256": "74465c5037bae6f0e14ed45133f1b70f52ee983780bbfdfe481e45b92fb18301",
+      "sampleRate": 24000,
+      "seconds": 11.2
+    },
+    "viaim-coach-female-w13-approved-v1/deadlift": {
+      "segments": [
+        "硬拉记住这三点。",
+        "收紧躯干，先让髋部向后移动。",
+        "背部保持自然，重量贴近身体。",
+        "平稳站起，避免猛拉或过度后仰。"
+      ],
+      "fingerprint": "b5df2359df5ba0521251409c6f8e55882c55076ed0f064861e80962cdcd1b45b",
+      "sha256": "a9022d5304e1f417b4d8c2b8927259c341991b8264bbbdfcfcef5e9bbd8d5e12",
+      "sampleRate": 24000,
+      "seconds": 11.04
+    },
+    "viaim-coach-female-w13-approved-v1/bench": {
+      "segments": [
+        "卧推记住这三点。",
+        "背部稳靠卧推凳，双脚踩实地面。",
+        "手腕保持稳定，缓慢下放杠铃。",
+        "平稳推起，避免借胸部反弹。"
+      ],
+      "fingerprint": "28775d30653d83c5d1ef6dc26a99615f565a0e66648e9321f6a1877af39dc423",
+      "sha256": "b2ef1c144b4d3151697f7064c109ca7aad038d95cbcda75346ed43f1fcb44719",
+      "sampleRate": 24000,
+      "seconds": 10.4
+    },
+    "viaim-coach-female-w13-approved-v1/lunge": {
+      "segments": [
+        "弓步蹲记住这三点。",
+        "向前迈步，前脚踩稳再下蹲。",
+        "前膝朝向脚尖，躯干保持稳定。",
+        "前脚发力回位，再换另一侧。"
+      ],
+      "fingerprint": "71138fa1dac225ba5cd5c08a132e2e9437567d4564e940deefbf090f7834e222",
+      "sha256": "72191cdc75164bad0658d6e0c7a0aacb9863ead8371e059ffc05fc144dd0ea00",
+      "sampleRate": 24000,
+      "seconds": 9.76
+    },
+    "viaim-coach-female-w13-approved-v1/shoulder_press": {
+      "segments": [
+        "肩上推举记住这三点。",
+        "双脚站稳，哑铃从肩部附近起始。",
+        "收紧躯干，避免挺腰借力。",
+        "平稳举过头顶，再控制下放。"
+      ],
+      "fingerprint": "7699e3ae85abe7f3ed68470710c8f7ee588517a83dc377e58e77d2724cbbed00",
+      "sha256": "96f0b84d4389d1868c9250501e19c480a4a69b4fdba2f0c2a276052cb8bae71a",
+      "sampleRate": 24000,
+      "seconds": 10.08
+    },
+    "viaim-coach-female-w13-approved-v1/curl": {
+      "segments": [
+        "二头弯举记住这三点。",
+        "上臂靠近身体，手腕保持自然。",
+        "屈肘举起哑铃，避免身体摆动。",
+        "缓慢下放，全程控制重量。"
+      ],
+      "fingerprint": "92a7a7ce453bbbe8896a0b2fb20eb263c15d617d7c99e1946e3a647c23f4621d",
+      "sha256": "ec9fa2e6da6078277b35a1db0d9fbf7d82fad0789b69c54a0cbfbe7bf0dd6997",
+      "sampleRate": 24000,
+      "seconds": 10.56
+    },
+    "viaim-coach-female-w13-approved-v1/pullup": {
+      "segments": [
+        "引体向上记住这三点。",
+        "握稳单杠，保持肩部与躯干稳定。",
+        "有控制地向上拉，避免甩腿摆荡。",
+        "缓慢下放，避免突然松力下坠。"
+      ],
+      "fingerprint": "a01b46f81e5304341d8834269c7b145ea022b181d6fe6863b491c6e1a52c5dc6",
+      "sha256": "09869e6ae038f3b56e337e108426642b2ce4828cc3b6ced1466a850097db7fb9",
+      "sampleRate": 24000,
+      "seconds": 10.72
+    },
+    "viaim-coach-female-w13-approved-v1/plank": {
+      "segments": [
+        "平板支撑记住这三点。",
+        "前臂撑地，肘部位于肩部下方。",
+        "头、躯干与腿保持一线。",
+        "保持呼吸，避免塌腰或抬臀。"
+      ],
+      "fingerprint": "cd0b7a17594cd5a4fe0c818d196fa0e297722d4c47142c21c85a488801e5d901",
+      "sha256": "b66c80152584a8d7f202be979758fa175274bbacd394b72fff847d52ddbab62c",
+      "sampleRate": 24000,
+      "seconds": 10.88
+    },
+    "viaim-coach-female-w18-approved-v1/squat": {
+      "segments": [
+        "深蹲记住这三点。",
+        "双脚站稳，重心保持在全脚掌。",
+        "屈髋屈膝下蹲，膝盖朝向脚尖。",
+        "保持躯干稳定，有控制地站起。"
+      ],
+      "fingerprint": "761b90283c7fd73475e339fbb61aeaaee6b8a027ed311c2acd5042c0b1e0733b",
+      "sha256": "57e974bba44fe880201485edbae19c322948acb673f1e5f22e6de56cd3a3782b",
+      "sampleRate": 24000,
+      "seconds": 10.72
+    },
+    "viaim-coach-female-w18-approved-v1/pushup": {
+      "segments": [
+        "俯卧撑记住这三点。",
+        "双手撑稳，头、躯干与腿保持一线。",
+        "屈肘缓慢下放，避免塌腰或抬臀。",
+        "推地撑起，全程保持身体稳定。"
+      ],
+      "fingerprint": "85c97846c04e13a7d2210163f1cfecf85e810fb3c0c927b1643513e2dacf57ee",
+      "sha256": "78609449a4b593f6cee980cf6632411e4f96b50a948c942724f914393886d7e2",
+      "sampleRate": 24000,
+      "seconds": 12.64
+    },
+    "viaim-coach-female-w18-approved-v1/bench": {
+      "segments": [
+        "卧推记住这三点。",
+        "背部稳靠卧推凳，双脚踩实地面。",
+        "手腕保持稳定，缓慢下放杠铃。",
+        "平稳推起，避免借胸部反弹。"
+      ],
+      "fingerprint": "d354e02e55e056d7487edb8da968257ffb6e07773e603719c0a6e0e24aa15b1f",
+      "sha256": "6ff166bca6b16b2200de90e92908c5b1331be5c117f4f04df774deb7102524d8",
+      "sampleRate": 24000,
+      "seconds": 12
+    },
+    "viaim-coach-female-w18-approved-v1/deadlift": {
+      "segments": [
+        "硬拉记住这三点。",
+        "收紧躯干，先让髋部向后移动。",
+        "背部保持自然，重量贴近身体。",
+        "平稳站起，避免猛拉或过度后仰。"
+      ],
+      "fingerprint": "4744a5f63fcf7c096e0e84d69cff23158c8c8e0c482e8e04cdddf92c542c1902",
+      "sha256": "71139c5729ebccec2331f412c5a9eec7429d6b811edd05dbcef7b459b3827362",
+      "sampleRate": 24000,
+      "seconds": 11.04
+    },
+    "viaim-coach-female-w18-approved-v1/lunge": {
+      "segments": [
+        "弓步蹲记住这三点。",
+        "向前迈步，前脚踩稳再下蹲。",
+        "前膝朝向脚尖，躯干保持稳定。",
+        "前脚发力回位，再换另一侧。"
+      ],
+      "fingerprint": "b4177b8f812729f9769664d48f81936a906b741ff1be647c6b59ddeb2e315812",
+      "sha256": "ca8e2964bb4db3ba19fd8e1135d6557fba58781655ac94d34e821da78e157d46",
+      "sampleRate": 24000,
+      "seconds": 9.92
+    },
+    "viaim-coach-female-w18-approved-v1/shoulder_press": {
+      "segments": [
+        "肩上推举记住这三点。",
+        "双脚站稳，哑铃从肩部附近起始。",
+        "收紧躯干，避免挺腰借力。",
+        "平稳举过头顶，再控制下放。"
+      ],
+      "fingerprint": "5ecb8e3ced9f4193d495e17c0bd2f2f0ab377f938eb33558ec484a575d5f1187",
+      "sha256": "939dcd1667377fd01f2936310309f76258f50cdb03947ad45cd65ccc3e84a50a",
+      "sampleRate": 24000,
+      "seconds": 10.56
+    },
+    "viaim-coach-female-w18-approved-v1/curl": {
+      "segments": [
+        "二头弯举记住这三点。",
+        "上臂靠近身体，手腕保持自然。",
+        "屈肘举起哑铃，避免身体摆动。",
+        "缓慢下放，全程控制重量。"
+      ],
+      "fingerprint": "4b55fc794f2c0770245b8cc3d715ba5cba04f020d00ea0954dcc4adb9d7760da",
+      "sha256": "25517094e2e9f5661c28da10fe0580c6a088b367791c817f5203bf7ab9cd7bd4",
+      "sampleRate": 24000,
+      "seconds": 10.08
+    },
+    "viaim-coach-female-w18-approved-v1/pullup": {
+      "segments": [
+        "引体向上记住这三点。",
+        "握稳单杠，保持肩部与躯干稳定。",
+        "有控制地向上拉，避免甩腿摆荡。",
+        "缓慢下放，避免突然松力下坠。"
+      ],
+      "fingerprint": "fe074d4d4e05d488b33192e99c79d530096dab574ed0928aa288fc4d509810e7",
+      "sha256": "460d80a441619851430ff7e939239283d9ef2db67f52447d74404f202bc1c0f9",
+      "sampleRate": 24000,
+      "seconds": 11.52
+    },
+    "viaim-coach-female-w18-approved-v1/plank": {
+      "segments": [
+        "平板支撑记住这三点。",
+        "前臂撑地，肘部位于肩部下方。",
+        "头、躯干与腿保持一线。",
+        "保持呼吸，避免塌腰或抬臀。"
+      ],
+      "fingerprint": "770efee8d856ec4deeea430b4f13843c83b0f127568871c0e360fcab84a4067e",
+      "sha256": "70751caad517c071836b2fb2907c6e9eeae292cd75e979c862ff2f404c1e47f6",
+      "sampleRate": 24000,
+      "seconds": 10.72
+    }
+  }
+}

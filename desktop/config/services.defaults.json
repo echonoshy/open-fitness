@@ -1,0 +1,17 @@
+{
+  "llm": {
+    "provider": "volcengine",
+    "baseUrl": "https://ark.cn-beijing.volces.com/api/plan/v3",
+    "model": "deepseek-v4.1-flash"
+  },
+  "asr": {
+    "provider": "agent-plan",
+    "baseUrl": "https://openspeech.bytedance.com/api/v3/plan",
+    "model": "doubao-seed-asr-2.0"
+  },
+  "tts": {
+    "provider": "agent-plan",
+    "baseUrl": "https://openspeech.bytedance.com/api/v3/plan",
+    "model": "doubao-seed-tts-2.0"
+  }
+}

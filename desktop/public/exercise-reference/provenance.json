@@ -1,0 +1,209 @@
+{
+  "createdDate": "2026-10-28",
+  "model": "realesr-animevideov3-x2",
+  "modelSource": "https://github.com/xinntao/Real-ESRGAN",
+  "modelSha256": "548a36f9c3f4ab8da56cd3b13badf23968bee207b396dad14d04b830e5f2ab2d",
+  "enhancementBlend": 0.65,
+  "frameRatePreserved": true,
+  "items": [
+    {
+      "order": 1,
+      "nameZh": "深蹲",
+      "name": "Bodyweight Squat",
+      "pageUrl": "https://movekit.com/exercises/bodyweight-squat",
+      "videoFile": "squat.mp4",
+      "coverFile": "squat.webp",
+      "sourceFile": "cleaned/01_深蹲_bodyweight-squat.mp4",
+      "sourceSha256": "77f44334275ff58fa724b95325f27a48377c9a6793875b946b68260f5ac53cf5",
+      "processing": "Real-ESRGAN animevideov3 x2, 65% SR plus 35% Lanczos source",
+      "video": {
+        "width": 1440,
+        "height": 1080,
+        "frames": 264,
+        "fps": "30/1",
+        "durationSeconds": 8.8,
+        "bytes": 1758728,
+        "sha256": "6976713d728af35341d6bc9c746352270ddaea46780ac06a1a5093a3c45af9d3",
+        "decodeVerified": true
+      },
+      "exercise": "squat"
+    },
+    {
+      "order": 2,
+      "nameZh": "俯卧撑",
+      "name": "Push Up",
+      "pageUrl": "https://movekit.com/exercises/push-up",
+      "videoFile": "pushup.mp4",
+      "coverFile": "pushup.webp",
+      "sourceFile": "cleaned/02_俯卧撑_push-up.mp4",
+      "sourceSha256": "09b071eb29c0aa49f76331e821a6c005c057c39cb23468d660e805c651644169",
+      "processing": "Real-ESRGAN animevideov3 x2, 65% SR plus 35% Lanczos source",
+      "video": {
+        "width": 1440,
+        "height": 1080,
+        "frames": 224,
+        "fps": "30/1",
+        "durationSeconds": 7.466667,
+        "bytes": 2903793,
+        "sha256": "b504f989431c5ebd495f725cfe9a23226c1b43480bf2354afb77df3a487deb29",
+        "decodeVerified": true
+      },
+      "exercise": "pushup"
+    },
+    {
+      "order": 3,
+      "nameZh": "卧推",
+      "name": "Barbell Bench Press",
+      "pageUrl": "https://movekit.com/exercises/barbell-bench-press",
+      "videoFile": "bench.mp4",
+      "coverFile": "bench.webp",
+      "sourceFile": "cleaned/03_卧推_barbell-bench-press.mp4",
+      "sourceSha256": "80b0c0f0b213bb61542f9b28bd49eead0fd4bcbd236975bffa42e86ea730937e",
+      "processing": "Real-ESRGAN animevideov3 x2, 65% SR plus 35% Lanczos source",
+      "video": {
+        "width": 1440,
+        "height": 1080,
+        "frames": 200,
+        "fps": "30/1",
+        "durationSeconds": 6.666667,
+        "bytes": 1403348,
+        "sha256": "955195660af2df774bb2b75ee31dea03692418d9a3fcc2932dfae40d5cf873ac",
+        "decodeVerified": true
+      },
+      "exercise": "bench"
+    },
+    {
+      "order": 4,
+      "nameZh": "硬拉",
+      "name": "Barbell Deadlift",
+      "pageUrl": "https://movekit.com/exercises/barbell-deadlift",
+      "videoFile": "deadlift.mp4",
+      "coverFile": "deadlift.webp",
+      "sourceFile": "cleaned/04_硬拉_barbell-deadlift.mp4",
+      "sourceSha256": "aabf00b71281641670182586c839c4d73cc5916016c5676f2412626e070cbee0",
+      "processing": "Real-ESRGAN animevideov3 x2, 65% SR plus 35% Lanczos source",
+      "video": {
+        "width": 1440,
+        "height": 1080,
+        "frames": 134,
+        "fps": "30/1",
+        "durationSeconds": 4.466667,
+        "bytes": 1092006,
+        "sha256": "62e5eb3847c5e6e20ece40209e6d26090874b18aa42489af1653432dda0f7c7b",
+        "decodeVerified": true
+      },
+      "exercise": "deadlift"
+    },
+    {
+      "order": 5,
+      "nameZh": "弓步蹲",
+      "name": "Forward Lunge",
+      "pageUrl": "https://movekit.com/exercises/forward-lunge",
+      "videoFile": "lunge.mp4",
+      "coverFile": "lunge.webp",
+      "sourceFile": "cleaned/05_弓步蹲_forward-lunge.mp4",
+      "sourceSha256": "51a6cbd210ce31bb91f0f6e948b8a91bcb283de9fb56f5fc6743861dece1925e",
+      "processing": "Real-ESRGAN animevideov3 x2, 65% SR plus 35% Lanczos source",
+      "video": {
+        "width": 1440,
+        "height": 1080,
+        "frames": 224,
+        "fps": "30/1",
+        "durationSeconds": 7.466667,
+        "bytes": 1602894,
+        "sha256": "1063fe90a1b7216dd327911005f088a31d70718ed5cf564f3237fea49d2dc1a1",
+        "decodeVerified": true
+      },
+      "preprocessing": "Recalibrated prior corner watermark restoration to preserve floor shadow; full local source kept in upscale-qa/hd-source.",
+      "exercise": "lunge"
+    },
+    {
+      "order": 6,
+      "nameZh": "肩上推举",
+      "name": "Standing Dumbbell Press",
+      "pageUrl": "https://movekit.com/exercises/standing-dumbbell-overhead-press",
+      "videoFile": "shoulder_press.mp4",
+      "coverFile": "shoulder_press.webp",
+      "sourceFile": "cleaned/06_肩上推举_standing-dumbbell-overhead-press.mp4",
+      "sourceSha256": "74b78c5cd784c6f92bb241afc1874844e9aa72d2e3ae09afe0e94fb8a3bab134",
+      "processing": "Real-ESRGAN animevideov3 x2, 65% SR plus 35% Lanczos source",
+      "video": {
+        "width": 1440,
+        "height": 1080,
+        "frames": 256,
+        "fps": "30/1",
+        "durationSeconds": 8.533333,
+        "bytes": 1136298,
+        "sha256": "4fb3af4c69097e47410181c03db30ebd380169f10350abd3574bac9bc24de389",
+        "decodeVerified": true
+      },
+      "exercise": "shoulder_press"
+    },
+    {
+      "order": 7,
+      "nameZh": "二头弯举",
+      "name": "Dumbbell Curl",
+      "pageUrl": "https://movekit.com/exercises/dumbbell-curl",
+      "videoFile": "curl.mp4",
+      "coverFile": "curl.webp",
+      "sourceFile": "cleaned/07_二头弯举_dumbbell-curl.mp4",
+      "sourceSha256": "9e2ff70579acd45aee7000c854fdac42817c3dacf7b965691924fed390fcadb0",
+      "processing": "Real-ESRGAN animevideov3 x2, 65% SR plus 35% Lanczos source",
+      "video": {
+        "width": 1440,
+        "height": 1080,
+        "frames": 192,
+        "fps": "30/1",
+        "durationSeconds": 6.4,
+        "bytes": 919214,
+        "sha256": "a66509a9da717549738db2a329f00aabaaa298b2b692866e74e1cc4b489c55fe",
+        "decodeVerified": true
+      },
+      "exercise": "curl"
+    },
+    {
+      "order": 8,
+      "nameZh": "引体向上",
+      "name": "Pull Ups",
+      "pageUrl": "https://movekit.com/exercises/pull-ups",
+      "videoFile": "pullup.mp4",
+      "coverFile": "pullup.webp",
+      "sourceFile": "cleaned/08_引体向上_pull-ups.mp4",
+      "sourceSha256": "6e7cd4634b0e53e04bc74f68a10bab760c10f6cc10b7563d78b0425a8f5be647",
+      "processing": "unchanged official HD original",
+      "video": {
+        "width": 1936,
+        "height": 1072,
+        "frames": 224,
+        "fps": "30/1",
+        "durationSeconds": 7.466667,
+        "bytes": 3200261,
+        "sha256": "6e7cd4634b0e53e04bc74f68a10bab760c10f6cc10b7563d78b0425a8f5be647",
+        "decodeVerified": true
+      },
+      "exercise": "pullup"
+    },
+    {
+      "order": 9,
+      "nameZh": "平板支撑",
+      "name": "Front Plank on Elbows",
+      "pageUrl": "https://movekit.com/exercises/front-plank",
+      "videoFile": "plank.mp4",
+      "coverFile": "plank.webp",
+      "sourceFile": "cleaned/09_平板支撑_front-plank.mp4",
+      "sourceSha256": "3e99826e7078c5a9d419293cf423bb94c367c282ce9262582570c115d2bb8047",
+      "processing": "Real-ESRGAN animevideov3 x2, 65% SR plus 35% Lanczos source",
+      "video": {
+        "width": 1440,
+        "height": 1080,
+        "frames": 128,
+        "fps": "30/1",
+        "durationSeconds": 4.266667,
+        "bytes": 509285,
+        "sha256": "2b5a3600edbfd57bff0fd3ee50ffcd9d04eef0d2a43c748c0ce77f6f4d034134",
+        "decodeVerified": true
+      },
+      "exercise": "plank"
+    }
+  ]
+}

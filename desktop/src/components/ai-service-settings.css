@@ -1,0 +1,150 @@
+.feature-page .ai-service-settings {
+  max-width: 860px;
+  width: 100%;
+}
+.ai-service-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+.ai-service-heading p,
+.ai-key-section p,
+.ai-test-results p,
+.ai-service-note {
+  color: #aaa9a3;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.ai-provider {
+  flex-shrink: 0;
+  border: 1px solid #ffffff20;
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-size: 12px;
+  color: #cfcec6;
+}
+.ai-key-fields {
+  padding: 0;
+  margin: 12px 0 0;
+  border: 0;
+  min-width: 0;
+}
+.ai-key-section {
+  padding: 22px 0;
+  border-bottom: 1px solid #ffffff10;
+}
+.ai-key-section > label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.ai-key-section input[type="password"] {
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px 14px;
+  background: #ffffff06;
+  border: 1px solid #ffffff24;
+  border-radius: 9px;
+  color: #f1f0e9;
+  font-size: 14px;
+}
+.ai-key-section input[type="password"]:focus {
+  outline: 1px solid var(--focus);
+  outline-offset: 2px;
+}
+.ai-key-section p {
+  margin: 8px 0 0;
+}
+.ai-test-results {
+  margin-top: 20px;
+}
+.ai-testing {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.ai-test-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ffffff0c;
+  font-size: 13px;
+}
+.ai-test-row > span:last-child {
+  max-width: 66%;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.ai-service-settings .ai-ok {
+  color: #b6cf9d;
+}
+.ai-service-settings .ai-failed {
+  color: #efad99;
+  overflow-wrap: anywhere;
+}
+.ai-service-actions {
+  display: flex;
+  gap: 12px;
+  margin: 22px 0 16px;
+}
+.ai-service-actions button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 20px;
+}
+.ai-service-settings button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ai-service-settings .ai-service-note {
+  font-size: 12px;
+  margin: 6px 0;
+}
+.ai-service-settings .ai-reload {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: 0;
+  color: #aaa9a3;
+  font-size: 12px;
+  margin-top: 16px;
+  padding: 8px 0;
+}
+.ai-spin {
+  animation: ai-spin 1s linear infinite;
+}
+@keyframes ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 700px) {
+  .ai-service-heading {
+    flex-wrap: wrap;
+  }
+  .ai-test-row {
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-spin {
+    animation: none;
+  }
+}
+
+.feature-page .ai-service-heading p {
+  margin: 8px 0 0;
+}
+.feature-page .ai-key-section p {
+  margin: 8px 0 0;
+}
+.feature-page .ai-service-note {
+  margin: 6px 0;
+  font-size: 12px;
+}

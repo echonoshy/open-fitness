@@ -1,0 +1,54 @@
+# Local tools and generated files
+.DS_Store
+.idea/
+.vscode/
+node_modules/
+.cache/
+*.log
+*.pid
+
+# Retired local runtimes must not return to the source tree
+.venv*/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.runtime/
+.playwright-mcp/
+.playwright-cli/
+/output/
+/captures/
+*.task
+
+# Personal data
+workout_log.json
+references.json
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+/uploads/
+coach_trace*.jsonl
+coach_eval_report*
+coach_identity.json*
+/data/live_state.json*
+/data/app_commands.jsonl
+
+# Credentials and per-machine service overrides
+.env
+.env.*
+!.env.example
+coach.env
+google_credentials.json
+google_token.json
+*.p12
+*.mobileprovision
+*.jks
+*.keystore
+
+# Local AI settings and private macOS distributions
+/.secrets/
+services.json
+services.json.key
+private-test.key
+/desktop/release-private/

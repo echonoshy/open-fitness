@@ -1,0 +1,266 @@
+.reference-slot {
+  width: 100%;
+  max-width: 100%;
+  align-self: flex-end;
+  flex-shrink: 0;
+  pointer-events: none;
+  border-radius: var(--radius-panel);
+}
+.exercise-reference-card {
+  position: relative;
+  width: 100%;
+  translate: var(--reference-x, 0) var(--reference-y, 0);
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 36px auto 34px;
+  grid-template-areas: "heading" "media" "footer";
+  overflow: hidden;
+  border: 1px solid #ffffff1c;
+  border-radius: var(--radius-panel);
+  background: #242424ed;
+  box-shadow: 0 10px 30px #0002;
+  text-shadow: none;
+}
+.reference-slot[data-size="large"] {
+  width: min(560px, calc(100vw - 40px));
+  max-width: none;
+}
+.reference-heading {
+  grid-area: heading;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 8px 3px 12px;
+}
+.reference-heading > div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.reference-heading span {
+  font-size: 11px;
+  color: #b9b9b9;
+}
+.reference-heading strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.reference-heading button {
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #c7c7c7;
+}
+.reference-media {
+  grid-area: media;
+  aspect-ratio: var(--reference-aspect, 4 / 3);
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  background: #e9ece8;
+}
+.reference-media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.reference-playback {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  min-height: 26px;
+  padding: 4px;
+  border: 1px solid #ffffff3b;
+  border-radius: 6px;
+  background: #272b2ad4;
+  color: white;
+}
+.reference-error {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 8px 10px 32px;
+  overflow: auto;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #fff;
+  background: #242424e8;
+}
+.reference-footer {
+  grid-area: footer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+}
+.reference-footer button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 26px;
+  height: 26px;
+  padding: 3px 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  border: 0;
+  border-radius: 5px;
+  color: #bdbdbd;
+  background: transparent;
+}
+.reference-footer button:hover:not(:disabled),
+.reference-heading button:hover:not(:disabled) {
+  background: #ffffff12;
+  color: white;
+}
+.reference-footer button[aria-pressed="true"] {
+  color: var(--accent);
+  background: #ffffff12;
+}
+.reference-footer .reference-sizes {
+  display: flex;
+  gap: 2px;
+  padding: 1px;
+  border-radius: 6px;
+  background: #0003;
+}
+.reference-sizes button {
+  min-width: 42px;
+  min-height: 24px;
+  height: 24px;
+  padding: 2px;
+}
+.stage-tools .reference-toggle[aria-pressed="true"] {
+  color: var(--accent);
+  background: #ffffff12;
+}
+/* All stacked panels share a width, including the standard video. */
+.with-reference .stage-bottom {
+  --stage-panel-width: 360px;
+  width: var(--stage-panel-width);
+  max-height: none;
+}
+.with-reference .coach-subtitle {
+  flex-shrink: 0;
+}
+@media (max-height: 1000px) and (min-width: 601px) {
+  /* The larger preview opens alongside the dock when it cannot fit above it. */
+  .reference-slot[data-size="large"] {
+    position: absolute;
+    right: calc(100% + 12px);
+    bottom: 0;
+    width: min(560px, calc(100vw - var(--stage-panel-width) - 300px));
+  }
+  .with-reference .coach-subtitle {
+    padding: 8px 12px;
+  }
+  .with-reference .subtitle-heading {
+    margin-bottom: 0;
+  }
+  .with-reference .subtitle-heading button {
+    min-height: 28px;
+    height: 28px;
+  }
+  .with-reference .coach-markdown {
+    min-height: 1.7em;
+  }
+  .with-reference .coach-subtitle:not(.expanded) .coach-markdown {
+    height: 1.7em;
+    flex-shrink: 0;
+    -webkit-line-clamp: 1;
+  }
+  .with-reference .coach-subtitle .heard-transcript {
+    display: none;
+  }
+}
+@media (max-height: 839px) and (min-width: 601px) {
+  .with-reference .call-dock {
+    padding: 8px;
+    gap: 6px;
+  }
+  .with-reference .call-dock .training-action {
+    font-size: 14px;
+    padding: 8px 6px;
+    gap: 6px;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 900px) and (min-width: 601px) {
+  .with-reference .stage-bottom {
+    --stage-panel-width: 280px;
+  }
+  .reference-slot[data-size="large"] {
+    width: min(420px, calc(100vw - var(--stage-panel-width) - 60px));
+  }
+}
+@media (max-width: 600px) {
+  .reference-slot[data-size="large"] {
+    width: 100%;
+  }
+  .with-reference.camera-live {
+    overflow-y: auto;
+  }
+  .with-reference.camera-live .exercise-hud {
+    flex-shrink: 0;
+  }
+  .with-reference.camera-live .stage-bottom {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: none;
+  }
+  .with-reference.camera-idle .stage-bottom {
+    max-height: none;
+  }
+}
+
+@media (max-width: 1050px) and (min-width: 901px) {
+  .with-reference .stage-bottom {
+    --stage-panel-width: 340px;
+  }
+}
+@media (max-height: 879px) and (min-width: 901px) {
+  .reference-slot[data-size="medium"] {
+    position: absolute;
+    right: calc(100% + 12px);
+    bottom: 0;
+  }
+}
+
+
+.reference-heading,
+.reference-media video {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.reference-slot[data-detached] {
+  z-index: 2;
+}
+.reference-slot[data-dragging] :is(.reference-heading, video) {
+  cursor: grabbing;
+}
+.reference-heading > div {
+  flex: 1;
+  min-width: 0;
+}
+.reference-heading span,
+.reference-heading button {
+  flex-shrink: 0;
+}
+.reference-heading strong {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

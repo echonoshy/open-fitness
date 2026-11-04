@@ -1,0 +1,1165 @@
+/* Full-bleed camera, with a small set of floating controls. */
+.app.immersive {
+  padding: 0;
+  max-width: none;
+  height: 100dvh;
+  overflow: hidden;
+}
+.app .app-header {
+  position: relative;
+  z-index: 20;
+  height: 72px;
+  align-items: center;
+  gap: 24px;
+  border: 0;
+}
+.immersive .app-header {
+  position: absolute;
+  inset: 0 0 auto;
+  padding: 0 40px;
+  background: #1e1e1ee6;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+.app-header .brand {
+  font-size: 26px;
+  font-weight: 750;
+  letter-spacing: -1.2px;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.app-header .brand span {
+  font-size: 20px;
+  color: #bcbcbc;
+  font-weight: 400;
+}
+.brand b {
+  color: var(--accent);
+  font-weight: 500;
+  padding: 0 2px;
+}
+.app-header nav {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 4px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  backdrop-filter: blur(20px);
+  gap: 3px !important;
+}
+.app-header nav button {
+  height: 36px;
+  min-height: 36px;
+  min-width: 72px;
+  padding: 0 16px !important;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1;
+  color: #bdbdbd;
+  white-space: nowrap;
+}
+.app-header nav button.selected {
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  border: 0;
+  font-weight: 650;
+}
+.app-header nav button:hover:not(.selected) {
+  background: #ffffff0a;
+}
+.app-header .device-pill {
+  max-width: 200px;
+  font-size: 12px;
+  line-height: 1;
+  background: #262626d9;
+  backdrop-filter: blur(20px);
+  height: 36px;
+  min-height: 36px;
+  border-radius: var(--radius-control);
+  padding: 0 16px;
+  border-color: #ffffff15;
+}
+.device-pill > span:not(.dot) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.controls-hidden .app-header {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+}
+.immersive > .error {
+  position: fixed;
+  top: 98px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(580px, calc(100% - 32px));
+  margin: 0;
+  z-index: 40;
+  background: #3b3028f5;
+  box-shadow: 0 12px 40px #0003;
+}
+.training-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--background);
+  color: var(--text-primary);
+}
+.stage-video,
+.stage-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.stage-video video,
+.stage-video canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  object-fit: contain;
+  transform: scale(
+    calc(-1 * var(--camera-view-zoom, 1)),
+    var(--camera-view-zoom, 1)
+  );
+}
+.stage-video video {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.camera-live .stage-video video {
+  opacity: 1;
+}
+.stage-shade {
+  background: transparent;
+}
+.camera-live .stage-shade {
+  background:
+    linear-gradient(180deg, #0008, transparent 28%, transparent 65%, #0009),
+    linear-gradient(90deg, #0005, transparent 30%);
+}
+.stage-hud {
+  transition:
+    opacity 0.2s,
+    visibility 0.2s;
+}
+.hud-hidden .stage-hud {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.exercise-hud {
+  position: absolute;
+  left: 42px;
+  top: 140px;
+  width: 190px;
+  text-shadow: 0 2px 20px #0004;
+}
+.exercise-hud > label {
+  display: block;
+  font-size: 13px;
+  color: #c3c3c3;
+  margin-bottom: 6px;
+}
+.exercise-picker {
+  position: relative;
+  width: max-content;
+  max-width: 100%;
+}
+.exercise-picker select {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 30px 0 0;
+  font-size: 38px;
+  font-weight: 650;
+  line-height: 1.5;
+  min-height: 40px;
+  max-width: 100%;
+}
+.exercise-picker svg {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #d2d2d2;
+}
+.rep-ring {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin-top: 24px;
+  font-variant-numeric: tabular-nums;
+}
+.rep-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+.rep-ring circle {
+  fill: none;
+  stroke-width: 7;
+}
+.ring-track {
+  stroke: #ffffff29;
+}
+.ring-value {
+  stroke: var(--accent);
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s;
+}
+.rep-ring > div {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.rep-ring strong {
+  font-size: 80px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -5px;
+  padding-right: 5px;
+}
+.rep-ring span {
+  color: #ccc;
+  font-size: 16px;
+  margin-top: 6px;
+}
+.rep-caption {
+  font-size: 13px;
+  text-align: center;
+  color: #bcbcbc;
+  margin-top: 15px;
+}
+.program-caption {
+  font-size: 12px;
+  color: var(--accent);
+  text-align: center;
+  margin-top: 14px;
+}
+.session-hud {
+  position: absolute;
+  right: 40px;
+  top: 128px;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 14px;
+}
+.session-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 32px;
+  background: #2b2b2bcc;
+  backdrop-filter: blur(16px);
+  border: 1px solid #ffffff10;
+  font-size: 13px;
+  color: #c7c7c7;
+}
+.session-chip svg {
+  color: #c4c5e7;
+}
+.session-chip strong {
+  font-size: 16px;
+  color: #f5f5f3;
+  font-variant-numeric: tabular-nums;
+}
+.tracking-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 11px;
+  border-radius: 20px;
+  background: #202020a6;
+}
+.camera-welcome {
+  pointer-events: none;
+  position: absolute;
+  inset: 20% 25% 22%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 34px 20px;
+}
+.viewfinder-corners {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.viewfinder-corners i {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: solid #646464;
+  border-width: 0;
+}
+.viewfinder-corners i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+  border-top-left-radius: 10px;
+}
+.viewfinder-corners i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+  border-top-right-radius: 10px;
+}
+.viewfinder-corners i:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+  border-bottom-left-radius: 10px;
+}
+.viewfinder-corners i:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+  border-bottom-right-radius: 10px;
+}
+.camera-symbol {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-panel);
+  background: transparent;
+  border: 0;
+  display: grid;
+  place-items: center;
+  color: #c5c5c5;
+  margin-bottom: 16px;
+}
+.camera-symbol svg {
+  width: 32px;
+  height: 32px;
+}
+.camera-welcome h1 {
+  font-size: 24px;
+  letter-spacing: -0.4px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.camera-welcome > p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 10px 0 4px;
+}
+.camera-welcome small {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #b5b5b5;
+}
+.session-overlay {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 28px 24px;
+  background: #202020cf;
+  backdrop-filter: blur(20px);
+  border: 1px solid #ffffff12;
+  border-radius: 30px;
+}
+.session-overlay strong {
+  font-size: 74px;
+  line-height: 1.1;
+  font-weight: 500;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.session-overlay p {
+  font-size: 14px;
+  color: #ccc;
+  white-space: nowrap;
+}
+.session-overlay button {
+  border-radius: 24px;
+  font-size: 13px;
+}
+.session-overlay .skip-sets {
+  min-height: 30px;
+  padding: 3px 8px;
+  border-color: transparent;
+  color: var(--muted);
+}
+.stage-bottom {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100% - 32px);
+}
+.voice-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #ffffff12;
+  border-radius: 24px;
+  background: #252525dd;
+  backdrop-filter: blur(20px);
+  padding: 8px 14px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #c5c5d4;
+  max-width: 100%;
+}
+.voice-status > span:last-of-type {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.voice-status.is-listening {
+  color: #e3e9d5;
+}
+.voice-status button {
+  padding: 0;
+  min-height: 18px;
+  width: 20px;
+  border: 0;
+}
+.voice-wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 16px;
+}
+.voice-wave i {
+  width: 2px;
+  border-radius: 3px;
+  background: var(--accent);
+  transition: height 0.1s;
+}
+.call-dock {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid #ffffff12;
+  background: #272727e6;
+  backdrop-filter: blur(24px);
+  border-radius: 60px;
+  padding: 14px 18px;
+  box-shadow: 0 12px 40px #0002;
+}
+.call-dock .dock-round {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  padding: 0;
+  border: 1px solid #ffffff0d;
+  background: #363636;
+  color: #cdcee9;
+  flex-shrink: 0;
+}
+.call-dock .dock-round:hover:not(:disabled) {
+  background: #474747;
+  border-color: #ffffff2a;
+}
+.call-dock .dock-round.mic-active {
+  background: #3c4630;
+  color: var(--accent);
+}
+.call-dock .finish-action {
+  color: #e2e2e2;
+}
+.call-dock .finish-action:hover:not(:disabled) {
+  color: #f5f5f3;
+  background: #3b3b3b;
+  border-color: #ffffff30;
+}
+.call-dock .training-action {
+  min-height: 58px;
+  min-width: 168px;
+  border-radius: 32px;
+  font-size: 15px;
+  gap: 12px;
+}
+.call-dock .training-action:disabled {
+  opacity: 0.45;
+}
+.coach-subtitle {
+  display: flex;
+  gap: 12px;
+  max-width: min(620px, 80vw);
+  padding: 14px 20px;
+  border-radius: 20px;
+  background: #202020e6;
+  backdrop-filter: blur(20px);
+  font-size: 13px;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+.coach-subtitle > span {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.coach-subtitle p {
+  max-height: 100px;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+.stage-footer {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: #b5b5b5;
+}
+.stage-footer span,
+.stage-footer > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.stage-footer button {
+  width: 28px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
+  border: 0;
+}
+.restore-hud {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 25;
+  font-size: 12px;
+  border-radius: 30px;
+  padding: 12px 18px;
+  color: #eee;
+  background: #292929c9;
+  backdrop-filter: blur(20px);
+  opacity: 0.65;
+}
+.restore-hud:hover,
+.restore-hud:focus-visible {
+  opacity: 1;
+}
+.training-dialog {
+  padding: 0;
+  width: min(420px, calc(100vw - 28px));
+  max-height: calc(100dvh - 50px);
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-dialog);
+  color: #f5f5f3;
+  background: var(--surface);
+  box-shadow: 0 30px 100px #0008;
+}
+.training-dialog::backdrop {
+  background: #0005;
+  backdrop-filter: blur(6px);
+}
+.training-dialog-content {
+  padding: 24px;
+}
+.dialog-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+.dialog-heading small {
+  font-size: 11px;
+  color: #aaa;
+}
+.dialog-heading h2 {
+  margin-top: 6px;
+  font-size: 22px;
+}
+.dialog-heading button {
+  width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+}
+.goal-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 20px;
+  font-size: 14px;
+}
+.goal-setting label small {
+  margin-left: 7px;
+}
+.training-dialog .stepper {
+  border-radius: 25px;
+  padding: 3px;
+}
+.training-dialog .stepper input {
+  width: 42px;
+}
+.training-dialog .rest-control {
+  padding: 20px 0;
+}
+.training-dialog .rest-control button {
+  border-radius: 20px;
+}
+.training-dialog .compact-field {
+  padding: 15px 0;
+  border-top: 1px solid var(--line);
+}
+.training-dialog .training-details {
+  margin: 10px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+}
+.training-dialog .training-details .feature-panel {
+  margin: 12px 0;
+  padding: 14px;
+  border-radius: 14px;
+  background: #222;
+}
+.training-dialog .training-details .feature-row {
+  gap: 10px;
+  font-size: 11px;
+}
+.training-dialog .training-details p {
+  line-height: 1.7;
+}
+.training-summary {
+  display: flex;
+  gap: 10px;
+  padding-top: 16px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #c9d7b4;
+}
+.training-summary svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.content-app {
+  padding-bottom: 24px;
+}
+.content-app .settings-card,
+.content-app .feature-panel {
+  border-radius: var(--radius-panel);
+}
+.content-app .primary {
+  border-radius: var(--radius-control);
+}
+.content-app .voice-option {
+  border-radius: 18px;
+}
+.content-app .voice-option.selected {
+  background: #30352a;
+}
+
+@media (min-width: 1500px) {
+  .camera-welcome {
+    inset: 21% 25% 22%;
+  }
+  .stage-bottom {
+    bottom: 36px;
+  }
+  .call-dock {
+    padding: 16px 20px;
+    gap: 18px;
+  }
+  .call-dock .dock-round {
+    width: 60px;
+    height: 60px;
+  }
+  .call-dock .training-action {
+    min-width: 186px;
+    min-height: 64px;
+  }
+}
+@media (max-height: 790px) and (min-width: 761px) {
+  .exercise-hud {
+    top: 118px;
+    width: 150px;
+  }
+  .exercise-picker select {
+    font-size: 28px;
+  }
+  .rep-ring {
+    width: 150px;
+    height: 150px;
+    margin-top: 16px;
+  }
+  .rep-ring strong {
+    font-size: 60px;
+  }
+  .camera-symbol {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 15px;
+  }
+  .camera-symbol svg {
+    width: 34px;
+  }
+  .camera-welcome {
+    inset: 23% 25% 24%;
+    padding: 16px;
+  }
+  .camera-welcome > p {
+    margin: 8px 0 4px;
+    font-size: 15px;
+  }
+  .camera-welcome h1 {
+    font-size: 24px;
+  }
+  .stage-bottom {
+    bottom: 22px;
+  }
+  .call-dock {
+    padding: 10px 14px;
+  }
+  .call-dock .dock-round {
+    width: 46px;
+    height: 46px;
+  }
+  .call-dock .training-action {
+    min-height: 50px;
+  }
+}
+@media (max-width: 1180px) {
+  .immersive .app-header {
+    padding: 0 26px;
+  }
+  .app-header .brand {
+    font-size: 26px;
+  }
+  .app-header .brand span {
+    font-size: 20px;
+  }
+  .app-header nav button {
+    padding: 0 12px !important;
+    min-width: 54px;
+    font-size: 12px;
+  }
+  .app-header .device-pill {
+    max-width: 150px;
+  }
+  .exercise-hud {
+    left: 28px;
+  }
+  .session-hud {
+    right: 28px;
+  }
+  .stage-footer {
+    left: 28px;
+    right: 28px;
+    font-size: 10px;
+  }
+  .stage-footer > span {
+    max-width: 180px;
+  }
+}
+@media (max-width: 900px) {
+  .app .app-header {
+    height: 130px;
+    align-items: flex-start;
+    padding-top: 18px;
+  }
+  .app-header nav {
+    top: 72px;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100% - 32px);
+  }
+  .exercise-hud {
+    top: 158px;
+    width: 140px;
+  }
+  .rep-ring {
+    width: 140px;
+    height: 140px;
+  }
+  .rep-ring strong {
+    font-size: 58px;
+  }
+  .session-hud {
+    top: 150px;
+  }
+  .camera-welcome {
+    inset: 28% 24% 25%;
+  }
+  .stage-footer > span {
+    display: none;
+  }
+  .stage-footer {
+    justify-content: flex-end;
+    bottom: 10px;
+  }
+  .settings-grid,
+  .two-columns {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .app.immersive .app-header {
+    height: 116px;
+  }
+  .immersive .app-header {
+    padding: 16px 20px 0;
+  }
+  .app-header .brand {
+    font-size: 26px;
+  }
+  .app-header .brand span {
+    font-size: 20px;
+  }
+  .app-header .device-pill {
+    height: 36px;
+    min-height: 36px;
+    font-size: 10px;
+    padding: 0 12px;
+    max-width: 130px;
+  }
+  .app-header nav {
+    top: 66px;
+    padding: 4px;
+    gap: 0 !important;
+  }
+  .app-header nav button {
+    min-width: 44px;
+    height: 34px;
+    min-height: 34px;
+    font-size: 11px;
+    padding: 0 11px !important;
+  }
+  .exercise-hud {
+    top: 140px;
+    left: 20px;
+    width: auto;
+  }
+  .exercise-hud > label {
+    font-size: 10px;
+  }
+  .exercise-picker select {
+    font-size: 23px;
+    min-height: 30px;
+  }
+  .exercise-picker svg {
+    width: 16px;
+  }
+  .rep-ring {
+    width: 90px;
+    height: 90px;
+    margin-top: 10px;
+  }
+  .rep-ring circle {
+    stroke-width: 8px;
+  }
+  .rep-ring strong {
+    font-size: 37px;
+    letter-spacing: -2px;
+    padding-right: 2px;
+  }
+  .rep-ring span {
+    font-size: 11px;
+    margin-top: 0;
+  }
+  .rep-caption,
+  .program-caption {
+    display: none;
+  }
+  .session-hud {
+    right: 18px;
+    top: 140px;
+    gap: 8px;
+  }
+  .session-chip {
+    font-size: 10px;
+    gap: 8px;
+    padding: 9px 12px;
+  }
+  .session-chip strong {
+    font-size: 13px;
+  }
+  .session-chip svg {
+    width: 14px;
+  }
+  .tracking-chip {
+    font-size: 9px;
+  }
+  .camera-welcome {
+    inset: 36% 8% 24%;
+    padding: 10px;
+  }
+  .camera-symbol {
+    width: 65px;
+    height: 65px;
+    margin-bottom: 14px;
+  }
+  .camera-symbol svg {
+    width: 29px;
+    height: 29px;
+  }
+  .camera-welcome h1 {
+    font-size: 24px;
+  }
+  .camera-welcome > p {
+    font-size: 12px;
+    margin: 9px 0 22px;
+  }
+  .camera-welcome small {
+    font-size: 11px;
+    margin-top: 12px;
+  }
+  .viewfinder-corners i {
+    width: 18px;
+    height: 18px;
+  }
+  .stage-bottom {
+    bottom: 42px;
+    max-width: calc(100% - 24px);
+    gap: 10px;
+  }
+  .call-dock {
+    gap: 8px;
+    padding: 10px;
+    border-radius: 40px;
+  }
+  .call-dock .dock-round {
+    width: 40px;
+    height: 40px;
+  }
+  .call-dock .dock-round svg {
+    width: 18px;
+    height: 18px;
+  }
+  .call-dock .training-action {
+    min-width: 112px;
+    min-height: 46px;
+    padding: 10px 13px;
+    gap: 7px;
+    font-size: 12px;
+  }
+  .call-dock .training-action svg {
+    width: 15px;
+  }
+  .voice-status {
+    font-size: 10px;
+    padding: 7px 12px;
+  }
+  .coach-subtitle {
+    font-size: 12px;
+    padding: 12px 15px;
+    max-width: calc(100vw - 36px);
+  }
+  .stage-footer {
+    bottom: 7px;
+    left: 20px;
+    right: 20px;
+    font-size: 9px;
+  }
+  .stage-footer button {
+    width: 24px;
+    min-height: 24px;
+    height: 24px;
+  }
+  .stage-footer > div {
+    gap: 6px;
+  }
+  .session-overlay {
+    top: 49%;
+    padding: 28px;
+    border-radius: 24px;
+  }
+  .session-overlay strong {
+    font-size: 58px;
+  }
+  .content-app {
+    padding: 0 18px 24px;
+  }
+  .content-app .page-title h1 {
+    font-size: 25px;
+  }
+  .content-app .settings-card,
+  .content-app .feature-panel {
+    padding: 20px;
+  }
+  .voice-options.approved-voices,
+  .metric-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .voice-library-heading,
+  .voice-sample {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .current-voice {
+    margin-bottom: 20px;
+  }
+  .voice-actions {
+    flex-wrap: wrap;
+  }
+  .history-list {
+    overflow-x: auto;
+  }
+}
+@media (max-width: 600px) and (max-height: 730px) {
+  .exercise-hud,
+  .session-hud {
+    top: 126px;
+  }
+  .rep-ring {
+    width: 72px;
+    height: 72px;
+    margin-top: 6px;
+  }
+  .rep-ring strong {
+    font-size: 30px;
+  }
+  .camera-welcome {
+    inset: 37% 9% 26%;
+  }
+  .camera-symbol {
+    display: none;
+  }
+  .camera-welcome h1 {
+    font-size: 22px;
+  }
+  .camera-welcome > p {
+    margin-bottom: 16px;
+  }
+  .stage-bottom {
+    bottom: 38px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .training-stage *,
+  .app-header {
+    transition: none !important;
+  }
+}
+
+/* Preserve the immersive full-window camera and original floating HUD layout. */
+.stage-video {
+  display: grid;
+  place-items: center;
+  container-type: size;
+}
+.camera-viewport {
+  position: relative;
+  overflow: hidden;
+  width: min(100cqw, calc(100cqh * var(--camera-aspect, 1.7777778)));
+  height: min(100cqh, calc(100cqw / var(--camera-aspect, 1.7777778)));
+  min-width: 0;
+  min-height: 0;
+}
+.camera-image {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(-1);
+  will-change: transform;
+}
+.stage-video .camera-image video,
+.stage-video .camera-image canvas {
+  transform: none;
+}
+.stage-video .camera-background-effect[hidden] {
+  display: none;
+}
+.coach-subtitle .heard-transcript {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #c7c7c7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.coach-subtitle.expanded .heard-transcript {
+  white-space: normal;
+}
+
+.training-capability {
+  display: block;
+  color: #d2ed9e;
+  font-size: 12px;
+  margin: 7px 0 0;
+  letter-spacing: 0.04em;
+}
+.exercise-trigger {
+  max-width: 100%;
+}
+.timed-training-note {
+  font-size: 12px;
+  color: #c0c3bb;
+  line-height: 1.7;
+}
+.timed-training-note p {
+  margin: 2px 0;
+}
+.timed-training-note label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.timed-training-note input {
+  width: 84px;
+  padding: 7px 9px;
+  color: #fff;
+  border: 1px solid #ffffff30;
+  border-radius: 8px;
+  background: #ffffff08;
+}
+.catalog-camera-guide {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #ffffff1c;
+}
+@media (max-height: 760px) {
+  .timed-training-note label {
+    margin-top: 4px;
+  }
+}
+.all-movements-entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: #d2ed9e15;
+  border: 1px solid #d2ed9e50;
+  border-radius: 10px;
+  color: #d2ed9e;
+}
