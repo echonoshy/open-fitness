@@ -1,0 +1,6 @@
+# Track the tour and the two screenshots used by the product page.
+/preview-media/*
+!/preview-media/open-fitness-tour.jpg
+!/preview-media/open-fitness-tour.mp4
+!/preview-media/plan-screen.jpg
+!/preview-media/library-screen.jpg
