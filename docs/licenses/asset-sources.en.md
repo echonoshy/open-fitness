@@ -14,11 +14,9 @@ Exercise demos, posters and their derivatives belong to their respective rights 
 
 The tour uses prerecorded movement footage by Polina Tankilevitch (squats) and MART PRODUCTION (stability-ball push-ups). [Squat footage](https://www.pexels.com/video/young-woman-exercising-6525519/) · [Push-up footage](https://www.pexels.com/video/man-using-a-exercise-ball-while-doing-push-ups-8027458/) · [Pexels License](https://www.pexels.com/license/)
 
-The exercise reference window in the recorded tour plays an excerpt of *Follow Me Fitness Normal Base Push-Up*, filmed by Cpl. David Delgadillo. DVIDS marks the footage as public domain. The tour trims, crops and mutes the excerpt. [Original footage and rights statement](https://www.dvidshub.net/video/590723/follow-me-fitness-normal-base-push-up)
-
 ## Website tour soundtrack
 
-*EDM Detection Mode* by Kevin MacLeod is licensed under CC BY 4.0. The tour uses a 60-second excerpt with a level adjustment and fades. [Composer and original track](https://incompetech.com/wordpress/2015/04/edm-detection-mode/) · [License](https://creativecommons.org/licenses/by/4.0/)
+*EDM Detection Mode* by Kevin MacLeod is licensed under CC BY 4.0. The tour uses a 68-second excerpt with a level adjustment and fades. [Composer and original track](https://incompetech.com/wordpress/2015/04/edm-detection-mode/) · [License](https://creativecommons.org/licenses/by/4.0/)
 
 ## Exercise text and training knowledge
 

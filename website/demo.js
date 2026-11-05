@@ -51,13 +51,15 @@ for (const button of chapters) {
 }
 video.addEventListener("timeupdate", syncChapter);
 video.addEventListener("seeked", syncChapter);
-if (new URLSearchParams(location.search).get("chapter") === "reference") {
-  const seekToReference = () => {
-    video.currentTime = Number(document.querySelector("#chapter-reference").dataset.start);
+const linkedChapter = chapters.find(button =>
+  button.dataset.chapter === new URLSearchParams(location.search).get("chapter"));
+if (linkedChapter) {
+  const seekToChapter = () => {
+    video.currentTime = Number(linkedChapter.dataset.start);
     syncChapter();
   };
-  if (video.readyState >= HTMLMediaElement.HAVE_METADATA) seekToReference();
-  else video.addEventListener("loadedmetadata", seekToReference, {once: true});
+  if (video.readyState >= HTMLMediaElement.HAVE_METADATA) seekToChapter();
+  else video.addEventListener("loadedmetadata", seekToChapter, {once: true});
 }
 video.addEventListener("playing", () => { error.hidden = true; });
 video.addEventListener("error", () => { error.hidden = false; });

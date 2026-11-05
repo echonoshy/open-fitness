@@ -44,12 +44,16 @@ function Pose() {
 }
 
 function Library() {
-  const caption = {position:"absolute",left:104,fontSize:32,color:"#b6c3af"};
-  return <Section title="挑选动作" detail="按名称搜索，再按器械筛选">
-    <div style={{...caption,top:184}}>搜索与筛选</div>
-    <Screen name="library" style={{left:102,top:242,width:1716,height:410}}/>
-    <div style={{...caption,top:699}}>匹配的动作</div>
-    <Screen name="matches" style={{left:102,top:761,width:1716,height:193}}/>
+  const {fps} = useVideoConfig();
+  return <Section title="动作库" detail="浏览动作，打开示范查看肌群与要领">
+    <Series>
+      <Series.Sequence durationInFrames={7 * fps}>
+        <Screen name="library"/>
+      </Series.Sequence>
+      <Series.Sequence durationInFrames={6 * fps}>
+        <Screen name="library-demo" videoStyle={{objectFit:"contain",background:ink}}/>
+      </Series.Sequence>
+    </Series>
   </Section>;
 }
 
@@ -125,7 +129,7 @@ function Tour() {
     <Html5Audio src={staticFile("edm-detection-mode.m4a")}/>
     <Series>
       <Series.Sequence name="姿态识别" durationInFrames={6 * fps}><Pose/></Series.Sequence>
-      <Series.Sequence name="挑选动作" durationInFrames={5 * fps}><Library/></Series.Sequence>
+      <Series.Sequence name="动作库" durationInFrames={13 * fps}><Library/></Series.Sequence>
       <Series.Sequence name="训练计划" durationInFrames={6 * fps}><Plans/></Series.Sequence>
       <Series.Sequence name="自动计次" durationInFrames={7 * fps}><Reps/></Series.Sequence>
       <Series.Sequence name="动作参考" durationInFrames={8 * fps}><Reference/></Series.Sequence>
@@ -138,4 +142,4 @@ function Tour() {
 }
 
 registerRoot(() => <Composition id="OpenFitnessTour" component={Tour}
-  width={1920} height={1080} fps={24} durationInFrames={60 * 24}/>);
+  width={1920} height={1080} fps={24} durationInFrames={68 * 24}/>);

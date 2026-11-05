@@ -63,7 +63,6 @@ video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; 
 .chapters button[aria-pressed="true"] { background: var(--selected); }
 .chapters button[aria-pressed="true"] span { font-weight: 600; }
 .note { margin-top: 13px; }
-.music-credit { margin-top: 4px; }
 .note a, footer a:hover { text-decoration: underline; }
 .info-section { padding-top: 38px; margin-top: 38px; border-top: 1px solid var(--line); }
 .feature-lines { margin-top: 14px; }
@@ -106,7 +105,7 @@ footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wr
   .feature-lines dd { margin-top: 3px; }
 }
 
-.cover { position: absolute; inset: 0; width: 100%; height: 100%; display: grid; align-items: end; justify-items: start; padding: clamp(12px,2vw,24px); border: 0; cursor: pointer; background: url("./preview-media/open-fitness-tour.jpg?v=reference-60") center / contain no-repeat #171717; }
+.cover { position: absolute; inset: 0; width: 100%; height: 100%; display: grid; align-items: end; justify-items: start; padding: clamp(12px,2vw,24px); border: 0; cursor: pointer; background: url("./preview-media/open-fitness-tour.jpg?v=library-68") center / contain no-repeat #171717; }
 .cover span { display: flex; align-items: center; gap: 8px; padding: 9px 16px; background: #fff; color: #232323; font-size: 13px; font-weight: 600; border-radius: 99px; box-shadow: 0 1px 8px #0002; }
 .cover svg { width: 13px; height: 13px; fill: currentColor; stroke: none; }
 .cover:hover span { background: #ededed; }
@@ -114,7 +113,7 @@ footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wr
 
 .product-head { display: flex; align-items: center; gap: 19px; margin-top: 32px; }
 .product-head > img { flex: none; }
-.product-head h1 { margin: 0 0 8px; font-size: clamp(30px, 3.05vw, 46px); }
+.product-head h1 { margin: 0 0 10px; font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; font-size: clamp(30px, 3.1vw, 44px); font-weight: 500; letter-spacing: .025em; line-height: 1.32; }
 .product-head p { font-size: 15px; }
 .showcase { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; padding: 12px 0 32px; margin-bottom: 25px; border-bottom: 1px solid var(--line); }
 .showcase article { display: grid; grid-template-rows: auto 1fr auto auto; align-content: start; }
@@ -139,7 +138,7 @@ footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wr
 @media (max-width: 760px) {
   .product-head { margin-top: 0; gap: 12px; align-items: flex-start; }
   .product-head > img { width: 51px; height: 51px; }
-  .product-head h1 { font-size: 29px; }
+  .product-head h1 { font-size: clamp(26px, 6.5vw, 31px); }
   .product-head p { font-size: 14px; }
 }
 @media (max-width: 600px) {

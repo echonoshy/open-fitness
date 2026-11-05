@@ -12,7 +12,7 @@ open-fitness is a camera and voice fitness coach. Pick an exercise and set a tar
 
 [![Watch the open-fitness feature tour](website/preview-media/open-fitness-tour.jpg)](https://echonoshy.github.io/open-fitness/#demo)
 
-[Watch the 60-second feature tour](https://echonoshy.github.io/open-fitness/#demo). Jump between pose tracking, exercise search, plans, rep counting, [the exercise reference window](https://echonoshy.github.io/open-fitness/?chapter=reference#demo), background blur, coach Q&A, exercise guidance and workout history. Turn on the instrumental soundtrack using the music button. The recorded coach exchange appears as text.
+[Watch the 68-second feature tour](https://echonoshy.github.io/open-fitness/#demo). Jump between pose tracking, exercise library, plans, rep counting, [the exercise reference window](https://echonoshy.github.io/open-fitness/?chapter=reference#demo), background blur, coach Q&A, exercise guidance and workout history. Turn on the instrumental soundtrack using the music button. The recorded coach exchange appears as text.
 
 ## Start training
 
