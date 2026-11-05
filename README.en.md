@@ -10,9 +10,9 @@
 
 open-fitness is a camera and voice fitness coach. Pick an exercise and set a target. During a squat, the app counts the rep as you stand back up. After the workout, open History to review each set and the feedback for individual reps.
 
-[![Watch the lunchtime squat workout](website/preview-media/open-fitness-tour.jpg)](https://echonoshy.github.io/open-fitness/#demo)
+[![Watch the open-fitness feature tour](website/preview-media/open-fitness-tour.jpg)](https://echonoshy.github.io/open-fitness/#demo)
 
-[Watch a set from start to finish](https://echonoshy.github.io/open-fitness/#demo). The silent tour shows the desktop app counting reps from prerecorded movement footage.
+[Watch the 52-second feature tour](https://echonoshy.github.io/open-fitness/#demo). Jump between pose tracking, exercise search, plans, rep counting, background blur, coach Q&A, exercise guidance and workout history. The recorded coach exchange appears as text in the silent video.
 
 ## Start training
 

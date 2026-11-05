@@ -12,7 +12,7 @@
 
 动作演示、封面及其衍生资料的权利归原权利人。项目许可不包含对这些素材的转载、公开分发或商业使用授权。
 
-官网「午间深蹲」演示使用 Polina Tankilevitch 拍摄的预录深蹲片段，作为片头和应用计数的输入。[Pexels 原片](https://www.pexels.com/video/young-woman-exercising-6525519/) · [Pexels 素材许可](https://www.pexels.com/license/)
+官网演示使用预录动作作为训练输入。深蹲由 Polina Tankilevitch 拍摄，健身球俯卧撑由 MART PRODUCTION 拍摄。[深蹲原片](https://www.pexels.com/video/young-woman-exercising-6525519/) · [俯卧撑原片](https://www.pexels.com/video/man-using-a-exercise-ball-while-doing-push-ups-8027458/) · [Pexels 素材许可](https://www.pexels.com/license/)
 
 ## 动作文字与训练知识
 

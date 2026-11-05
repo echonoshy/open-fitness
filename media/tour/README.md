@@ -1,13 +1,7 @@
-# 官网实机演示
+# 官网功能演示
 
-31 秒的 Remotion 短片，取材于桌面端的一次「午间深蹲」训练。`public/` 中的四段实机录屏对应动作库、计划、计数和记录。时间轴和剪辑位于 [src/index.jsx](src/index.jsx)。
+52 秒的无声实机演示，分为姿态识别、挑选动作、训练计划、自动计次、背景虚化、AI 语音教练、动作讲解和训练记录八章。[Remotion 时间轴](src/index.jsx)
 
-片头和计数使用同一段预录动作。重新制作片头时，从 [Polina Tankilevitch 的 Pexels 原片](https://www.pexels.com/video/young-woman-exercising-6525519/) 下载 1080 × 1920 的 MP4，在本目录准备三秒片段并打开预览。
+`public/` 保存已裁切的无声录屏。语音问答和动作讲解沿用此前的实机录制，问答文字按当时的识别和回复整理。训练使用的预录动作见[素材署名](../../ASSET-LICENSES.md)。
 
-```sh
-ffmpeg -i squat-original.mp4 -ss 0.4 -t 3.15 -vf 'fps=24,scale=720:1280,setsar=1' -c:v libx264 -crf 18 -pix_fmt yuv420p -an public/squat.mp4
-npm ci
-npm run studio
-```
-
-`npm run render` 输出 1080p 无声成片到 `out/open-fitness-tour.mp4`。更新官网时同步替换视频、封面、[章节按钮](../../website/index.html)和[中文字幕](../../website/assets/tour.zh.vtt)。
+在本目录运行 `npm ci` 安装依赖。`npm run studio` 打开时间轴，`npm run render` 输出 `out/open-fitness-tour.mp4`。改动片长或章节时，同步更新[官网播放器](../../website/index.html)和[中文字幕](../../website/assets/tour.zh.vtt)。

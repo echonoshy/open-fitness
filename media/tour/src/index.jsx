@@ -1,126 +1,133 @@
 import React from "react";
 import {
-  AbsoluteFill, Composition, Easing, Img, OffthreadVideo, Sequence,
-  interpolate, registerRoot, staticFile, useCurrentFrame,
+  AbsoluteFill, Composition, Easing, Img, OffthreadVideo, Series,
+  interpolate, registerRoot, staticFile, useCurrentFrame, useVideoConfig,
 } from "remotion";
 
-const fps = 24;
-const ink = "#191c19";
-const paper = "#f5f4eb";
+const ink = "#171b19";
+const panel = "#232624";
+const cream = "#f4f4ed";
 const lime = "#d2ed9e";
-const muted = "#a9b0a7";
 const font = '"PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif';
 
-function enter(frame, distance = 32) {
-  const progress = interpolate(frame, [0, 15], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic),
+function Screen({name, start = 0, style, videoStyle}) {
+  const {fps} = useVideoConfig();
+  return <div style={{position: "absolute", left: 133, top: 126, width: 1654, height: 916,
+    overflow: "hidden", borderRadius: 16, background: panel, ...style}}>
+    <OffthreadVideo src={staticFile(name + ".mp4")} muted trimBefore={Math.round(start * fps)}
+      style={{display: "block", width: "100%", height: "100%", objectFit: "cover", ...videoStyle}}/>
+  </div>;
+}
+
+function Section({title, detail, children}) {
+  const frame = useCurrentFrame();
+  const progress = interpolate(frame, [0, 9], [0, 1], {
+    extrapolateRight: "clamp", easing: Easing.out(Easing.cubic),
   });
-  return { opacity: 0.25 + 0.75 * progress, transform: `translateY(${distance * (1 - progress)}px)` };
-}
-
-function Footage({name, from = 0, style}) {
-  return <OffthreadVideo src={staticFile(name + ".mp4")} trimBefore={from} muted
-    style={{display: "block", width: "100%", height: "100%", objectFit: "cover", ...style}}/>;
-}
-
-function Wordmark({dark = false, width = 209}) {
-  return <Img src={staticFile("wordmark.svg")} style={{width, filter: dark ? "brightness(0)" : undefined}}/>;
-}
-
-function Intro() {
-  const frame = useCurrentFrame();
-  return <AbsoluteFill style={{background: ink}}>
-    <div style={{position: "absolute", right: 0, top: 0, width: 814, height: 1080, overflow: "hidden"}}>
-      <Footage name="squat" style={{objectFit: "cover", objectPosition: "center 50%", transform: "scale(1.015)"}}/>
+  return <AbsoluteFill style={{background: ink, color: cream, fontFamily: font}}>
+    <div style={{position: "absolute", top: 35, left: 83, right: 82, height: 69,
+      display: "flex", alignItems: "center", gap: 35}}>
+      <Img src={staticFile("wordmark.svg")} style={{width: 222}}/>
+      <div style={{height: 40, width: 2, background: "#525851"}}/>
+      <h1 style={{margin: 0, fontSize: 54, lineHeight: 1.1, letterSpacing: -1,
+        fontWeight: 650, transform: `translateY(${(1-progress)*7}px)`}}>{title}</h1>
+      <div style={{marginLeft: "auto", fontSize: 30, color: lime}}>{detail}</div>
     </div>
-    <div style={{position: "absolute", left: 107, top: 85}}><Wordmark width={258}/></div>
-    <div style={{position: "absolute", left: 108, top: 317, ...enter(frame)}}>
-      <div style={{fontSize: 32, color: lime, letterSpacing: 3, fontWeight: 550}}>实机训练记录</div>
-      <h1 style={{fontSize: 139, color: paper, lineHeight: 1.1, letterSpacing: -9, fontWeight: 650, margin: "30px 0 38px"}}>午间深蹲</h1>
-      <div style={{fontSize: 43, color: "#d3d7ce", letterSpacing: 1}}>从挑动作，到数完这一组。</div>
-    </div>
-    <div style={{position: "absolute", bottom: 120, left: 110, width: 806, borderTop: "1px solid #596052", paddingTop: 21,
-      display: "flex", alignItems: "baseline", justifyContent: "space-between", color: muted, fontSize: 28}}>
-      <span>自重训练</span><span style={{color: lime, fontVariantNumeric: "tabular-nums"}}>1 组 / 3 次</span>
-    </div>
-  </AbsoluteFill>;
-}
-
-function Chapter({title, section, dark = false, children}) {
-  const frame = useCurrentFrame();
-  const foreground = dark ? paper : ink;
-  return <AbsoluteFill style={{background: dark ? ink : paper, color: foreground}}>
-    <div style={{position: "absolute", left: 100, right: 100, top: 52, display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-      <Wordmark dark={!dark} width={185}/>
-      <div style={{fontSize: 25, color: dark ? lime : "#545d4a", fontWeight: 550, letterSpacing: 2}}>{section}</div>
-    </div>
-    <h2 style={{margin: 0, position: "absolute", top: 111, left: 96, fontWeight: 630, fontSize: 76, letterSpacing: -3, ...enter(frame, 19)}}>{title}</h2>
     {children}
   </AbsoluteFill>;
 }
 
-function Screen({x = 96, y, w = 1728, h, children}) {
-  return <div style={{position: "absolute", left: x, top: y, width: w, height: h, borderRadius: 17,
-    overflow: "hidden", background: "#1a1b1c", border: "1px solid #53584f"}}>{children}</div>;
+function Pose() {
+  return <Section title="姿态识别" detail="关节点随动作移动，膝角实时更新">
+    <Screen name="count" start={2}/>
+  </Section>;
 }
 
 function Library() {
-  return <Chapter title="今天，练自重深蹲。" section="动作库">
-    <div style={{position: "absolute", left: 102, top: 254, fontSize: 37, color: "#46503f"}}>搜索「深蹲」，再把器械筛成「自重」。</div>
-    <div style={{position: "absolute", left: 100, right: 100, top: 407, display: "flex", gap: 38}}>
-      {[
-        {label: "动作名称", left: -2015, top: -74, width: 2850},
-        {label: "器械筛选", left: -22, top: -248, width: 2390},
-      ].map(({label, left, top, width}) => <div key={label} style={{flex: 1, minWidth: 0}}>
-        <div style={{fontSize: 29, color: "#58634e", marginBottom: 21}}>{label}</div>
-        <div style={{position: "relative", height: 277, background: "#191b1c", borderRadius: 16, overflow: "hidden"}}>
-          <Footage name="library" style={{position: "absolute", left, top, width, height: "auto"}}/>
-        </div>
-      </div>)}
-    </div>
-  </Chapter>;
+  const caption = {position:"absolute",left:104,fontSize:32,color:"#b6c3af"};
+  return <Section title="挑选动作" detail="按名称搜索，再按器械筛选">
+    <div style={{...caption,top:184}}>搜索与筛选</div>
+    <Screen name="library" style={{left:102,top:242,width:1716,height:410}}/>
+    <div style={{...caption,top:699}}>匹配的动作</div>
+    <Screen name="matches" style={{left:102,top:761,width:1716,height:193}}/>
+  </Section>;
 }
 
-function Plan() {
+function Plans() {
+  const {fps} = useVideoConfig();
+  return <Section title="训练计划" detail="安排组数、次数和休息，载入后开始">
+    <Series>
+      <Series.Sequence durationInFrames={3 * fps}>
+        <Screen name="plan" style={{left:89,top:192,width:1742,height:784}}/>
+      </Series.Sequence>
+      <Series.Sequence durationInFrames={3 * fps}>
+        <Screen name="load" start={0.3}/>
+      </Series.Sequence>
+    </Series>
+  </Section>;
+}
+
+function Reps() {
+  return <Section title="自动计次" detail="俯卧撑下放再推起，计数随回位增加">
+    <Screen name="pushup" start={0.4}/>
+  </Section>;
+}
+
+function Blur() {
+  return <Section title="背景虚化" detail="训练中打开「取景」，切换背景效果">
+    <Screen name="blur"/>
+  </Section>;
+}
+
+function Voice() {
+  const {fps} = useVideoConfig();
   const frame = useCurrentFrame();
-  const zoom = interpolate(frame, [0, 37, 88], [1.83, 1.83, 1], {
-    extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic),
-  });
-  return <Chapter title="把这组目标改为 3 次。" section="训练计划" dark>
-    <Screen x={126} w={1668} y={242} h={794}><Footage name="plan" style={{transformOrigin: "37% 34%", transform: `scale(${zoom})`}}/></Screen>
-  </Chapter>;
+  const answerOpacity = interpolate(frame, [4.4 * fps, 4.72 * fps], [0, 1],
+    {extrapolateLeft:"clamp", extrapolateRight:"clamp"});
+  const label = {fontSize:30, color:lime, marginBottom:18, fontWeight:580};
+  const text = {fontSize:53, margin:0, lineHeight:1.55, letterSpacing:-1};
+  return <Section title="AI 语音教练" detail="实机问答转写">
+    <div style={{position:"absolute",left:102,top:215,width:900}}>
+      <div style={label}>提问</div>
+      <p style={text}>做深蹲时摄像头应该从哪个方向拍？请用一句话回答。</p>
+      <div style={{marginTop:51,borderTop:"1px solid #4c544a",paddingTop:40,opacity:answerOpacity}}>
+        <div style={label}>教练回复</div>
+        <p style={text}>深蹲请从侧面或斜前方45度拍摄，让肩、髋、膝、踝完整入镜。</p>
+      </div>
+    </div>
+    <Screen name="conversation" style={{left:1090,top:248,width:720,height:624}}/>
+  </Section>;
 }
 
-function Count() {
-  return <Chapter title="回到站姿，次数加一。" section="自动计次  /  预录动作样本">
-    <Screen x={200} y={218} w={1520} h={856}><Footage name="count" from={18}/></Screen>
-  </Chapter>;
+function Guidance() {
+  return <Section title="动作讲解" detail="展开教练回复，查看当前动作的要点">
+    <Screen name="guide-motion" style={{left:84,top:245,width:932,height:614}}/>
+    <Screen name="guide-panel" style={{left:1041,top:245,width:800,height:614}}
+      videoStyle={{objectFit:"contain",background:"#262827"}}/>
+  </Section>;
 }
 
 function History() {
-  const frame = useCurrentFrame();
-  return <Chapter title="这组深蹲，已经存好了。" section="训练记录" dark>
-    <div style={{position: "absolute", left: 105, top: 263, color: lime, display: "flex", gap: 55,
-      alignItems: "baseline", ...enter(frame - 5), fontVariantNumeric: "tabular-nums"}}>
-      <span style={{fontSize: 130, lineHeight: 1.1, fontWeight: 550}}>1<span style={{fontSize: 46, marginLeft: 14}}>组</span></span>
-      <span style={{fontSize: 130, lineHeight: 1.1, fontWeight: 550}}>3<span style={{fontSize: 46, marginLeft: 14}}>次</span></span>
-    </div>
-    <Screen y={469} h={456}><Footage name="history"/></Screen>
-  </Chapter>;
+  return <Section title="训练记录" detail="展开一组，回看每次动作的用时和角度">
+    <Screen name="history" style={{left:167,top:126,width:1586,height:916}}/>
+  </Section>;
 }
 
-const scenes = [
-  {start: 0, end: 3, component: Intro}, {start: 3, end: 8, component: Library},
-  {start: 8, end: 13, component: Plan}, {start: 13, end: 25, component: Count},
-  {start: 25, end: 31, component: History},
-];
-
 function Tour() {
-  return <AbsoluteFill style={{fontFamily: font, background: ink}}>
-    {scenes.map(({start, end, component: Scene}) =>
-      <Sequence key={start} from={start * fps} durationInFrames={(end - start) * fps}><Scene/></Sequence>)}
+  const {fps} = useVideoConfig();
+  return <AbsoluteFill style={{background:ink}}>
+    <Series>
+      <Series.Sequence name="姿态识别" durationInFrames={6 * fps}><Pose/></Series.Sequence>
+      <Series.Sequence name="挑选动作" durationInFrames={5 * fps}><Library/></Series.Sequence>
+      <Series.Sequence name="训练计划" durationInFrames={6 * fps}><Plans/></Series.Sequence>
+      <Series.Sequence name="自动计次" durationInFrames={7 * fps}><Reps/></Series.Sequence>
+      <Series.Sequence name="背景虚化" durationInFrames={6 * fps}><Blur/></Series.Sequence>
+      <Series.Sequence name="AI 语音教练" durationInFrames={10 * fps}><Voice/></Series.Sequence>
+      <Series.Sequence name="动作讲解" durationInFrames={6 * fps}><Guidance/></Series.Sequence>
+      <Series.Sequence name="训练记录" durationInFrames={6 * fps}><History/></Series.Sequence>
+    </Series>
   </AbsoluteFill>;
 }
 
 registerRoot(() => <Composition id="OpenFitnessTour" component={Tour}
-  width={1920} height={1080} fps={fps} durationInFrames={31 * fps}/>);
+  width={1920} height={1080} fps={24} durationInFrames={52 * 24}/>);

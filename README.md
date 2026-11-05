@@ -10,9 +10,9 @@
 
 open-fitness 是一款摄像头与语音健身教练。挑一个想练的动作，设好组数和目标。做深蹲时，应用会在你起身后计次。练完打开「记录」，就能看到每组做了多少，以及每次的动作反馈。
 
-[![观看实机演示：午间深蹲](website/preview-media/open-fitness-tour.jpg)](https://echonoshy.github.io/open-fitness/#demo)
+[![观看 open-fitness 功能演示](website/preview-media/open-fitness-tour.jpg)](https://echonoshy.github.io/open-fitness/#demo)
 
-[观看「午间深蹲」实机演示](https://echonoshy.github.io/open-fitness/#demo) · 从选动作到保存一组训练，使用预录动作样本，静音可看。
+[观看 52 秒实机功能演示](https://echonoshy.github.io/open-fitness/#demo) · 按章节查看姿态识别、挑选动作、训练计划、自动计次、背景虚化、语音教练、动作讲解和训练记录。语音问答以文字呈现。
 
 ## 开始训练
 

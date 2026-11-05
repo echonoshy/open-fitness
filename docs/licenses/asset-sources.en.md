@@ -12,7 +12,7 @@ Example attribution: open-fitness contributors, *open-fitness app icon*, CC BY-N
 
 Exercise demos, posters and their derivatives belong to their respective rights holders. The project license grants no rights to republish, publicly distribute or commercially use this material.
 
-The website tour uses squat footage by Polina Tankilevitch for the opening shot and as input to the app. [Original footage on Pexels](https://www.pexels.com/video/young-woman-exercising-6525519/) · [Pexels License](https://www.pexels.com/license/)
+The tour uses prerecorded movement footage by Polina Tankilevitch (squats) and MART PRODUCTION (stability-ball push-ups). [Squat footage](https://www.pexels.com/video/young-woman-exercising-6525519/) · [Push-up footage](https://www.pexels.com/video/man-using-a-exercise-ball-while-doing-push-ups-8027458/) · [Pexels License](https://www.pexels.com/license/)
 
 ## Exercise text and training knowledge
 

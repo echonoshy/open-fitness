@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="用 open-fitness 安排训练，让摄像头帮你数深蹲。观看一组训练的实机演示，查看计划、动作库和桌面版下载。">
+  <meta name="description" content="观看 open-fitness 实机演示，了解姿态识别、训练计划、自动计次、背景虚化与语音教练。">
   <link rel="icon" href="./assets/app-icon.png" type="image/png">
-  <link rel="stylesheet" href="./style.css?v=squat-041">
+  <link rel="stylesheet" href="./style.css?v=features-52">
   <title>open-fitness · 摄像头与语音健身教练</title>
 </head>
 <body>
@@ -49,42 +49,45 @@
         </div>
       </section>
       <section id="demo" aria-labelledby="film-title">
-        <div class="section-heading"><h2 id="film-title">实机演示</h2><span class="meta">31 秒<span class="dot">·</span>无声演示</span></div>
+        <div class="section-heading"><h2 id="film-title">实机演示</h2><span class="meta">52 秒<span class="dot">·</span>无声演示</span></div>
         <div class="screen">
-          <video id="demo-video" controls muted playsinline preload="metadata" poster="./preview-media/open-fitness-tour.jpg?v=squat-041" aria-label="open-fitness 软件功能实机演示" aria-describedby="film-note">
-            <source src="./preview-media/open-fitness-tour.mp4?v=squat-041" type="video/mp4">
-            <track kind="captions" srclang="zh-CN" label="中文" src="./assets/tour.zh.vtt?v=squat-041">
-            你的浏览器无法播放此视频。<a href="./preview-media/open-fitness-tour.mp4?v=squat-041">打开原片</a>
+          <video id="demo-video" controls muted playsinline preload="metadata" poster="./preview-media/open-fitness-tour.jpg?v=features-52" aria-label="open-fitness 软件功能实机演示" aria-describedby="film-note">
+            <source src="./preview-media/open-fitness-tour.mp4?v=features-52" type="video/mp4">
+            <track kind="captions" srclang="zh-CN" label="中文" src="./assets/tour.zh.vtt?v=features-52">
+            你的浏览器无法播放此视频。<a href="./preview-media/open-fitness-tour.mp4?v=features-52">打开原片</a>
           </video>
-          <button class="cover" type="button" hidden aria-label="播放 31 秒实机演示：午间深蹲">
+          <button class="cover" type="button" hidden aria-label="播放 52 秒功能演示">
             <span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5 13 8l-9 5.5z"/></svg>播放演示</span>
           </button>
         </div>
         <div class="chapters" aria-label="演示章节">
-          <button type="button" data-start="0" aria-pressed="true"><time>00:00</time><span>午间深蹲</span></button>
-          <button type="button" data-start="3" aria-pressed="false"><time>00:03</time><span>挑选动作</span></button>
-          <button type="button" data-start="8" aria-pressed="false"><time>00:08</time><span>设定目标</span></button>
-          <button type="button" data-start="13" aria-pressed="false"><time>00:13</time><span>自动计次</span></button>
-          <button type="button" data-start="25" aria-pressed="false"><time>00:25</time><span>回看记录</span></button>
+          <button type="button" data-start="0" aria-pressed="true"><time>00:00</time><span>姿态识别</span></button>
+          <button type="button" data-start="6" aria-pressed="false"><time>00:06</time><span>挑选动作</span></button>
+          <button type="button" data-start="11" aria-pressed="false"><time>00:11</time><span>训练计划</span></button>
+          <button type="button" data-start="17" aria-pressed="false"><time>00:17</time><span>自动计次</span></button>
+          <button type="button" data-start="24" aria-pressed="false"><time>00:24</time><span>背景虚化</span></button>
+          <button type="button" data-start="30" aria-pressed="false"><time>00:30</time><span>AI 语音教练</span></button>
+          <button type="button" data-start="40" aria-pressed="false"><time>00:40</time><span>动作讲解</span></button>
+          <button type="button" data-start="46" aria-pressed="false"><time>00:46</time><span>训练记录</span></button>
         </div>
-        <p class="note" id="film-note">画面录自 open-fitness 桌面版。训练时向应用输入预录的深蹲视频，画面中的计数和最后的训练记录均由应用生成。</p>
-        <p class="note" id="play-error" role="status" hidden>视频暂时无法播放。<a href="./preview-media/open-fitness-tour.mp4?v=squat-041">打开原片</a></p>
+        <p class="note" id="film-note">训练画面使用预录动作样本，骨架、计数和记录均来自实际运行的应用。语音教练一节用文字呈现当时的提问与回复。</p>
+        <p class="note" id="play-error" role="status" hidden>视频暂时无法播放。<a href="./preview-media/open-fitness-tour.mp4?v=features-52">打开原片</a></p>
       </section>
       <section id="features" class="showcase" aria-label="训练计划和动作库">
         <article id="plans">
           <h2>设置训练计划</h2>
           <p>为每个动作设置组数、目标次数或时长、组间休息和负重。保存后，下次可以直接开始同一套计划。</p>
-          <a class="shot" href="./preview-media/plan-screen.jpg?v=squat-041" data-title="设置训练计划" aria-label="放大训练计划实机截图">
-            <img src="./preview-media/plan-screen.jpg?v=squat-041" width="1700" height="488" alt="午间深蹲的计划编辑器，目标为一组 3 次。">
+          <a class="shot" href="./preview-media/plan-screen.jpg?v=features-52" data-title="设置训练计划" aria-label="放大训练计划实机截图">
+            <img src="./preview-media/plan-screen.jpg?v=features-52" width="1700" height="526" alt="全身基础训练计划，俯卧撑每组 10 次，平板支撑每组 30 秒。">
             <span aria-hidden="true">⤢</span>
           </a>
-          <small>午间深蹲<span>·</span>1 组，目标 3 次</small>
+          <small>全身基础训练<span>·</span>俯卧撑与平板支撑</small>
         </article>
         <article id="library">
           <h2>找到今天想练的动作</h2>
           <p>按难度、肌群或器械筛选，点开演示视频看动作怎么做。喜欢的动作可以加入「常练动作」。</p>
-          <a class="shot" href="./preview-media/library-screen.jpg?v=squat-041" data-title="按器械筛选深蹲" aria-label="放大动作库实机截图">
-            <img src="./preview-media/library-screen.jpg?v=squat-041" width="1700" height="488" alt="动作库中搜索了「深蹲」，器械筛选为「自重」。">
+          <a class="shot" href="./preview-media/library-screen.jpg?v=features-52" data-title="按器械筛选深蹲" aria-label="放大动作库实机截图">
+            <img src="./preview-media/library-screen.jpg?v=features-52" width="1700" height="488" alt="动作库中搜索了「深蹲」，器械筛选为「自重」。">
             <span aria-hidden="true">⤢</span>
           </a>
           <small>深蹲<span>·</span>自重动作</small>
