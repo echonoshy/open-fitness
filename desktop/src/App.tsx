@@ -559,14 +559,13 @@ export default function App() {
         let items;
         try { items = resolvePlan(command.blocks, movementLibrary); }
         catch (error) { return failure((error as Error).message); }
-        if (items.some(item=>item.camera) && !engine.cameraReady) {
+        if (items[0].camera && !engine.cameraReady) {
           const token = ++startRequest.current;
-          setPage("train");
           await startCamera();
           signal?.throwIfAborted();
           if (token!==startRequest.current || !engine.cameraReady) return failure("摄像头尚未就绪，计划未开始。");
         }
-        result=catalogPlan.start(items);
+        result=catalogPlan.start(items, command.planName);
       } else if (command.type === "adjust_plan_set") {
         result = catalogPlan.active ? catalogPlan.command(command) : engine.adjustPlanSet(command);
       } else if (command.type === "skip_remaining_sets") {
@@ -591,6 +590,7 @@ export default function App() {
       if (result.ok) {
         await savePending();
         await persist(d=>({...d, checkpoint:engine.checkpoint(), timedCheckpoint:timedTraining.checkpoint()}));
+        if (command.type === "start_catalog_program" || (command.type === "session" && ["start", "resume"].includes(command.action))) setError("");
         if (!catalogPlan.active && !engine.program) setSummaryText(result.message);
         if (command.type==="start_catalog_program") {framer.reset();renderView();interaction.current.clear();setSummaryText("");}
       }
@@ -638,8 +638,10 @@ export default function App() {
             parsedCommand.data.type === "new_set" ||
             (parsedCommand.data.type === "session" &&
               ["start", "resume"].includes(parsedCommand.data.action))
-          )
+          ) {
             setSummaryText("");
+            if (!engine.pending.length && !timedTraining.pending.length) setError("");
+          }
           await savePending();
           await persist(
             (d) => ({ ...d, timedCheckpoint: timedTraining.checkpoint() }),
@@ -667,7 +669,7 @@ export default function App() {
           ["start", "resume"].includes(parsedCommand.data.action)));
     if (isStart && !engine.cameraReady) {
       const token = ++startRequest.current;
-      setPage("train");
+      if (parsedCommand.data.type !== "start_program") setPage("train");
       await startCamera();
       signal?.throwIfAborted();
       if (token !== startRequest.current || !engine.cameraReady)
@@ -739,6 +741,7 @@ export default function App() {
     }
     signal?.throwIfAborted();
     const receipt = engine.dispatch(raw);
+    if (receipt.ok && isStart && !engine.pending.length && !timedTraining.pending.length) setError("");
     receipt.state = controlSnapshot();
     flushSync(() => setState(receipt.state));
     if (receipt.ok && engine.pending.length) {
@@ -823,7 +826,7 @@ export default function App() {
       if (window.coach) {
         const perms = await window.coach.permissions();
         if (!perms.camera || !perms.microphone)
-          throw Error("请在系统设置 → 隐私与安全性中允许摄像头和麦克风。");
+          throw Error("请在系统的隐私设置中允许桌面应用访问摄像头和麦克风。");
       }
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,

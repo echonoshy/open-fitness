@@ -6,7 +6,7 @@ import { PlanAppearanceDialog, PlanBadge, type PlanAppearance } from "./PlanAppe
 import type { LibrarySource } from "./MovementLibrary";
 import { HistoryDateRange } from "./HistoryDateRange";
 import { TimedRecordDetail } from "./TimedRecordDetail";
-import { historyChoices, historySets, movementResults } from "../core/catalog-history";
+import { groupWorkouts, historyChoices, historySets, movementResults } from "../core/catalog-history";
 import { primaryMovementSlugs } from "../core/movement-library";
 import {
   recoverTimedCheckpoint,
@@ -119,6 +119,9 @@ export function Planner({
   const [appearanceOpen, setAppearanceOpen] = useState(false);
   const [selection, setSelection] = useState<{ id: string; phase: "editing" | "saved" } | null>(null);
   const justSaved = selection?.phase === "saved";
+  const movementNames = useMemo(() => new Map(library.items.map(item => [item.slug, item.name])), [library.items]);
+  const displayBlock = (block: PlanBlock) =>
+    ("movementSlug" in block && movementNames.get(block.movementSlug)) || blockName(block);
   const [saving, setSaving] = useState(false);
   const identityButton = useRef<HTMLButtonElement>(null);
   const overview = useRef<HTMLElement>(null);
@@ -223,8 +226,8 @@ export function Planner({
                 <span className="exercise-number">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <button className="plan-movement-button" aria-label={uiText(`更换动作${i+1}：${blockName(b)}`)} onClick={()=>setPicking(i)}>
-                  <span>{uiText(blockName(b))}<small>{uiText(blockUnit(b)==="seconds" ? "每组按秒" : "每组按次")}</small></span><ChevronDown size={15}/>
+                <button className="plan-movement-button" aria-label={uiText(`更换动作${i+1}：${displayBlock(b)}`)} onClick={()=>setPicking(i)}>
+                  <span>{uiText(displayBlock(b))}<small>{uiText(blockUnit(b)==="seconds" ? "每组按秒" : "每组按次")}</small></span><ChevronDown size={15}/>
                 </button>
               </div>
               {(["sets", "target", "rest", "load"] as const).map((k, j) => (
@@ -319,7 +322,7 @@ export function Planner({
                 <i
                   style={{ background: chartColors[i % chartColors.length] }}
                 />
-                <span>{uiText(blockName(b))}</span>
+                <span>{uiText(displayBlock(b))}</span>
                 <small>
                   {b.sets} × {b.target}
                   {uiText(blockUnit(b) === "seconds" ? "秒" : "次")}
@@ -334,8 +337,8 @@ export function Planner({
               setStarting(true);
               try {
                 const traditional = blocks.every((block): block is Block => "exercise" in block);
-                if (traditional) await control({ type: "start_program", blocks });
-                else await control({ type: "start_catalog_program", blocks });
+                if (traditional) await control({ type: "start_program", blocks, planName: identity.name });
+                else await control({ type: "start_catalog_program", blocks, planName: identity.name });
               } catch (error) {
                 report(error);
               } finally {
@@ -377,7 +380,7 @@ export function Planner({
                 {uiText(p.blocks
                   .map(
                     (b) =>
-                      `${blockName(b)} ${b.sets}×${b.target}${blockUnit(b) === "seconds" ? "秒" : "次"}`,
+                      `${displayBlock(b)} ${b.sets}×${b.target}${blockUnit(b) === "seconds" ? "秒" : "次"}`,
                   )
                   .join(" · "))}
               </p>
@@ -553,7 +556,7 @@ export function HistoryPanel({
   data,
   library,
 }: Pick<Props, "data"> & { library: LibrarySource }) {
-  const { uiText } = useUiLocale();
+  const { language, uiText, message } = useUiLocale();
   const [recordMode, setRecordMode] = useState("all");
   const [exercise, setExercise] = useState("all"),
     [from, setFrom] = useState(""),
@@ -588,6 +591,7 @@ export function HistoryPanel({
       ),
     [allRows, exercise, from, to, period, recordMode],
   );
+  const workouts = useMemo(() => groupWorkouts(rows), [rows]);
   const totals = useMemo(() => activityOverview(rows), [rows]);
   const coverage = useMemo(
     () => coverageByMuscle(rows).filter((g) => g.sets),
@@ -894,16 +898,7 @@ export function HistoryPanel({
         </div>
       )}
       <section className="feature-panel record-list-panel">
-        <SectionHeading title={uiText("每组详情")} detail={uiText(`${rows.length} 条记录`)} />
-        {rows.length > 0 && (
-          <div className="record-list-heading" aria-hidden="true">
-            <span>{uiText("训练动作")}</span>
-            <span>{uiText("训练时间")}</span>
-            <span>{uiText("完成情况")}</span>
-            <span>{uiText("记录来源")}</span>
-            <span />
-          </div>
-        )}
+        <SectionHeading title={uiText("按次回顾")} detail={message("{0} 次训练 · {1} 组", workouts.length, rows.length)} />
         {!rows.length && (
           <EmptyState
             icon={ListChecks}
@@ -917,19 +912,28 @@ export function HistoryPanel({
             }
           />
         )}
-        {[...rows]
-          .reverse()
-          .map(({ record, name }) =>
-            "exercise" in record ? (
-              <RecordDetail key={"pose-" + record.id} r={record} name={name} />
-            ) : (
-              <TimedRecordDetail
-                key={"catalog-" + record.id}
-                r={record}
-                name={name}
-              />
-            ),
-          )}
+        {workouts.map(([key, sets]) => {
+          const planName = sets.find(({ record }) => record.planName)?.record.planName;
+          const exercises = [...new Set(sets.map(row => uiText(row.name)))].join(" · ");
+          const title = planName ?? (sets.some(({ record }) => record.blockIndex != null)
+            ? uiText("计划训练") : exercises);
+          return (
+            <details className="workout-record" key={key}>
+              <summary>
+                <div><strong>{title}</strong>{title !== exercises && <small>{exercises}</small>}</div>
+                <span>{new Date(sets[0].startedAt).toLocaleString(language)} · {message("{0} 组", sets.length)}</span>
+                <ChevronDown size={16} aria-hidden="true" />
+              </summary>
+              <div className="record-list-heading" aria-hidden="true">
+                <span>{uiText("训练动作")}</span><span>{uiText("训练时间")}</span>
+                <span>{uiText("完成情况")}</span><span>{uiText("记录来源")}</span><span />
+              </div>
+              {sets.map(({ record, name }) => "exercise" in record
+                ? <RecordDetail key={"pose-" + record.id} r={record} name={name} />
+                : <TimedRecordDetail key={"catalog-" + record.id} r={record} name={name} />)}
+            </details>
+          );
+        })}
       </section>
       <p className="page-footnote">
         {uiText("累计次数优先采用手动修正值，没有修正时使用本组记录的计数。只计时的组计入时长和组数。")}

@@ -56,7 +56,7 @@ export const commandSchema = z.discriminatedUnion("type", [
       unit: z.enum(["reps", "seconds"]).optional(),
     })
     .strict(),
-  z.object({ type: z.literal("start_program"), blocks: planSchema }).strict(),
+  z.object({ type: z.literal("start_program"), blocks: planSchema, planName: z.string().trim().min(1).max(80).optional() }).strict(),
   z.object({ type: z.literal("stop_program") }).strict(),
   z
     .object({
@@ -105,6 +105,7 @@ export type Command = z.infer<typeof commandSchema>;
 export interface RecordRow {
   id: string;
   sessionId?: string;
+  planName?: string;
   setIndex?: number;
   blockIndex?: number;
   holdBest?: number;
@@ -135,7 +136,7 @@ export interface Snapshot {
   holdGoal: number;
   holdBest: number;
   fatigue: number;
-  program: { blocks: Block[]; block: number; set: number; between?: boolean; setId?: string; restSeconds?: number } | null;
+  program: { blocks: Block[]; planName?: string; block: number; set: number; between?: boolean; setId?: string; restSeconds?: number } | null;
   status: "ready" | "training" | "paused" | "resting";
   reps: number;
   hold: number;
@@ -282,6 +283,7 @@ export class SessionEngine {
       goal: this.exercise === "plank" ? this.holdGoal : this.goal,
       setIndex: this.program?.set,
       blockIndex: this.program?.block,
+      ...(this.program?.planName && { planName: this.program.planName }),
       ...this.planPosition,
     };
   }
@@ -408,7 +410,7 @@ export class SessionEngine {
     if (c.type === "start_program") {
       if (!this.cameraReady) return fail("请先开启摄像头，等待模型就绪。");
       if (this.active) return fail("请先结束当前训练，再启动计划。");
-      this.program = { blocks: structuredClone(c.blocks), block: 0, set: 1 };
+      this.program = { blocks: structuredClone(c.blocks), planName: c.planName, block: 0, set: 1 };
       this.nextSet = false;
       this.applyBlock();
       this.reset();

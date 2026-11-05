@@ -125,6 +125,8 @@ export function mergeImportedData(
     incoming.timedRecords ?? [],
     data.timedCheckpoint?.id,
   );
+  const addedTimed = timedRecords.length - (data.timedRecords?.length ?? 0);
+  const skipped = incoming.records.length - added.records + (incoming.timedRecords?.length ?? 0) - addedTimed;
   return {
     data: {
       ...data,
@@ -137,6 +139,6 @@ export function mergeImportedData(
       homeShortcuts: data.homeShortcuts ?? incoming.homeShortcuts,
       timedRecords,
     },
-    message: `新增 ${added.records} 组记录${incoming.timedRecords?.length ? `、${timedRecords.length - (data.timedRecords?.length ?? 0)} 组计时记录` : ""}、${added.profile} 条资料、${added.plans} 份计划、${added.references} 个参考动作${incoming.freePractice ? `、${practiceAdded} 个自由跟练动作` : ""}；${incoming.records.length - added.records} 组重复记录已跳过，另有 ${trash.length - (data.trash?.length ?? 0)} 项加入最近删除。同名资料、同 ID 计划和已有参考动作保留本机版本。`,
+    message: `新增 ${added.records} 组记录${incoming.timedRecords?.length ? `、${addedTimed} 组计时记录` : ""}、${added.profile} 条资料、${added.plans} 份计划、${added.references} 个参考动作${incoming.freePractice ? `、${practiceAdded} 个自由跟练动作` : ""}；${skipped} 组重复记录已跳过，另有 ${trash.length - (data.trash?.length ?? 0)} 项加入最近删除。同名资料、同 ID 计划和已有参考动作保留本机版本。`,
   };
 }

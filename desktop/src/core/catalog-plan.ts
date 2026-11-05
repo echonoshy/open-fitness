@@ -52,6 +52,7 @@ export const catalogPlanControl = z.discriminatedUnion("type", [
     .object({
       type: z.literal("start_catalog_program"),
       blocks: catalogPlanSchema,
+      planName: z.string().trim().min(1).max(80).optional(),
     })
     .strict(),
   z.object({ type: z.literal("complete_plan_set") }).strict(),
@@ -123,6 +124,7 @@ const success = (message: string): Result => ({ ok: true, message });
 const fail = (message: string): Result => ({ ok: false, message });
 export type PlanPosition = {
   sessionId: string;
+  planName?: string;
   blockIndex: number;
   setIndex: number;
 };
@@ -145,6 +147,7 @@ export class CatalogPlan {
   private block = 0;
   private set = 1;
   private sessionId = "";
+  private planName?: string;
   private between = false;
   private paused = false;
   private deadline = 0;
@@ -158,7 +161,9 @@ export class CatalogPlan {
     return this.items.length > 0;
   }
   get needsCamera() {
-    return this.items.some((item) => item.camera);
+    if (!this.active) return false;
+    const block = this.between ? this.next()?.block : this.block;
+    return block !== undefined && this.items[block].camera;
   }
   private get current() {
     return this.items[this.block];
@@ -204,16 +209,17 @@ export class CatalogPlan {
         : {}),
     };
   }
-  start(items: Resolved): Result {
+  start(items: Resolved, planName?: string): Result {
     if (this.active || this.engine.active || this.timed.active)
       return fail("请先结束当前训练，再开始计划。");
     if (!items.length) return fail("请先选择计划动作。");
-    if (items.some((i) => i.camera) && !this.engine.cameraReady)
+    if (items[0].camera && !this.engine.cameraReady)
       return fail("摄像头就绪后才能开始这个计划。");
     this.items = items;
     this.block = 0;
     this.set = 1;
     this.sessionId = crypto.randomUUID();
+    this.planName = planName;
     this.beginSet();
     return success("计划已开始，共 " + items.length + " 个动作。");
   }
@@ -222,6 +228,7 @@ export class CatalogPlan {
     this.setRest = block.rest;
     const position = {
       sessionId: this.sessionId,
+      ...(this.planName && { planName: this.planName }),
       blockIndex: this.block,
       setIndex: this.set,
     };

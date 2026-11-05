@@ -871,6 +871,20 @@ body {
   color: var(--muted);
   margin-top: 8px;
 }
+.workout-record { border-top: 1px solid var(--line, #ffffff18); }
+.workout-record > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.workout-record > summary::-webkit-details-marker { display: none; }
+.workout-record > summary > div { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.workout-record > summary small { display: block; margin-top: 4px; }
+.workout-record > summary small, .workout-record > summary span { color: var(--muted); font-size: 12px; }
+.workout-record[open] > summary > svg { transform: rotate(180deg); }
 .feature-page .record-detail {
   border: 0;
   border-top: 1px solid #ffffff10;

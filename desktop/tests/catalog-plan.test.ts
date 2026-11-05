@@ -275,3 +275,35 @@ test("v4 favorites and plans survive adding a mixed plan, deletion, restore and 
   assert.equal(recovered.timedRecords![0].blockIndex, 0);
   assert.equal(recovered.timedRecords![0].interrupted, true);
 });
+
+test("a mixed plan requests a camera only at the camera set and preserves the workout across a retry", async () => {
+  let requests = 0;
+  let allowCamera = false;
+  const engine = new SessionEngine();
+  const app = appControls({
+    engine,
+    movementLibrary: library,
+    startCamera: async () => { requests++; engine.cameraReady = allowCamera; },
+  });
+  const blocks = [block("dumbbell-wrist-curl", 1, 60), block("bodyweight-squat", 1, 8)];
+  const run = (action: string) => app.dispatch({ type: "session", action });
+  assert.ok((await app.dispatch({ type: "start_catalog_program", blocks, planName: "腕与腿" })).ok);
+  assert.ok((await run("pause")).ok);
+  assert.ok((await run("resume")).ok);
+  assert.equal(requests, 0);
+  assert.ok((await app.dispatch({ type: "complete_plan_set" })).ok);
+  assert.equal(app.catalogPlan.tick()?.ok, false);
+  assert.equal((await run("resume")).ok, false);
+  assert.equal(app.catalogPlan.overlay().status, "paused");
+  assert.equal(requests, 1);
+  allowCamera = true;
+  assert.ok((await run("resume")).ok);
+  assert.ok(app.catalogPlan.tick()?.ok);
+  assert.ok((await app.dispatch({ type: "complete_plan_set" })).ok);
+  const data = dataSchema.parse(app.dataRef.current);
+  assert.equal(data.timedRecords?.length, 1);
+  assert.equal(data.records.length, 1);
+  assert.equal(data.records[0].sessionId, data.timedRecords[0].sessionId);
+  assert.equal(data.records[0].planName, "腕与腿");
+  assert.equal(data.timedRecords[0].planName, "腕与腿");
+});

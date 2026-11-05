@@ -24,6 +24,8 @@ npm run dev
 | `npm run icon` | 从最终美术源文件生成 `build/icon.icns` |
 | `npm run package` | 使用本机密钥文件生成自用包 |
 | `npm run package:public` | 生成 Apple 芯片 Mac 版，不含个人 Key |
+| `npm run package:mac:intel` | 生成 Intel Mac x64 内测 ZIP，不含个人 Key |
+| `npm run package:win` | 生成 Windows x64 内测安装程序，不含个人 Key |
 | `npm run verify:vad` | 用本地样本执行真实 Silero 推理，结果在 `output/` |
 | `npm run verify:services` | 显式调用真实 LLM / ASR / TTS，测试合成语音和内存训练状态 |
 

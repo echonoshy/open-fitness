@@ -24,6 +24,7 @@ const statisticsSchema = z.object({
 export const timedRecordSchema = z.object({
   id: z.string().min(1),
   sessionId: z.string().min(1),
+  planName: z.string().min(1).max(80).optional(),
   setIndex: z.number().int().positive(),
   blockIndex: z.number().int().nonnegative().optional(),
   movementSlug: z.string().min(1).max(160),

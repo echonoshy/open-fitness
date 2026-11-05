@@ -71,6 +71,11 @@ app.on("second-instance", () => {
   win?.focus();
 });
 const allowed = (url: string) => isAllowedRendererUrl(url, dev);
+function mediaAccessStatus(kind: "camera" | "microphone") {
+  return process.platform === "darwin" || process.platform === "win32"
+    ? systemPreferences.getMediaAccessStatus(kind)
+    : "unknown";
+}
 const serviceMetrics: ServiceMetric[] = [];
 const controllers = new Map<string, AbortController>();
 let writes = Promise.resolve();
@@ -215,7 +220,12 @@ app.whenReady().then(async () => {
         await systemPreferences.askForMediaAccess("microphone");
       return { camera, microphone };
     }
-    return { camera: true, microphone: true };
+    // Let getUserMedia handle an undetermined status; only block an explicit OS denial.
+    const blocked = ["denied", "restricted"];
+    return {
+      camera: !blocked.includes(mediaAccessStatus("camera")),
+      microphone: !blocked.includes(mediaAccessStatus("microphone")),
+    };
   });
   ipcMain.handle(
     "service",
@@ -429,14 +439,8 @@ app.whenReady().then(async () => {
         "本次应用运行最近500个请求；耗时单位毫秒，TTS首包是服务到达时间，非扬声器实际出声时间",
       services,
       dataPath: app.getPath("userData"),
-      camera:
-        process.platform === "darwin"
-          ? systemPreferences.getMediaAccessStatus("camera")
-          : "unknown",
-      microphone:
-        process.platform === "darwin"
-          ? systemPreferences.getMediaAccessStatus("microphone")
-          : "unknown",
+      camera: mediaAccessStatus("camera"),
+      microphone: mediaAccessStatus("microphone"),
     };
   });
   await createWindow();

@@ -36,6 +36,7 @@ export const recordSchema = z.object({
   load: z.number().min(0).max(500),
   goal: z.number().nonnegative(),
   sessionId: z.string().optional(),
+  planName: z.string().min(1).max(80).optional(),
   setIndex: z.number().int().optional(),
   blockIndex: z.number().int().optional(),
   source: z.string().optional(),

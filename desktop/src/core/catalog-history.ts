@@ -115,6 +115,21 @@ export function historySets(
   return rows;
 }
 
+/** The history filter supplies sets oldest first. Keep that order within a workout. */
+export function groupWorkouts(rows: HistorySet[]) {
+  const groups = new Map<string, HistorySet[]>();
+  for (const row of rows) {
+    const r = row.record;
+    const key = r.sessionId ? `session:${r.sessionId}`
+      : `set:${"exercise" in r ? "pose" : "catalog"}:${r.id}`;
+    const sets = groups.get(key);
+    if (sets) sets.push(row);
+    else groups.set(key, [row]);
+  }
+  return [...groups].sort(([, a], [, b]) =>
+    Date.parse(b[b.length - 1].startedAt) - Date.parse(a[a.length - 1].startedAt));
+}
+
 export function historyChoices(catalog: Movement[], rows: HistorySet[]) {
   const names = new Map(catalog.map((m) => [m.slug, m.name]));
   for (const [id, slug] of Object.entries(primaryMovementSlugs)) {

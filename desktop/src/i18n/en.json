@@ -1,4 +1,7 @@
 {
+  "{0} 组": "{0} sets",
+  "{0} 次训练 · {1} 组": "{0} workouts · {1} sets",
+  "按次回顾": "Workouts",
   "设置读取失败": "Could not load settings",
   "测试失败，请重试": "Test failed. Try again.",
   "已保存并生效，下次对话将使用当前配置。": "Saved. Your next conversation will use these settings.",
@@ -865,7 +868,9 @@
   "训练已结束，记录已保存。": "Workout finished and saved.",
   "本地记录保存失败，请点击重试保存。": "Could not save the workout. Select Retry save.",
   "本地记录保存失败，请重试保存，关闭应用前请确认保存成功。": "Could not save locally. Retry before closing the app.",
-  "请在系统设置 → 隐私与安全性中允许摄像头和麦克风。": "Allow camera and microphone access in System Settings → Privacy & Security.",
+  "请在系统的隐私设置中允许桌面应用访问摄像头和麦克风。": "Allow desktop apps to access your camera and microphone in your system’s privacy settings.",
+  "未获得摄像头权限，请在系统的隐私设置中允许桌面应用访问摄像头后重试。": "Allow desktop apps to access your camera in your system’s privacy settings, then try again.",
+  "未获得麦克风权限，请在系统的隐私设置中允许桌面应用访问麦克风后重试。": "Allow desktop apps to access your microphone in your system’s privacy settings, then try again.",
   "{0}试听结束，喜欢的话可以点击「选用」。": "{0} preview finished. Select it to use this voice.",
   "已保存「{0}」，后续教练回复和训练提示将使用这个声音。": "Saved {0} for future replies and reminders.",
   "已打断，请说话": "Interrupted. Go ahead.",

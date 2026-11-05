@@ -1,8 +1,8 @@
 {
   "name": "open-fitness",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
-  "description": "Camera and voice fitness coach for macOS",
+  "description": "Camera and voice fitness coach for macOS and Windows",
   "author": "open-fitness contributors",
   "type": "module",
   "main": "dist-electron/main.cjs",
@@ -16,9 +16,11 @@
     "verify:services": "tsx scripts/verify-services.ts",
     "verify:vad": "tsx scripts/verify-barge-in.ts",
     "icon": "node scripts/icon.mjs",
-    "package": "node scripts/package-macos.mjs personal",
+    "package": "node scripts/package-desktop.mjs personal",
     "package:private": "npm run package",
-    "package:public": "node scripts/package-macos.mjs public",
+    "package:public": "node scripts/package-desktop.mjs public",
+    "package:win": "node scripts/package-desktop.mjs public win-x64",
+    "package:mac:intel": "node scripts/package-desktop.mjs public mac-x64",
     "postinstall": "node scripts/assets.mjs",
     "format": "prettier --write src electron web tests scripts vite.config.ts",
     "serve:web": "node dist-web/server.mjs",
@@ -40,6 +42,7 @@
     "zod": "^4.0.0"
   },
   "devDependencies": {
+    "@electron/get": "^5.1.0",
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^24.0.0",
     "@types/react": "^19.0.0",
@@ -78,7 +81,15 @@
       },
       "icon": "build/icon.icns"
     },
-    "electronDist": "node_modules/electron/dist"
+    "win": {
+      "icon": "assets/branding/app-icon.ico"
+    },
+    "nsis": {
+      "artifactName": "${productName}-${version}-windows-${arch}-setup.${ext}"
+    },
+    "toolsets": {
+      "nsis": "1.2.1"
+    }
   },
   "license": "PolyForm-Noncommercial-1.0.0"
 }

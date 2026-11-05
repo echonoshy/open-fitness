@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { catalog } from "./fixtures/movement-catalog";
 import test from "node:test";
 import {
+  groupWorkouts,
   historyChoices,
   historySets,
   movementResults,
@@ -108,4 +109,15 @@ test("manual zero overrides the estimate and timed measures keep their actual un
   assert.equal(series.get("估算保持时间")?.best, 17);
   assert.equal(series.get("估算活动时间")?.best, 11);
   assert(!series.has("估算 1RM"));
+});
+
+test("mixed-engine sets share one workout and old unlinked records stay separate", () => {
+  const rows = historySets(
+    [plank, { ...plank, id: "another" }, { ...plank, id: "planned", sessionId: "session" }],
+    [{ ...base, planName: "腕与腿", startedAt: "2026-11-03T10:05:00Z" }],
+    catalog,
+  );
+  const groups = groupWorkouts(filterHistory(rows, {}, now));
+  assert.deepEqual(groups[0][1].map(row => row.record.id), ["planned", "one"]);
+  assert.equal(groups.length, 3);
 });

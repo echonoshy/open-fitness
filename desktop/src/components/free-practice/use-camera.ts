@@ -5,7 +5,7 @@ export function deviceError(error: unknown, kind: "摄像头" | "麦克风") {
   const name = error instanceof Error ? error.name : "";
   if (name === "NotAllowedError" || name === "SecurityError")
     return desktop
-      ? `未获得${kind}权限，请在系统设置的「隐私与安全性」中允许本应用后重试。`
+      ? `未获得${kind}权限，请在系统的隐私设置中允许桌面应用访问${kind}后重试。`
       : `未获得${kind}权限，请在浏览器地址栏允许后重试。`;
   if (name === "NotFoundError" || name === "OverconstrainedError")
     return `没有找到可用的${kind}，请连接设备后重试。`;
