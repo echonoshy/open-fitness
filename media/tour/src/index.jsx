@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  AbsoluteFill, Composition, Easing, Img, OffthreadVideo, Series,
+  AbsoluteFill, Composition, Easing, Html5Audio, Img, OffthreadVideo, Series,
   interpolate, registerRoot, staticFile, useCurrentFrame, useVideoConfig,
 } from "remotion";
 
@@ -79,6 +79,12 @@ function Blur() {
   </Section>;
 }
 
+function Reference() {
+  return <Section title="动作参考" detail="边练边看示范，拖动或放大参考窗">
+    <Screen name="reference"/>
+  </Section>;
+}
+
 function Voice() {
   const {fps} = useVideoConfig();
   const frame = useCurrentFrame();
@@ -116,11 +122,13 @@ function History() {
 function Tour() {
   const {fps} = useVideoConfig();
   return <AbsoluteFill style={{background:ink}}>
+    <Html5Audio src={staticFile("edm-detection-mode.m4a")}/>
     <Series>
       <Series.Sequence name="姿态识别" durationInFrames={6 * fps}><Pose/></Series.Sequence>
       <Series.Sequence name="挑选动作" durationInFrames={5 * fps}><Library/></Series.Sequence>
       <Series.Sequence name="训练计划" durationInFrames={6 * fps}><Plans/></Series.Sequence>
       <Series.Sequence name="自动计次" durationInFrames={7 * fps}><Reps/></Series.Sequence>
+      <Series.Sequence name="动作参考" durationInFrames={8 * fps}><Reference/></Series.Sequence>
       <Series.Sequence name="背景虚化" durationInFrames={6 * fps}><Blur/></Series.Sequence>
       <Series.Sequence name="AI 语音教练" durationInFrames={10 * fps}><Voice/></Series.Sequence>
       <Series.Sequence name="动作讲解" durationInFrames={6 * fps}><Guidance/></Series.Sequence>
@@ -130,4 +138,4 @@ function Tour() {
 }
 
 registerRoot(() => <Composition id="OpenFitnessTour" component={Tour}
-  width={1920} height={1080} fps={24} durationInFrames={52 * 24}/>);
+  width={1920} height={1080} fps={24} durationInFrames={60 * 24}/>);

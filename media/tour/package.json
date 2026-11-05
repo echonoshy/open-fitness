@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "studio": "remotion studio src/index.jsx",
-    "render": "remotion render src/index.jsx OpenFitnessTour out/open-fitness-tour.mp4 --muted --crf=18"
+    "render": "remotion render src/index.jsx OpenFitnessTour out/open-fitness-tour.mp4 --crf=18 --audio-bitrate=192k --metadata \"comment=Music: EDM Detection Mode by Kevin MacLeod (https://incompetech.com/wordpress/2015/04/edm-detection-mode/), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Excerpt with adjusted level and fades.\""
   },
   "dependencies": {
     "@remotion/cli": "4.0.539",

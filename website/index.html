@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="观看 open-fitness 实机演示，了解姿态识别、训练计划、自动计次、背景虚化与语音教练。">
+  <meta name="description" content="观看 open-fitness 实机演示，了解姿态识别、训练计划、自动计次、动作参考、背景虚化与语音教练。">
   <link rel="icon" href="./assets/app-icon.png" type="image/png">
-  <link rel="stylesheet" href="./style.css?v=features-52">
+  <link rel="stylesheet" href="./style.css?v=reference-60">
   <title>open-fitness · 摄像头与语音健身教练</title>
 </head>
 <body>
@@ -49,14 +49,14 @@
         </div>
       </section>
       <section id="demo" aria-labelledby="film-title">
-        <div class="section-heading"><h2 id="film-title">实机演示</h2><span class="meta">52 秒<span class="dot">·</span>无声演示</span></div>
+        <div class="section-heading"><h2 id="film-title">实机演示</h2><div class="film-tools"><span class="meta">60 秒</span><button class="sound-toggle" type="button" aria-pressed="false" hidden>开启配乐</button></div></div>
         <div class="screen">
-          <video id="demo-video" controls muted playsinline preload="metadata" poster="./preview-media/open-fitness-tour.jpg?v=features-52" aria-label="open-fitness 软件功能实机演示" aria-describedby="film-note">
-            <source src="./preview-media/open-fitness-tour.mp4?v=features-52" type="video/mp4">
-            <track kind="captions" srclang="zh-CN" label="中文" src="./assets/tour.zh.vtt?v=features-52">
-            你的浏览器无法播放此视频。<a href="./preview-media/open-fitness-tour.mp4?v=features-52">打开原片</a>
+          <video id="demo-video" controls muted playsinline preload="metadata" poster="./preview-media/open-fitness-tour.jpg?v=reference-60" aria-label="open-fitness 软件功能实机演示" aria-describedby="film-note">
+            <source src="./preview-media/open-fitness-tour.mp4?v=reference-60" type="video/mp4">
+            <track kind="captions" srclang="zh-CN" label="中文" src="./assets/tour.zh.vtt?v=reference-60">
+            你的浏览器无法播放此视频。<a href="./preview-media/open-fitness-tour.mp4?v=reference-60">打开原片</a>
           </video>
-          <button class="cover" type="button" hidden aria-label="播放 52 秒功能演示">
+          <button class="cover" type="button" hidden aria-label="播放 60 秒功能演示">
             <span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5 13 8l-9 5.5z"/></svg>播放演示</span>
           </button>
         </div>
@@ -65,13 +65,15 @@
           <button type="button" data-start="6" aria-pressed="false"><time>00:06</time><span>挑选动作</span></button>
           <button type="button" data-start="11" aria-pressed="false"><time>00:11</time><span>训练计划</span></button>
           <button type="button" data-start="17" aria-pressed="false"><time>00:17</time><span>自动计次</span></button>
-          <button type="button" data-start="24" aria-pressed="false"><time>00:24</time><span>背景虚化</span></button>
-          <button type="button" data-start="30" aria-pressed="false"><time>00:30</time><span>AI 语音教练</span></button>
-          <button type="button" data-start="40" aria-pressed="false"><time>00:40</time><span>动作讲解</span></button>
-          <button type="button" data-start="46" aria-pressed="false"><time>00:46</time><span>训练记录</span></button>
+          <button id="chapter-reference" type="button" data-start="24" aria-pressed="false"><time>00:24</time><span>动作参考</span></button>
+          <button type="button" data-start="32" aria-pressed="false"><time>00:32</time><span>背景虚化</span></button>
+          <button type="button" data-start="38" aria-pressed="false"><time>00:38</time><span>AI 语音教练</span></button>
+          <button type="button" data-start="48" aria-pressed="false"><time>00:48</time><span>动作讲解</span></button>
+          <button type="button" data-start="54" aria-pressed="false"><time>00:54</time><span>训练记录</span></button>
         </div>
-        <p class="note" id="film-note">训练画面使用预录动作样本，骨架、计数和记录均来自实际运行的应用。语音教练一节用文字呈现当时的提问与回复。</p>
-        <p class="note" id="play-error" role="status" hidden>视频暂时无法播放。<a href="./preview-media/open-fitness-tour.mp4?v=features-52">打开原片</a></p>
+        <p class="note" id="film-note">训练画面使用预录动作样本，骨架、计数和记录均来自实际运行的应用。参考窗播放公开的俯卧撑示范片段。语音问答以文字呈现。</p>
+        <p class="note music-credit">配乐《<a href="https://incompetech.com/wordpress/2015/04/edm-detection-mode/">EDM Detection Mode</a>》，Kevin MacLeod 作曲，按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 许可节选并调整音量、淡入淡出。</p>
+        <p class="note" id="play-error" role="status" hidden>视频暂时无法播放。<a href="./preview-media/open-fitness-tour.mp4?v=reference-60">打开原片</a></p>
       </section>
       <section id="features" class="showcase" aria-label="训练计划和动作库">
         <article id="plans">
@@ -98,6 +100,7 @@
         <dl class="feature-lines">
           <div><dt>AI 语音交互</dt><dd>训练中可以问「深蹲时怎么呼吸」，也可以说「把目标改成 12 次」「休息一分钟」。教练播报时，你可以直接开口打断。</dd></div>
           <div><dt>摄像头计次与计时</dt><dd>深蹲、俯卧撑等动作可自动计次，平板支撑按保持时间记录。动作库也标明哪些动作适合估算、计时或手动记录。</dd></div>
+          <div><dt>动作参考</dt><dd>训练时点「参考」，可以一边练习，一边看当前动作的循环示范。拖动参考窗可以让出画面，点「放大」能看清动作细节。</dd></div>
           <div><dt>背景虚化与隐私</dt><dd>可以在取景时虚化身后的房间。摄像头画面和姿态分析留在本机。使用在线教练时，语音片段、对话和必要的训练上下文会发往所配置的 AI 服务。</dd></div>
           <div><dt>记录与导出</dt><dd>练完一组，可以回看次数、时长和历史表现。完整资料可备份为 JSON，部分训练记录也可导出为 Strong 或 Hevy 格式的 CSV。</dd></div>
         </dl>
@@ -119,6 +122,6 @@
     <a class="original-shot" target="_blank" rel="noopener" aria-label="查看原始大小的截图（新标签页）"><img alt=""></a>
     <p>点击图片查看原始大小。</p>
   </dialog>
-  <script src="./demo.js" defer></script>
+  <script src="./demo.js?v=reference-60" defer></script>
 </body>
 </html>

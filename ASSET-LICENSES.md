@@ -14,6 +14,12 @@
 
 官网演示使用预录动作作为训练输入。深蹲由 Polina Tankilevitch 拍摄，健身球俯卧撑由 MART PRODUCTION 拍摄。[深蹲原片](https://www.pexels.com/video/young-woman-exercising-6525519/) · [俯卧撑原片](https://www.pexels.com/video/man-using-a-exercise-ball-while-doing-push-ups-8027458/) · [Pexels 素材许可](https://www.pexels.com/license/)
 
+官网录制的「动作参考」窗口使用《Follow Me Fitness Normal Base Push-Up》的俯卧撑片段，由 Cpl. David Delgadillo 摄制。原片在 DVIDS 标记为公共领域，演示中做了节选、裁切和静音。[示范原片与权利说明](https://www.dvidshub.net/video/590723/follow-me-fitness-normal-base-push-up)
+
+## 官网演示配乐
+
+《EDM Detection Mode》由 Kevin MacLeod 创作，采用 CC BY 4.0 许可。官网演示节选 60 秒，调整音量并加入淡入淡出。[作者与原曲](https://incompetech.com/wordpress/2015/04/edm-detection-mode/) · [许可条款](https://creativecommons.org/licenses/by/4.0/)
+
 ## 动作文字与训练知识
 
 - `data/exercises.json` 的英文动作数据来自 yuhonas/free-exercise-db，按上游 Unlicense 公共领域声明使用。保留其原有权利，包括商业使用。来源 https://github.com/yuhonas/free-exercise-db 。[上游许可原文](docs/licenses/free-exercise-db-Unlicense.txt)

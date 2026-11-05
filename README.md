@@ -12,7 +12,7 @@ open-fitness 是一款摄像头与语音健身教练。挑一个想练的动作�
 
 [![观看 open-fitness 功能演示](website/preview-media/open-fitness-tour.jpg)](https://echonoshy.github.io/open-fitness/#demo)
 
-[观看 52 秒实机功能演示](https://echonoshy.github.io/open-fitness/#demo) · 按章节查看姿态识别、挑选动作、训练计划、自动计次、背景虚化、语音教练、动作讲解和训练记录。语音问答以文字呈现。
+[观看 60 秒实机功能演示](https://echonoshy.github.io/open-fitness/#demo) · 按章节查看姿态识别、挑选动作、训练计划、自动计次、[动作参考](https://echonoshy.github.io/open-fitness/?chapter=reference#demo)、背景虚化、语音教练、动作讲解和训练记录。可开启运动配乐，语音问答以文字呈现。
 
 ## 开始训练
 
