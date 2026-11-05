@@ -1,6 +1,22 @@
 const video = document.querySelector("#demo-video");
 const chapters = Array.from(document.querySelectorAll(".chapters button"));
 const error = document.querySelector("#play-error");
+const soundToggle = document.querySelector(".sound-toggle");
+
+function syncSound() {
+  const audible = !video.muted && video.volume > 0;
+  soundToggle.textContent = audible ? "关闭配乐" : "开启配乐";
+  soundToggle.setAttribute("aria-pressed", String(audible));
+}
+soundToggle.addEventListener("click", () => {
+  const audible = !video.muted && video.volume > 0;
+  if (!audible && video.volume === 0) video.volume = 1;
+  video.muted = audible;
+  syncSound();
+});
+video.addEventListener("volumechange", syncSound);
+syncSound();
+soundToggle.hidden = false;
 
 const cover = document.querySelector(".cover");
 cover.hidden = false;
@@ -35,6 +51,14 @@ for (const button of chapters) {
 }
 video.addEventListener("timeupdate", syncChapter);
 video.addEventListener("seeked", syncChapter);
+if (new URLSearchParams(location.search).get("chapter") === "reference") {
+  const seekToReference = () => {
+    video.currentTime = Number(document.querySelector("#chapter-reference").dataset.start);
+    syncChapter();
+  };
+  if (video.readyState >= HTMLMediaElement.HAVE_METADATA) seekToReference();
+  else video.addEventListener("loadedmetadata", seekToReference, {once: true});
+}
 video.addEventListener("playing", () => { error.hidden = true; });
 video.addEventListener("error", () => { error.hidden = false; });
 
