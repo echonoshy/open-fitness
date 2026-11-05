@@ -1,10 +1,10 @@
 # open-fitness 开发维护
 
-当前产品由 Electron、React、TypeScript 和同源 Web 服务组成，不运行本地 Python 服务。使用说明见 [试用指南](../docs/trial-guide.md)，测试范围见 [验证清单](../docs/validation.md)。以下命令均在 `desktop/` 执行。
+当前产品由 Electron、React、TypeScript 和同源 Web 服务组成。训练流程见[使用指南](../docs/trial-guide.md)，测试范围见 [验证清单](../docs/validation.md)。以下命令均在 `desktop/` 执行。
 
-## 安装与运行
+## 从源码运行
 
-Node.js 22.12+ 或 24.x，npm 使用仓库锁文件安装。本次维护验证使用 Node.js 24.14.0 / npm 11.9.0。
+Node.js 22.12+ 或 24.x，npm 使用仓库锁文件安装。
 
 ```sh
 npm ci
@@ -23,7 +23,7 @@ npm run dev
 | `npm run serve:web` | 已构建的 Web 服务；用 `PORT=5182` 等环境变量换端口 |
 | `npm run icon` | 从最终美术源文件生成 `build/icon.icns` |
 | `npm run package` | 使用本机密钥文件生成自用包 |
-| `npm run package:public` | 生成不含 Key 的分发包 |
+| `npm run package:public` | 生成 Apple 芯片 Mac 版，不含个人 Key |
 | `npm run verify:vad` | 用本地样本执行真实 Silero 推理，结果在 `output/` |
 | `npm run verify:services` | 显式调用真实 LLM / ASR / TTS，测试合成语音和内存训练状态 |
 
@@ -41,13 +41,15 @@ npm run dev
 | `config/` | 随包默认服务配置 |
 | `assets/branding/` | 最终图标源文件；生成的图标在 `build/` |
 | `public/exercise-narration/`、`public/pcm-worklet.js` | 动作示范的预录讲解与录音 Worklet，教练音色试听由当前 TTS 服务实时合成 |
-| `tests/` | 功能回归；算法对照 JSON 位于 `fixtures/`，无需运行 Python |
+| `tests/` | 功能回归，算法对照样本位于 `fixtures/` |
 | `scripts/` | 构建、资源准备和仍适用的维护命令 |
 | `output/`、`release/`、`dist*/`、`build/` | 本机生成内容，Git 忽略 |
 
-从「训练」页开始训练，在「动作库 → 常练动作」管理收藏，在「计划」页编排训练。全库 582 个动作中，原有 8 个计数动作和平板支撑继续使用 `SessionEngine`；其余动作通过 `TimedTraining` 保存独立统计：385 个估算计数、19 个保持计时、148 个活动计时、21 个普通计时。共享摄像头、关节点、背景虚化与动作示范，不复用无关动作的评分。
+## 动作统计
 
-新增统计规则在 `src/core/movement-statistics.ts`，视频标定数据在 `movement-calibration.json`。更新演示素材后，先在单独 Python 环境安装 MediaPipe / OpenCV，执行 `scripts/extract-movement-poses.py --output <缓存目录>`，再执行 `npx tsx scripts/calibrate-movement-statistics.ts <缓存目录>`；提取过程离线进行，不属于应用运行依赖。实际训练与记录的核验方法见[验证清单](../docs/validation.md)。
+深蹲、俯卧撑等基础动作和平板支撑使用 `SessionEngine`。动作库中的估算计数、保持计时、活动计时和普通计时由 `TimedTraining` 保存。每种模式记录的字段以及手动修正的核验方法见[验证清单](../docs/validation.md)。
+
+动作统计规则位于 `src/core/movement-statistics.ts`。更新演示素材后，用 `scripts/extract-movement-poses.py --output <缓存目录>` 提取姿态，再用 `npx tsx scripts/calibrate-movement-statistics.ts <缓存目录>` 重新标定。
 
 自动计数和姿态计时状态以本地 `SessionEngine` 为准；模型调用工具后读取实际执行结果。摄像头视频与姿态推理在本机进行。开启语音时，音频片段、对话和所需训练上下文发往配置的服务。
 
@@ -56,11 +58,6 @@ npm run dev
 ## 服务配置
 
 公开源码与分发包只包含三个官方 HTTPS 接口及模型名称。普通用户首次使用 AI 时，在「设置 → AI 服务」填一个 Agent Plan Key。大模型、语音识别与语音合成全部测试通过后即可保存。此后可在同一处替换 Key。大模型请求只发送一次，限额或鉴权错误会直接返回。
-
-| 打包命令（在 `desktop/` 执行） | macOS ARM64 安装包 |
-| --- | --- |
-| `npm run package`（亦可用 `npm run package:private`） | `release-private/mac-arm64/open-fitness.app`，自动带上本机 Key |
-| `npm run package:public` | `release/mac-arm64/open-fitness.app`，不含 Key |
 
 自用打包从仓库根目录的 `.secrets/agent-plan.key` 读取单行 Key。整个目录由 Git 忽略。更换自用包的默认 Key 时，更新此文件再打包即可。缺少文件时，自用打包会提示文件路径。分发命令可在全新克隆中执行，跳过本机密钥文件。拿到自用包的人可以提取其中的 Key。
 
@@ -72,12 +69,12 @@ Web 服务默认只监听 `127.0.0.1`，语音接口检查同源请求；经反�
 
 ## 数据与兼容性
 
-- 新安装的桌面资料目录为 `~/Library/Application Support/open-fitness/`。如果同级已有旧目录 `Viaim Coach/`，桌面与本机 Web 服务沿用它，保留训练记录、服务配置和已选音色。显式 `--user-data-dir` 仍可用于隔离验证。
+- 新安装的桌面资料目录在 macOS 为 `~/Library/Application Support/open-fitness/`，在 Windows 为 `%APPDATA%\open-fitness\`。桌面应用优先沿用同级已有的旧目录 `Viaim Coach/`，保留训练记录、服务配置和已选音色。显式 `--user-data-dir` 仍可用于隔离验证。
 - 桌面端：资料目录中的 `data.json`；控制与诊断日志为同目录的 `controls.jsonl`。0.3.35 数据格式为 v3；升级前按旧版本保存 `data.json.v2.backup`（从 v1 升级则为 v1），正常写入采用串行原子替换。
 - Web：数据保存在当前来源的浏览器本机存储，桌面和 Web 通过完整 JSON 备份迁移。清除站点数据会删除浏览器记录。
 - 计时记录使用 `timedRecords` / `timedCheckpoint`，与自动计数的 `records` 分开；完整 JSON 备份含两类记录，Strong / Hevy CSV 仍只交换原有自动计数与姿态计时记录。计时记录不含暂停和休息，不代表有效动作时长，自填次数不计入评分和个人纪录。
 - 训练每 5 秒保存检查点。桌面正常关闭前归档当前组；意外中断后恢复为中断记录，不自动接续计数，最后约 5 秒可能缺失。
-- 旧 `workout_log.json`、`coach_profile.db` 和可选 `references.json` 导入仍保留。SQLite 通过 JavaScript/WASM 读取，与是否安装 Python 无关。
+- 旧 `workout_log.json`、`coach_profile.db` 和可选 `references.json` 导入仍保留。SQLite 通过 sql.js 读取。
 - CSV 用于交换记录，不能保留完整评分、节奏和最近删除等内容；完整恢复使用 JSON。最近删除可恢复，永久删除前的旧备份仍可能包含内容。
 
 ## 打包与交付
@@ -89,7 +86,7 @@ npm test
 CSC_IDENTITY_AUTO_DISCOVERY=false npm run package:public
 ```
 
-当前包包含仅供内部参考的第三方演示。交付前请按 [素材许可清单](../ASSET-LICENSES.md) 核对拟分发的内容。
+公开分发前，按[素材许可清单](../ASSET-LICENSES.md)核对随包内容。
 
 分发命令会更新 `release/mac-arm64/`。完成内测签名、检查包内版本与构建时间后，生成本次分发的 ZIP：
 
@@ -104,8 +101,6 @@ shasum -a 256 open-fitness-trial.zip > open-fitness-trial.zip.sha256
 
 版本号取自 `package.json` 的 `version`，发布时同步 `package-lock.json`。设置页显示当前版本号、构建时间、运行模式与使用许可。日常清理不提升版本，也不把旧 ZIP 视为包含新源码。
 
-### 内测临时签名与画面远近
-
-0.3.9 的“画面远近”提供 1.0–2.0 倍显示缩放。1.0 倍完整显示输入画面，窗口比例不同时会留边；视频和骨架同步缩放，识别仍使用原始完整帧，不控制硬件镜头。关闭或切换摄像头会复位。
+### 内测临时签名
 
 无需证书的内测构建可在打包后执行 `npm run sign:internal -- "release/mac-arm64/open-fitness.app"`，也可指定其他输出路径。该命令从内到外进行临时签名并严格验证，未公证版本仍可能需要首次手动放行。重新打包后必须再次签名。

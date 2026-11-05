@@ -6,49 +6,24 @@
   </picture>
 </h1>
 
-[简体中文](README.md) · **English** · [Product website and demo](https://echonoshy.github.io/open-fitness/)
+[简体中文](README.md) · **English** · [Website](https://echonoshy.github.io/open-fitness/) · [Desktop downloads](https://echonoshy.github.io/open-fitness/#download)
 
-**A camera-guided AI fitness coach for Apple Silicon Macs.** Use your camera to track movement and talk to the coach while you train. Start with a set of squats, or build your own workout from a library of 582 exercises.
+open-fitness is a camera and voice fitness coach. Pick an exercise and set a target. During a squat, the app counts the rep as you stand back up. After the workout, open History to review each set and the feedback for individual reps.
 
-## Product tour
+[![Watch the lunchtime squat workout](website/preview-media/open-fitness-tour.jpg)](https://echonoshy.github.io/open-fitness/#demo)
 
-[![Watch the open-fitness product tour](website/preview-media/open-fitness-tour.jpg)](website/preview-media/open-fitness-tour.mp4?raw=true)
+[Watch a set from start to finish](https://echonoshy.github.io/open-fitness/#demo). The silent tour shows the desktop app counting reps from prerecorded movement footage.
 
-[Watch the 50-second demo (MP4, Mandarin audio)](website/preview-media/open-fitness-tour.mp4?raw=true) · See how to choose an exercise, start a plan and count squats with the camera. Hear the coach answer a question mid-workout. The demo uses prerecorded movement footage as its camera input.
+## Start training
 
-## Start a workout
+- **Choose an exercise.** Search the library by name, muscle group or equipment. Squats and push-ups support automatic rep counting. Planks are tracked by hold time. Other exercises show their tracking mode in the library.
+- **Build a plan.** Set the order, sets, rep or time targets, load and rest periods. Save the plan to use it again.
+- **Talk to the coach.** Connect your Agent Plan key under Settings → AI Services for online voice coaching. Exercise tracking, plans and workout history work on their own.
 
-1. Drag `open-fitness.app` into Applications and open it. Select your camera in Settings and grant camera access when macOS prompts you.
-2. On the Training screen, select squats and start a set. Stand side-on with your shoulder, hip, knee and ankle in view. Complete a squat and return to standing to see the rep count.
-3. To ask the coach a question or change a target by voice, enter your Agent Plan key under Settings → AI Services. Test the connection, save it, and turn on the microphone.
+Camera footage and pose analysis stay on your device. When you enable online coaching, the app sends voice clips, conversation and relevant workout context to your configured services.
 
-**Basic training works without an API key.** You can browse exercises, build plans, count reps or time holds for supported movements, and save workouts. Camera footage and pose analysis stay on your Mac. When you enable the online voice coach, audio clips, conversation and relevant workout context are sent to the services you configure.
+## Documentation
 
-## Exercises, plans and history
+[User guide and backups](docs/trial-guide.md) · [Development and packaging](desktop/README.md) · [Test coverage](docs/validation.md) · [Coach voices](docs/voices.md) · [Product tour source](media/tour/README.md). These guides are in Chinese.
 
-| What you want to do | How it works |
-| --- | --- |
-| Find an exercise | Search in Chinese or English, filter by muscle group, equipment or difficulty, and save exercises to your favorites. |
-| Track movement | The camera counts reps for supported exercises such as squats and push-ups, and times plank holds. Other exercises are labeled for estimated reps, timing or manual logging. |
-| Repeat a workout | Arrange exercises, sets, rep or time targets, loads and rest periods in a plan. Save it and start it again next time. |
-| Review or back up your training | Open History to review your workouts. Use JSON for a full backup, or exchange supported records using Strong or Hevy CSV files. |
-
-## Run from source
-
-Install Node.js and npm, then run the following commands from the repository root. The first install downloads dependencies and the pose model. The app runs without Python.
-
-```sh
-cd desktop
-npm ci
-npm run dev
-```
-
-From the same directory, run `npm run web` to start the browser app. The desktop and browser apps store training data separately. Use `npm test` for the regression suite and `npm run package:public` on a Mac to build a distributable app without a personal key. The [developer guide](desktop/README.md) lists the environment requirements and other commands.
-
-## Documentation and licensing
-
-Further reading in Chinese
-
-[User guide](docs/trial-guide.md) · [validation and known limitations](docs/validation.md) · [coach voices](docs/voices.md).
-
-The project's own code is licensed under PolyForm Noncommercial. Commercial use requires separate permission. The original app icon and designated documentation use a Creative Commons Attribution-NonCommercial license. Third-party exercise footage, models and audio have their own terms. See the [code license](LICENSE), [asset licenses and credits](ASSET-LICENSES.md) and [project sources](docs/sources.md).
+The project's own code uses the PolyForm Noncommercial license. Commercial use requires separate permission. Third-party assets have their own terms. See the [code license](LICENSE), [asset licenses and credits](docs/licenses/asset-sources.en.md) and [project sources](docs/sources.md).

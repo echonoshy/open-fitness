@@ -6,7 +6,7 @@
 
 训练算法和部分资料参考了 Feki-Tech/ai-gym-coach 的提交 `6400cb23b1cf68be3d83f2eeadeab05984d6cfbe`。项目目前在 TypeScript 客户端运行训练逻辑。[上游状态对照样本](../desktop/tests/fixtures/upstream-parity.json)和[角度对照样本](../desktop/tests/fixtures/upstream-pose-angles.json)用于回归测试。真人训练的验证条件见[验证清单](validation.md)。
 
-早期 Python/Flask 原型使用了 Fitness Trainer。仓库保留其 [MIT 许可与版权声明](licenses/fitness-trainer-MIT.txt)。
+早期训练原型使用了 Fitness Trainer。仓库保留其 [MIT 许可与版权声明](licenses/fitness-trainer-MIT.txt)。
 
 ## 动作与知识资料
 

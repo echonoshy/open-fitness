@@ -1,6 +1,6 @@
 # Viaim Coach：短训练入口、改善确认与下次训练建议需求草案 v1
 
-> 这份材料记录了 2026 年 11 月 2 日的评审背景和建议。文中对现状的描述以调研当天为准。现有功能见[使用指南](../trial-guide.md)。
+> 这份材料记录了 2026 年 11 月 2 日的评审背景和建议。文中对现状的描述以调研当天为准。现有功能见[使用指南](../../trial-guide.md)。
 
 日期：2026-11-02。用途：产品需求评审。状态：未实现、未开展本轮真人验收。
 
@@ -294,15 +294,15 @@ flowchart TD
 
 **附：本轮核对的实现依据**
 
-- [训练页与现有休息覆盖层](../../desktop/src/components/TrainingStage.tsx)：当前休息倒计时、训练控制和参考卡。
-- [计划预览与开始入口](../../desktop/src/components/Features.tsx)：已有组次、动作顺序、计划启动和载入。
-- [训练计划执行与切组](../../desktop/src/core/session.ts)：自动休息、切组与结束。
-- [计划中修改边界](../../desktop/src/core/session.ts)：开始前条件、计划中换动作限制和休息时修改限制。
-- [逐次幅度与速度结果](../../desktop/src/core/engine.ts)：完整一次动作才形成的结果，以及发力阶段过快的现有含义。
-- [俯卧撑可评估范围](../../desktop/src/core/pushup.ts)：侧面与身体线条可见性限制。
-- [现有主动纠错](../../desktop/src/core/interaction.ts)：实时问题、提示间隔与优先级基础。
-- [现有总结](../../desktop/src/App.tsx)：单组提示与整次完成汇总。
-- [当前记录与保存计划](../../desktop/src/core/data.ts)：已有组/次记录与计划字段。
-- [同名计划保存行为](../../desktop/src/core/data-edits.ts)：生成建议需避免无意覆盖同名手动计划。
+- [训练页与现有休息覆盖层](../../../desktop/src/components/TrainingStage.tsx)：当前休息倒计时、训练控制和参考卡。
+- [计划预览与开始入口](../../../desktop/src/components/Features.tsx)：已有组次、动作顺序、计划启动和载入。
+- [训练计划执行与切组](../../../desktop/src/core/session.ts)：自动休息、切组与结束。
+- [计划中修改边界](../../../desktop/src/core/session.ts)：开始前条件、计划中换动作限制和休息时修改限制。
+- [逐次幅度与速度结果](../../../desktop/src/core/engine.ts)：完整一次动作才形成的结果，以及发力阶段过快的现有含义。
+- [俯卧撑可评估范围](../../../desktop/src/core/pushup.ts)：侧面与身体线条可见性限制。
+- [现有主动纠错](../../../desktop/src/core/interaction.ts)：实时问题、提示间隔与优先级基础。
+- [现有总结](../../../desktop/src/App.tsx)：单组提示与整次完成汇总。
+- [当前记录与保存计划](../../../desktop/src/core/data.ts)：已有组/次记录与计划字段。
+- [同名计划保存行为](../../../desktop/src/core/data-edits.ts)：生成建议需避免无意覆盖同名手动计划。
 
 本轮只新增本需求草案，未修改应用代码、安装依赖、运行构建或发布。

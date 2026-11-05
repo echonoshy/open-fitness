@@ -1,6 +1,6 @@
 # Viaim Coach 同类产品调研与需求评估
 
-> 这份材料记录了 2026 年 11 月 2 日的评审背景和建议。文中对现状的描述以调研当天为准。现有功能见[使用指南](../trial-guide.md)。
+> 这份材料记录了 2026 年 11 月 2 日的评审背景和建议。文中对现状的描述以调研当天为准。现有功能见[使用指南](../../trial-guide.md)。
 
 调研日期：2026-11-02。阶段：需求评估，未进入实现。
 
@@ -23,7 +23,7 @@
 | 用户资料 | 目标、限制、器械、偏好等供教练对话参考 | 资料尚不等于结构化的计划约束与周期安排 |
 | 本地姿态与数据 | 摄像头姿态分析在本机；支持备份、CSV 交换、恢复 | 保留现有方式；语音音频、对话及必要上下文仍发送至配置服务，不能宣传为所有数据都不出本机 |
 
-关键本地依据：[计划与资料界面](../../desktop/src/components/Features.tsx)、[训练协议](../../desktop/src/core/session.ts)、[反馈触发](../../desktop/src/core/interaction.ts)、[训练总结](../../desktop/src/App.tsx)、[趋势统计](../../desktop/src/core/progress.ts)、[运行与数据边界](../../desktop/README.md)。
+关键本地依据：[计划与资料界面](../../../desktop/src/components/Features.tsx)、[训练协议](../../../desktop/src/core/session.ts)、[反馈触发](../../../desktop/src/core/interaction.ts)、[训练总结](../../../desktop/src/App.tsx)、[趋势统计](../../../desktop/src/core/progress.ts)、[运行与数据边界](../../../desktop/README.md)。
 
 **2. 同类产品与值得借鉴的机制**
 
